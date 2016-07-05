@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:background="@color/transparent"
+              android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/common_dian20"
+        android:paddingBottom="@dimen/common_dian10"
+        android:background="@drawable/train_circle_bg"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:paddingBottom="@dimen/common_dian10"
+            android:paddingTop="@dimen/common_dian20"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/show_exit"
+                android:gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:paddingTop="@dimen/common_dian10"
+                android:paddingBottom="@dimen/common_dian10"
+                android:textColor="@color/common_color_343434"
+                android:textSize="@dimen/common_text_18sp"
+                android:text="@string/string_train_exit"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:background="@color/color_liner_bg"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/common_dian10"
+            android:layout_height="@dimen/common_dian44"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:text="@string/string_train_exit_no"
+                android:textSize="@dimen/common_text_18sp"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:layout_marginRight="@dimen/common_dian10"
+                android:layout_marginLeft="@dimen/common_dian10"
+                android:background="@drawable/select_circle_button_bg"
+                android:id="@+id/btn_train_no"/>
+
+            <Button
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:text="@string/string_train_exit_ok"
+                android:textSize="@dimen/common_text_18sp"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/common_dian10"
+                android:layout_marginRight="@dimen/common_dian10"
+                android:textColor="@color/white"
+                android:background="@drawable/select_circle_button_bg"
+                android:id="@+id/btn_train_ok"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:android_custom="http://schemas.android.com/apk/res-auto"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <com.hhd.breath.app.widget.RoundNoProgressBar
+        android:id="@+id/roundProgressBar2"
+        android:layout_width="200dip"
+        android:layout_height="200dip"
+        android_custom:roundColor="#79D6F7"
+        android:layout_centerHorizontal="true"
+        android_custom:roundProgressColor="#ffffff"
+        android_custom:textColorR="@color/white"
+        android_custom:roundWidth="3dip"
+        android_custom:textSizeR="90sp"/>
+    <com.hhd.breath.app.widget.LocalSetImgView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dip"
+        android:id="@+id/img_common_dian"
+        android:scaleType="center"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/icon_common_dian"/>
+</RelativeLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/common_text_20sp"
+        android:textColor="@color/color_nobreath_bg"
+        android:gravity="center"
+        android:paddingBottom="@dimen/common_dian20"
+        android:paddingTop="@dimen/common_dian20"
+        android:layout_centerVertical="true"
+        android:text="添加训练计划"/>
+
+</RelativeLayout>

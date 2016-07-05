@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="btn_heath_text_select">#807F83</color>
+
+
+
+    <color name="tr_black">#e5e5e5</color>
+
+    <color name="common_top_color">#1fbaf3</color>
+    <color name="common_color_343434">#8d8d8d</color>
+    <color name="common_color_d5d5d5">#dddddd</color>
+    <color name="common_color_878787">#878787</color>
+
+    <color name="common_bottom_bar_normal_bg">#2d2f31</color>
+    <color name="common_bottom_bar_selected_bg">#161718</color>
+    <color name="common_bottom_bar_blue">#24A4EB</color>
+
+    <color name="common_bottom_text_color">#cbcbcb</color>
+    <color name="common_train_8A8A8C">#8A8A8C</color>
+    <color name="common_record_c6c7c9">#c6c7c9</color>
+    
+    <color name="common_train_plan_text_color">#8d8d8d</color>
+    <color name="common_cir_bg_color">#1179B0</color>
+    <color name="common_me_bg_color">#FAF9FE</color>
+    <color name="common_color_cbcbcb">#CBCBCB</color>
+    <color name="common_color_9A9A9A">#9A9A9A</color>
+    <color name="app_title_pressed_color">#1682aa</color>
+    <color name="province_line_border">#D0D0D0</color>
+    <color name="common_activity_color">#FFFFFF</color>
+    
+    
+    <color name="transparent">#00000000</color>
+    <color name="common_start_train_bg_color">#1FBAF3</color>
+    <color name="common_color_88_white">#88FFFFFF</color>
+    <color name="color_breath_bg">#7ADBFE</color>
+    <color name="color_nobreath_bg">#ff1FBAF3</color>
+    <color name="color_liner_bg">#dddddd</color>
+    <color name="red">#FF4500</color>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+                android:background="@color/transparent"
+              android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/select_circle_bg"
+        android:paddingTop="@dimen/common_dian20"
+        android:layout_centerInParent="true"
+        android:paddingBottom="@dimen/common_dian20"
+        android:layout_height="wrap_content">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/progress_id"
+            android:layout_marginTop="@dimen/common_dian15"
+            style="@android:style/Widget.ProgressBar.Small"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progress_id"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/common_dian30"
+            android:text="正在生成预览文件，请稍后..."/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

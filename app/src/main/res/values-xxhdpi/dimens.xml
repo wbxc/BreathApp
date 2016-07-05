@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="common_dian43">43dip</dimen>
+    <dimen name="common_dian44">44dip</dimen>
+    <dimen name="common_dian46">46dip</dimen>
+    <dimen name="common_dian39">39dip</dimen>
+    <dimen name="common_dian35">35dip</dimen>
+    <dimen name="common_dian49">49dip</dimen>
+    <dimen name="common_dian50">50dip</dimen>
+    <dimen name="common_dian40">40dip</dimen>
+    <dimen name="common_dian20">20dip</dimen>
+    <dimen name="common_dian21">21dip</dimen>
+    <dimen name="common_dian22">22dip</dimen>
+    <dimen name="common_dian23">23dip</dimen>
+    <dimen name="common_dian25">25dip</dimen>
+
+    <dimen name="common_dian30">30dip</dimen>
+    <dimen name="common_dian55">55dip</dimen>
+    <dimen name="common_dian120">120dip</dimen>
+    <dimen name="common_dian51">51dp</dimen>
+    <dimen name="common_dian70">70dp</dimen>
+    <dimen name="common_dian100">100dp</dimen>
+    <dimen name="common_dian5">5dp</dimen>
+    <dimen name="common_dian10">10dp</dimen>
+    <dimen name="common_dian15">15dp</dimen>
+
+    <dimen name="common_text_18sp">18sp</dimen>
+    <dimen name="common_text_16sp">16sp</dimen>
+    <dimen name="common_text_14sp">14sp</dimen>
+    <dimen name="common_text_20sp">20sp</dimen>
+</resources>

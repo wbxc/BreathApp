@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:orientation="horizontal"
+              android:background="@color/white"
+              android:layout_height="50dip">
+
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+        <Button
+            android:id="@+id/train"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="训练"
+            android:paddingTop="5dip"
+            android:paddingBottom="2dip"
+            android:gravity="center"
+            android:drawableTop="@drawable/select_bg_train"
+            android:background="@color/white"
+            android:textColor="@color/main_botton_text_color"
+            android:layout_centerInParent="true"
+            android:onClick="onTabClicked"
+            android:textSize="12sp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+        <Button
+            android:paddingTop="5dip"
+            android:paddingBottom="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="历史"
+            android:drawableTop="@drawable/select_bg_hisrecord"
+            android:background="@color/white"
+            android:id="@+id/history_record"
+            android:textSize="12sp"
+            android:onClick="onTabClicked"
+            android:textColor="@color/main_botton_text_color"
+            android:layout_centerInParent="true"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dip"
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+        <Button
+            android:paddingTop="5dip"
+            android:paddingBottom="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="12sp"
+            android:text="我"
+            android:drawableTop="@drawable/select_bg_meinfo"
+            android:background="@color/white"
+            android:id="@+id/meInfo"
+            android:onClick="onTabClicked"
+            android:textColor="@color/main_botton_text_color"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+
+
+
+</LinearLayout>

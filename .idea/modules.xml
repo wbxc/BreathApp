@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/BreathApp.iml" filepath="$PROJECT_DIR$/BreathApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pulltofresh/pulltofresh.iml" filepath="$PROJECT_DIR$/pulltofresh/pulltofresh.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sdk_library_project/sdk_library_project.iml" filepath="$PROJECT_DIR$/sdk_library_project/sdk_library_project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/social_sdk_library_project/social_sdk_library_project.iml" filepath="$PROJECT_DIR$/social_sdk_library_project/social_sdk_library_project.iml" />
+    </modules>
+  </component>
+</project>

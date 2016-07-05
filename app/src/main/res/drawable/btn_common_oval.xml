@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item >
+        <shape >
+            <corners android:radius="@dimen/common_dian23" ></corners>
+            <stroke android:color="@color/color_nobreath_bg" android:width="1dip" ></stroke>
+            <solid android:color="@color/color_nobreath_bg" ></solid>
+        </shape>
+    </item>
+    <item  android:state_pressed="true" android:state_focused="true">
+        <shape >
+            <corners android:radius="@dimen/common_dian23" ></corners>
+            <stroke android:color="@color/common_action_bar_splitter" android:width="1dip" ></stroke>
+            <solid android:color="@color/common_action_bar_splitter" ></solid>
+        </shape>
+    </item>
+</selector>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:victory="http://schemas.victory.com/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent">
+
+    <FrameLayout
+        android:id="@+id/section_progress"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:background="#22c0c0c0"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@mipmap/frame_box"/>
+
+        <ProgressBar
+            android:id="@+id/progress_large"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="center" />
+        <TextView
+            android:id="@+id/tvWaiting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="请稍等"
+            android:layout_marginBottom="3dp"
+            android:textSize="12sp"
+            android:textColor="#ffffffff"
+            android:layout_marginTop="25dp"/>
+
+    </FrameLayout>
+
+</LinearLayout>

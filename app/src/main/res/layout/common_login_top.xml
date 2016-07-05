@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian50"
+                android:background="@color/common_top_color"
+                android:orientation="horizontal">
+
+    <RelativeLayout
+        style="@style/common_back"
+        android:id="@+id/back_re"
+        android:background="@drawable/select_back_re_bg">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/icon_common_back_image"/>
+    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="登录"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:id="@+id/topText"
+        android:layout_height="wrap_content"/>
+    <RelativeLayout
+        android:layout_width="@dimen/common_dian50"
+        android:layout_alignParentRight="true"
+        android:id="@+id/layout_right"
+        android:background="@drawable/select_back_re_bg"
+        android:visibility="gone"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="保存"
+            android:id="@+id/tvRight"
+            android:layout_centerInParent="true"
+            android:textSize="16sp"
+            android:textColor="@color/white"/>
+    </RelativeLayout>
+
+</RelativeLayout>

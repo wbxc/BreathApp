@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:textSize="@dimen/common_text_18sp"
+        android:id="@+id/tvTrainName"
+        android:text="缩唇呼吸训练"
+        android:gravity="center|left"
+        android:layout_marginLeft="@dimen/common_dian20"
+        android:layout_height="@dimen/common_dian44"/>
+
+   <TextView
+       android:layout_width="match_parent"
+       android:text="呼吸强度"
+       android:id="@+id/tvStrength"
+       android:layout_below="@+id/tvTrainName"
+       android:gravity="center|left"
+       android:layout_marginLeft="@dimen/common_dian20"
+       android:textSize="@dimen/common_text_16sp"
+       android:layout_height="@dimen/common_dian35"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:text="呼吸持久"
+        android:id="@+id/tvPersistent"
+        android:layout_below="@+id/tvStrength"
+        android:gravity="center|left"
+        android:layout_marginLeft="@dimen/common_dian20"
+        android:textSize="@dimen/common_text_16sp"
+        android:layout_height="@dimen/common_dian35"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:text="呼吸控制"
+        android:id="@+id/tvControl"
+        android:layout_below="@+id/tvPersistent"
+        android:gravity="center|left"
+        android:layout_marginLeft="@dimen/common_dian20"
+        android:textSize="@dimen/common_text_16sp"
+        android:layout_height="@dimen/common_dian35"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:text="创建于:"
+        android:id="@+id/tvTrainStartTime"
+        android:layout_below="@+id/tvControl"
+        android:gravity="center|left"
+        android:visibility="gone"
+        android:layout_marginLeft="@dimen/common_dian20"
+        android:textSize="@dimen/common_text_16sp"
+        android:layout_height="@dimen/common_dian35"/>
+
+</RelativeLayout>

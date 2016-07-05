@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dip"
+                android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/re1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/select_phone_bg" >
+        <TextView
+            android:id="@+id/textview1"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="选择照片"
+            android:textColor="@color/common_color_878787"
+            android:textSize="20sp" />
+        <View
+            android:id="@+id/vew1"
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_below="@+id/textview1"
+            android:background="@color/color_liner_bg" />
+        <Button
+            android:id="@+id/select_button_xiangji"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_below="@+id/vew1"
+            android:background="@null"
+            android:text="相机"
+            android:textColor="@color/common_top_color"
+            android:textSize="20sp" />
+        <View
+            android:id="@+id/vew2"
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_below="@+id/select_button_xiangji"
+            android:background="@color/color_liner_bg" />
+        <Button
+            android:id="@+id/select_button_xiangce"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_below="@+id/vew2"
+            android:background="@null"
+            android:text="相册"
+            android:textColor="@color/common_top_color"
+            android:textSize="20sp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/re1"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:layout_marginTop="20dip"
+        android:background="@drawable/select_phone_bg" >
+        <Button
+            android:id="@+id/quxiao"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:text="取消"
+            android:textColor="@color/common_top_color"
+            android:textSize="20sp" />
+    </RelativeLayout>
+</RelativeLayout>

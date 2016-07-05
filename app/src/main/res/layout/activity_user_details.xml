@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.hhd.breath.app.main.ui.UserDetailsActivity">
+
+    <include
+        android:id="@+id/top_re"
+        layout="@layout/common_login_top"/>
+
+    <RelativeLayout
+        android:id="@+id/layoutAvatar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_re"
+        android:layout_marginTop="25dp">
+        <com.hhd.breath.app.widget.CircularImage
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/main_moren"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/img_user_Avatar"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_user_Avatar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="头像"
+            android:textColor="@color/common_bottom_text_color"
+            android:textSize="16sp"/>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutAvatar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian55"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="账号"
+                    android:textColor="@color/common_color_9A9A9A"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/text_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text=""
+                    android:textColor="@color/common_color_343434"
+                    android:textSize="18sp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/common_color_d5d5d5"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_userName"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian55"
+                android:background="@drawable/common_select_me_item">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:text="姓名"
+                    android:textColor="@color/common_color_9A9A9A"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/text_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/view1"
+                    android:text=""
+                    android:textColor="@color/common_color_343434"
+                    android:textSize="18sp"/>
+
+                <ImageView
+                    android:id="@+id/view1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@mipmap/icon_common_go_detail"
+                    android:visibility="invisible"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/common_color_d5d5d5"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_sexName"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian55"
+                android:background="@drawable/common_select_me_item">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:text="性别"
+                    android:textColor="@color/common_color_9A9A9A"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/text_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/view2"
+                    android:text=""
+                    android:textColor="@color/common_color_343434"
+                    android:textSize="18sp"/>
+
+                <ImageView
+                    android:id="@+id/view2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@mipmap/icon_common_go_detail"
+                    android:visibility="invisible"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="20dp"
+                    android:background="@color/common_color_d5d5d5"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_birthday"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian55"
+                android:background="@drawable/common_select_me_item">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:text="出生年月"
+                    android:textColor="@color/common_color_9A9A9A"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/text_birthday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/view3"
+                    android:text=""
+                    android:textColor="@color/common_color_343434"
+                    android:textSize="18sp"/>
+
+                <ImageView
+                    android:id="@+id/view3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@mipmap/icon_common_go_detail"
+                    android:visibility="invisible"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/common_color_d5d5d5"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_bMdicalRecord"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian55"
+                android:background="@drawable/common_select_me_item">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:text="呼吸病史"
+                    android:textColor="@color/common_color_9A9A9A"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/medical_flag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/view4"
+                    android:text="无"
+                    android:textColor="@color/common_color_343434"
+                    android:textSize="18sp"/>
+
+                <ImageView
+                    android:id="@+id/view4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@mipmap/icon_common_go_detail"
+                    android:visibility="invisible"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/common_color_d5d5d5"/>
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/layout_exit_user"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian44"
+                android:layout_marginLeft="@dimen/common_dian30"
+                android:layout_marginRight="@dimen/common_dian30"
+                android:layout_marginTop="@dimen/common_dian20"
+                android:background="@drawable/select_layout_user"
+                android:gravity="center"
+                android:text="@string/string_login_out"
+                android:textColor="@color/white"
+                android:textSize="@dimen/common_text_18sp">
+            </Button>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

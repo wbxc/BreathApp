@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/white"
+    tools:context="com.hhd.breath.app.main.ui.BreathRegisterSecond">
+    <include layout="@layout/common_login_top" android:id="@+id/layoutTop" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/layoutTop"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/tvShowPhone"
+            android:text="已发送验证码到:"
+            android:textSize="@dimen/common_text_18sp"
+            android:gravity="center_vertical|left"
+            android:singleLine="true"
+            android:layout_marginTop="@dimen/common_dian20"
+            android:layout_marginLeft="@dimen/common_dian30"
+            android:visibility="gone"
+            android:textColor="@color/color_nobreath_bg"
+            android:layout_height="@dimen/common_dian44"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_below="@+id/tvShowPhone"
+            android:id="@+id/layout_content"
+            android:layout_marginTop="@dimen/common_dian20"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="120dip"
+                android:layout_height="@dimen/common_dian44"
+                android:hint="@string/string_check_code"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="@dimen/common_dian30"
+                android:layout_centerVertical="true"
+                android:id="@+id/editCheckCode"
+                android:inputType="number"
+                android:textSize="@dimen/common_text_18sp"
+                android:background="@null"
+                />
+            <Button
+                android:layout_width="120dip"
+                android:id="@+id/btnGetCheckCode"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/common_dian30"
+                android:textSize="@dimen/common_text_16sp"
+                android:text="@string/string_get_check_code"
+                android:background="@drawable/btn_get_code"
+                android:layout_centerVertical="true"
+                android:textColor="@color/white"
+                android:layout_height="@dimen/common_dian44"/>
+        </RelativeLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_below="@+id/layout_content"
+            android:layout_marginTop="@dimen/common_dian40"
+            android:layout_height="@dimen/common_dian44"
+            android:text="@string/string_commit"
+            android:id="@+id/btnCommit"
+            android:layout_marginLeft="@dimen/common_dian30"
+            android:layout_marginRight="@dimen/common_dian30"
+            android:background="@drawable/btn_common_oval"
+            android:textSize="@dimen/common_text_18sp"
+            android:gravity="center"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+</RelativeLayout>
