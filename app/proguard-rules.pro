@@ -29,3 +29,6 @@
 -keep public class com.hhd.breath.app.R$*{
     public static final int *;
 }
+
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
