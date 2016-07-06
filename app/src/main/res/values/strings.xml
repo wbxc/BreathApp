@@ -80,6 +80,8 @@
     <string name="string_detail_user_error">获取个人信息失败</string>
     <string name="string_detail_user_net_error">网络连接异常</string>
     <string name="string_breath_health_check">呼吸健康检测</string>
+    <string name="string_create_myself_train">创建自定义训练</string>
+    <string name="string_create_train">创建</string>
 
 
 </resources>

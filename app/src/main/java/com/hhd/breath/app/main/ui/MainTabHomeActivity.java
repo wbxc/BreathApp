@@ -32,6 +32,7 @@ import com.hhd.breath.app.utils.ActivityCollector;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.utils.StringUtils;
 import com.hhd.breath.app.wchusbdriver.Global340Driver;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.update.UmengUpdateAgent;
 
 import java.lang.ref.WeakReference;
@@ -84,7 +85,6 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
         }
         UmengUpdateAgent.update(this) ;
         initEvent();
-
     }
 
     private void initEvent(){

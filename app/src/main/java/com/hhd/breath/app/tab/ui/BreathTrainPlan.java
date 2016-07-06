@@ -27,6 +27,7 @@ import com.hhd.breath.app.main.ui.BreathTrainActivity;
 import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.view.RecycleViewDivider;
+import com.hhd.breath.app.view.ui.TrainPlanAdd;
 import com.hhd.breath.app.view.viewHolder.TrainPlanSwipeAdapter;
 import com.hhd.breath.app.wchusbdriver.Global340Driver;
 
@@ -136,6 +137,9 @@ public class BreathTrainPlan extends BaseActivity {
             public void onItemClick(View view, int position) {
                 if (position == (trainPlans.size() - 1)) {
                     BreathApplication.toast(BreathTrainPlan.this, "训练计划添加功能暂未实现");
+                    Intent intent = new Intent() ;
+                    intent.setClass(BreathTrainPlan.this, TrainPlanAdd.class) ;
+                    startActivity(intent);
                 } else {
 
                     if (!isNotEmpty(ShareUtils.getSerialNumber(BreathTrainPlan.this))) {

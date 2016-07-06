@@ -148,10 +148,12 @@ public class DBManger {
     public static String TRAIN_STOP_TIME = "stopTime" ;
     public static String TRAIN_CREATE_TIME = "createTime" ;
     public static String TABLE_TRAIN_PLAN = "trainPlan" ;
+    public static String TRAIN_PLAN_USER_ID ="user_id" ;
 
 
     public static String  CREATE_TRAIN_PLAN = "CREATE TABLE IF NOT EXITS "+TABLE_TRAIN_PLAN+" (" +
                 "id integer primary key autoincrement , "+
+            TRAIN_PLAN_USER_ID+" VARCHAR(50)"+
             TRAIN_PLAN_NAME+" VARCHAR(50),"+
             TRAIN_PLAN_PERSISTENT+" VARCHAR(20),"+
             TRAIN_PLANE_CONTROL+" VARCHAR(20),"+

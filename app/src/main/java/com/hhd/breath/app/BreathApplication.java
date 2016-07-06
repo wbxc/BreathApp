@@ -25,7 +25,10 @@ public class BreathApplication extends Application {
         super.onCreate();
 
         //获取APP ID并将以下代码复制到项目Application类onCreate()中，Bugly会为自动检测环境并完成配置：
-        CrashReport.initCrashReport(this, "900038004", false);
+
+        //
+        // 测试的时候是true  发布的时候false
+        CrashReport.initCrashReport(getApplicationContext(), "900038004", true);
         // 反馈服务初始化
         // init(false) 在应用中只集成了友盟用户反馈SDK，没有集成友盟消息推送SDK
         FeedbackPush.getInstance(this).init(false);
