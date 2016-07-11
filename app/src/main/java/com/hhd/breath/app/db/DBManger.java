@@ -18,6 +18,13 @@ public class DBManger {
     public  static String TRAIN_REPORT_ID = "train_report_id" ;
 
 
+
+
+
+
+
+
+
     /**
      * 记录报告
      *
@@ -145,26 +152,92 @@ public class DBManger {
     public static String TRAIN_PLAN_CONTROL_LEVEL = "controlLevel" ;
     public static String TRAIN_PLAN_STRENGTH_LEVEL = "strengthLevel" ;
     public static String TRAIN_BREATH_TIME = "breathTime" ;
-    public static String TRAIN_STOP_TIME = "stopTime" ;
+    public static String TRAIN_INSPIRER_TIME = "stopTime" ;
     public static String TRAIN_CREATE_TIME = "createTime" ;
-    public static String TABLE_TRAIN_PLAN = "trainPlan" ;
+
     public static String TRAIN_PLAN_USER_ID ="user_id" ;
+    public static String TRAIN_PLAN_TYPE = "plan_type" ; //  训练的类型  默认和循环渐进
+    public static String TRAIN_PLAN_CUM_TIME = "cumulative_time" ;   // 训练累计时间
+    public static String TRAIN_PLAN_TIMES = "train_times" ;   //  累计训练多少次合格晋级
+    public static String TABLE_TRAIN_PLAN = "trainPlan" ;
 
 
-    public static String  CREATE_TRAIN_PLAN = "CREATE TABLE IF NOT EXITS "+TABLE_TRAIN_PLAN+" (" +
+
+
+    public static String  CREATE_TRAIN_PLAN = "CREATE TABLE IF NOT exists "+TABLE_TRAIN_PLAN+" (" +
                 "id integer primary key autoincrement , "+
-            TRAIN_PLAN_USER_ID+" VARCHAR(50)"+
+            TRAIN_PLAN_USER_ID+" VARCHAR,"+
             TRAIN_PLAN_NAME+" VARCHAR(50),"+
-            TRAIN_PLAN_PERSISTENT+" VARCHAR(20),"+
-            TRAIN_PLANE_CONTROL+" VARCHAR(20),"+
-            TRAIN_PLAN_STRENGTH+" VARCHAR(20),"+
-            TRAIN_PLAN_GROUP_NUMBER+" VARCHAR(20),"+
-            TRAIN_PLAN_PERSISTENT_LEVEL+" VARCHAR(20) ,"+
-            TRAIN_PLAN_CONTROL_LEVEL+" VARCHAR(20),"+
-            TRAIN_PLAN_STRENGTH_LEVEL+" VARCHAR(20),"+
-            TRAIN_BREATH_TIME+" VARCHAR(20),"+
-            TRAIN_STOP_TIME+" VARCHAR(20),"+
-            TRAIN_CREATE_TIME+" VARCHAR(20)"+
+            TRAIN_PLAN_PERSISTENT+" VARCHAR,"+
+            TRAIN_PLANE_CONTROL+" VARCHAR,"+
+            TRAIN_PLAN_STRENGTH+" VARCHAR,"+
+            TRAIN_PLAN_GROUP_NUMBER+" VARCHAR,"+
+            TRAIN_PLAN_PERSISTENT_LEVEL+" VARCHAR,"+
+            TRAIN_PLAN_CONTROL_LEVEL+" VARCHAR,"+
+            TRAIN_PLAN_STRENGTH_LEVEL+" VARCHAR,"+
+            TRAIN_BREATH_TIME+" VARCHAR,"+
+            TRAIN_INSPIRER_TIME +" VARCHAR,"+
+            TRAIN_CREATE_TIME+" VARCHAR,"+
+            TRAIN_PLAN_TYPE+" VARCHAR,"+
+            TRAIN_PLAN_CUM_TIME+" VARCHAR,"+
+            TRAIN_PLAN_TIMES+" VARCHAR"+
             ")"  ;
+
+
+
+
+
+
+
+
+
+    public static String TRAIN_HIS_RECORD_ID = "record_id" ;
+    public static String TRAIN_HIS_FILE_ID = "file_id" ;
+    public static String TRAIN_HIS_USER_ID = "user_id" ;
+    public static String TRAIN_HIS_BREATH_TYPE = "breath_type" ;
+    public static String TRAIN_HIS_TRAIN_GROUP = "train_group" ;
+    public static String TRAIN_HIS_TRAIN_LAST = "train_last" ;
+    public static String TRAIN_HIS_TRAIN_TIME = " train_time" ;
+    public static String TRAIN_HIS_TRAIN_RESULT = "train_result" ;
+    public static String TRAIN_HIS_FILE_UPLOAD_TIME = "file_upload_time" ;
+    public static String TRAIN_HIS_DIFFICULTY = "difficulty" ;
+    public static String TRAIN_HIS_SUGGESTION = "suggestion" ;
+    public static String TRAIN_HIS_DEVICE_SN = "device_sn" ;
+    public static String TRAIN_HIS_FILE_TYPE = "file_type" ;
+    public static String TRAIN_HIS_FILE_O_NAME = "file_o_name" ;
+    public static String TRAIN_HIS_FILE_N_NAME = "file_n_name" ;
+    public static String TRAIN_HIS_FILE_PATH = "file_path" ;
+    public static String TRAIN_HIS_FILE_MD5 = "file_md5" ;
+    public static String TRAIN_HIS_PLATFORM = "platform" ;
+    public static String TRAIN_HIS_IS_DELETE = "is_delete" ;
+    public static String TRAIN_HIS_RECORD_STATE = "record_state" ;
+    public static String TRAIN_HIS_FILE_SIZE = "file_size" ;
+
+
+    public static String TABLE_TRAIN_HIS = "train_his" ;
+    public static String CREATE_TRAIN_HIS = "create table if not exists "+TABLE_TRAIN_HIS+"(" +
+            "id integer primary key AUTOINCREMENT ,"+
+            TRAIN_HIS_RECORD_ID+" VARCHAR , "+
+            TRAIN_HIS_FILE_ID+" VARCHAR ,"+
+            TRAIN_HIS_USER_ID+" VARCHAR ,"+
+            TRAIN_HIS_BREATH_TYPE+" VARCHAR ,"+
+            TRAIN_HIS_TRAIN_GROUP+" VARCHAR ,"+
+            TRAIN_HIS_TRAIN_LAST+" VARCHAR,"+
+            TRAIN_HIS_TRAIN_TIME+" VARCHAR ,"+
+            TRAIN_HIS_TRAIN_RESULT+" VARCHAR ,"+
+            TRAIN_HIS_FILE_UPLOAD_TIME+" VARCHAR,"+
+            TRAIN_HIS_DIFFICULTY+" VARCHAR ,"+
+            TRAIN_HIS_SUGGESTION+" VARCHAR ,"+
+            TRAIN_HIS_DEVICE_SN+" VARCHAR ,"+
+            TRAIN_HIS_FILE_TYPE+" VARCHAR ,"+
+            TRAIN_HIS_FILE_O_NAME+" VARCHAR,"+
+            TRAIN_HIS_FILE_N_NAME+" VARCHAR,"+
+            TRAIN_HIS_FILE_PATH+" VARCHAR,"+
+            TRAIN_HIS_FILE_MD5+" VARCHAR,"+
+            TRAIN_HIS_PLATFORM+" VARCHAR,"+
+            TRAIN_HIS_IS_DELETE+" VARCHAR,"+
+            TRAIN_HIS_RECORD_STATE+" VARCHAR,"+
+            TRAIN_HIS_FILE_SIZE+" VARCHAR"+
+            ")";
 
 }

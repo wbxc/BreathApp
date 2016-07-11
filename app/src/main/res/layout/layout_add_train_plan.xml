@@ -1,19 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
+                android:paddingTop="@dimen/common_dian15"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
-
-    <TextView
+              android:layout_height="wrap_content">
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/common_text_20sp"
-        android:textColor="@color/color_nobreath_bg"
-        android:gravity="center"
-        android:paddingBottom="@dimen/common_dian20"
-        android:paddingTop="@dimen/common_dian20"
+        android:src="@mipmap/icon_bg_add_plan"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:src="@mipmap/icon_add_plan"
         android:layout_centerVertical="true"
-        android:text="添加训练计划"/>
+        android:id="@+id/imgAddPlan"
+        android:layout_marginLeft="@dimen/common_dian20"
+        android:layout_height="wrap_content"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:src="@mipmap/icon_train_plan_cell"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/common_dian20"
+        android:layout_height="wrap_content"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/imgAddPlan"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/common_dian15"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="创建自定义训练"
+            android:textSize="@dimen/common_text_18sp"
+            android:id="@+id/tvCustomName"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_below="@+id/tvCustomName"
+            android:text="创建属于自己的训练方式"
+            android:textColor="@color/white"
+            android:textSize="@dimen/common_text_16sp"
+            android:layout_marginTop="@dimen/common_dian5"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
 </RelativeLayout>

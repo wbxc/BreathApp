@@ -10,7 +10,37 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/white"
     tools:context="com.hhd.breath.app.tab.ui.BreathTrainPlan">
-    <include layout="@layout/top_layout" android:id="@+id/topLayout"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/topLayout"
+        android:background="@color/common_top_color"
+        android:layout_height="@dimen/common_dian50">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="HyBreath"
+            android:gravity="center|left"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_centerVertical="true"
+            android:id="@+id/topText"
+            android:layout_marginLeft="@dimen/common_dian20"
+            android:layout_height="wrap_content"/>
+
+        <RelativeLayout
+            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/common_dian50"
+            android:id="@+id/layoutMeDetails"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:src="@mipmap/icon_navbar_me"
+                android:layout_centerInParent="true"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_below="@+id/topLayout"

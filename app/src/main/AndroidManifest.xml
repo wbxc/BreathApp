@@ -14,7 +14,7 @@
         android:normalScreens="true"
         android:xlargeScreens="true"/>
 
-    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.READ_LOGS"/>
     <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
@@ -160,7 +160,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".tab.ui.MeTabActivity"
+            android:name=".view.ui.MeDetailsActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
@@ -317,10 +317,6 @@
                 <action android:name="com.umeng.message.autoupdate.handler.action"/>
             </intent-filter>
         </service>
-        <!--
-            <service android:name="com.umeng.fb.example.MyPushIntentService"
-                 android:process=":push" />
-        -->
         <!-- V1.3.0添加的service，负责下载通知的资源 -->
         <service android:name="com.umeng.message.UmengDownloadResourceService"/>
 
@@ -388,11 +384,19 @@
             android:name=".main.ui.BreathRegisterSecond"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".tab.ui.BreathCheck">
+        <activity
+            android:name=".tab.ui.BreathCheck"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".tab.ui.BreathTrainPlan">
+        <activity
+            android:name=".tab.ui.BreathTrainPlan"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".view.ui.TrainPlanAdd">
+        <activity
+            android:name=".view.ui.TrainPlanAdd"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".view.ui.TrainAddName">
         </activity>
     </application>
 

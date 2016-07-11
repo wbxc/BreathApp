@@ -10,8 +10,6 @@ import android.os.Message;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
@@ -23,16 +21,16 @@ import com.hhd.breath.app.BaseDialog;
 import com.hhd.breath.app.BreathApplication;
 import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
+import com.hhd.breath.app.db.TrainPlanService;
+import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.service.GlobalUsbService;
 import com.hhd.breath.app.tab.ui.BreathCheck;
 import com.hhd.breath.app.tab.ui.BreathTrainPlan;
 import com.hhd.breath.app.tab.ui.HisTabActivity;
-import com.hhd.breath.app.tab.ui.MeTabActivity;
 import com.hhd.breath.app.utils.ActivityCollector;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.utils.StringUtils;
 import com.hhd.breath.app.wchusbdriver.Global340Driver;
-import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.update.UmengUpdateAgent;
 
 import java.lang.ref.WeakReference;
@@ -59,7 +57,6 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_tab_home);
-
         mTabHost = (TabHost) findViewById(android.R.id.tabhost);
         mTabWidget = (TabWidget) findViewById(android.R.id.tabs);
         mTabHost.setOnTabChangedListener(this);
@@ -79,12 +76,32 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
             case 2:
                 mTabHost.setCurrentTab(2);
                 break;
-            case 3:
-                mTabHost.setCurrentTab(3);
-                break;
         }
         UmengUpdateAgent.update(this) ;
         initEvent();
+
+        if (!TrainPlanService.getInstance(MainTabHomeActivity.this).exits(ShareUtils.getUserId(MainTabHomeActivity.this),"0")){
+
+            TrainPlan trainPlan = new TrainPlan() ;
+            trainPlan.setTrainType("0");  // 循序渐进呼气类型
+            trainPlan.setName("循序渐进训练");   // 训练的名称
+            trainPlan.setInspirerTime("3");   // 吸气时间 就是暂停时间
+            trainPlan.setGroupNumber("10");    // 呼吸训练的组数
+            trainPlan.setTimes("1");           // 完成多少次可以晋级
+            trainPlan.setControlLevel("13");     // 控制强度
+            trainPlan.setControl("1");
+            trainPlan.setStrength("1");
+            trainPlan.setStrengthLevel("15");
+            trainPlan.setPersistent("1");
+            trainPlan.setPersistentLevel("3");
+            trainPlan.setUserId(ShareUtils.getUserId(MainTabHomeActivity.this));
+            trainPlan.setCumulativeTime("");   // 训练累计时间
+            trainPlan.setCreateTime("");
+            TrainPlanService.getInstance(MainTabHomeActivity.this).add(trainPlan) ;
+        }
+
+
+
     }
 
     private void initEvent(){
@@ -268,9 +285,9 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
             case 2:
                 mTabHost.setCurrentTab(2);
                 break;
-            case 3:
+           /* case 3:
                 mTabHost.setCurrentTab(3);
-                break;
+                break;*/
         }
     }
 
@@ -298,12 +315,12 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
                                 .setBackgroundResource(R.mipmap.icon_tab_me_select);
                         ((TextView) list.get(i).findViewById(R.id.tv_main))
                                 .setTextColor(getResources().getColor(R.color.common_bottom_bar_blue));
-                    } else if (i == 3) {
+                    } /*else if (i == 3) {
                         ((ImageView) list.get(i).findViewById(R.id.btn_tab_bottom_weixin))
                                 .setBackgroundResource(R.mipmap.icon_tab_me_select);
                         ((TextView) list.get(i).findViewById(R.id.tv_main))
                                 .setTextColor(getResources().getColor(R.color.common_bottom_bar_blue));
-                    }
+                    }*/
                 }
             } else {// 其他按钮设置为没选中
                 mTabWidget.getChildAt(Integer.valueOf(i)).setBackgroundDrawable(null);
@@ -324,12 +341,12 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
                                 .setBackgroundResource(R.mipmap.icon_tab_me_unselect);
                         ((TextView) list.get(i).findViewById(R.id.tv_main))
                                 .setTextColor(getResources().getColor(R.color.common_color_d5d5d5));
-                    }else if (i == 3 && i != tabID) {
+                    }/*else if (i == 3 && i != tabID) {
                         ((ImageView) list.get(i).findViewById(R.id.btn_tab_bottom_weixin))
                                 .setBackgroundResource(R.mipmap.icon_tab_me_unselect);
                         ((TextView) list.get(i).findViewById(R.id.tv_main))
                                 .setTextColor(getResources().getColor(R.color.common_color_d5d5d5));
-                    }
+                    }*/
                 }
             }
         }
@@ -340,7 +357,6 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
         setIndicator(R.mipmap.icon_tab_train_select, 0, new Intent(this, BreathTrainPlan.class));
         setIndicator(R.mipmap.icon_tab_hisrecord_unselect, 1, new Intent(this, HisTabActivity.class));
         setIndicator(R.mipmap.icon_tab_me_unselect, 2, new Intent(this, BreathCheck.class));
-        setIndicator(R.mipmap.icon_tab_me_unselect, 3, new Intent(this, MeTabActivity.class));
 
     }
 
@@ -371,11 +387,11 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
                 mText.setText(getResources().getString(R.string.string_tab_check));
                 mText.setTextColor(getResources().getColor(R.color.common_color_d5d5d5));
                 break;
-            case 3:
+           /* case 3:
 
                 mText.setText(getResources().getString(R.string.string_tab_me));
                 mText.setTextColor(getResources().getColor(R.color.common_color_d5d5d5));
-                break;
+                break;*/
 
         }
         iv.setBackgroundResource(icon);

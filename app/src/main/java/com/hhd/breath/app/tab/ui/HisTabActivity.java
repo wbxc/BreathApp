@@ -15,6 +15,7 @@ import com.hhd.breath.app.BaseActivity;
 import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
 import com.hhd.breath.app.adapter.TrainExpandableAdapter;
+import com.hhd.breath.app.db.TrainHisService;
 import com.hhd.breath.app.imp.TrainRecordImp;
 import com.hhd.breath.app.main.ui.TrainReportActivity;
 import com.hhd.breath.app.model.BreathHisDataShow;
@@ -117,7 +118,6 @@ public class HisTabActivity extends BaseActivity {
         mExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Log.e("setOnChildClickListener", "groupPosition" + groupPosition + ">>>" + "childPosition" + childPosition);
                 if (groupPosition < breathResultShow.size() && childPosition < breathResultShow.get(groupPosition).getBreathHistoricalDatas().size()) {
                     goNextUI(breathResultShow.get(groupPosition).getBreathHistoricalDatas().get(childPosition).getRecord_id());
                 }
@@ -209,6 +209,9 @@ public class HisTabActivity extends BaseActivity {
             @Override
             public void onResponse(Call<BreathTempData> call, Response<BreathTempData> response) {
                 List<BreathHistoricalData> breathHistoricalDatas = response.body().getData();
+
+                TrainHisService.getInstance(HisTabActivity.this).addList(breathHistoricalDatas);
+
                 if (!breathHistoricalDatas.isEmpty()) {
 
                     for (int i = 0; i < breathHistoricalDatas.size(); i++) {
@@ -224,7 +227,6 @@ public class HisTabActivity extends BaseActivity {
                                 int breathSize = breathHisDataShows.size();
 
                                 for (int j = 0; j < breathSize; j++) {
-                                    Log.e("breathSize", "breathSize" + breathSize);
                                     if (breathHisDataShows.get(j).getMeasure_time().equals(measure_time)) {
                                         //breathHisDataShows.get(j).getBreathHistoricalDatas().add(breathHistoricalDatas.get(i)) ;
                                     } else {
@@ -262,7 +264,6 @@ public class HisTabActivity extends BaseActivity {
                 @Override
                 public void onFailure (Call < BreathTempData > call, Throwable t){
 
-                    Log.e("BreathTempData", "fail BreathTempData"+ t.getMessage());
                 }
               }
             );

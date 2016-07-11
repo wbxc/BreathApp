@@ -10,18 +10,42 @@ import com.hhd.breath.app.db.DBManger;
 public class TrainPlan {
 
     private String name ;   // 训练名称
-    private String persistent ;
-    private String control ;
-    private String strength ;
+    private String persistent ;  // 表示太阳的个数
+    private String control ;   // 表示星星的个数
+    private String strength ;  // 表示月亮的个数
     private String groupNumber  ;
+
+
+
     private String persistentLevel ;
     private String controlLevel ;
     private String strengthLevel ;
+
+
+
     private String breathTime ;
-    private String stopTime ;
+    private String inspirerTime;   // 吸气时间
     private String createTime ;  //创建时间
     private String userId ;
+    private String trainType ;   // 训练的类型  区分循环渐进  还是 自定义
+    private String cumulativeTime ;  // 累计时间
 
+
+    public String getTrainType() {
+        return trainType;
+    }
+
+    public void setTrainType(String trainType) {
+        this.trainType = trainType;
+    }
+
+    public String getCumulativeTime() {
+        return cumulativeTime;
+    }
+
+    public void setCumulativeTime(String cumulativeTime) {
+        this.cumulativeTime = cumulativeTime;
+    }
 
     private String times ;
 
@@ -41,12 +65,12 @@ public class TrainPlan {
         this.breathTime = breathTime;
     }
 
-    public String getStopTime() {
-        return stopTime;
+    public String getInspirerTime() {
+        return inspirerTime;
     }
 
-    public void setStopTime(String stopTime) {
-        this.stopTime = stopTime;
+    public void setInspirerTime(String inspirerTime) {
+        this.inspirerTime = inspirerTime;
     }
 
     public String getCreateTime() {
@@ -145,11 +169,13 @@ public class TrainPlan {
         contentValues.put(DBManger.TRAIN_PLAN_STRENGTH,trainPlan.getStrength());
         contentValues.put(DBManger.TRAIN_PLAN_STRENGTH_LEVEL,trainPlan.getStrengthLevel());
         contentValues.put(DBManger.TRAIN_PLAN_PERSISTENT,trainPlan.getPersistent()) ;
-        contentValues.put(DBManger.TRAIN_PLAN_PERSISTENT_LEVEL,trainPlan.getStrengthLevel());
+        contentValues.put(DBManger.TRAIN_PLAN_PERSISTENT_LEVEL,trainPlan.getPersistentLevel());
         contentValues.put(DBManger.TRAIN_PLAN_GROUP_NUMBER,trainPlan.getGroupNumber());
-        contentValues.put(DBManger.TRAIN_BREATH_TIME,trainPlan.getBreathTime());
-        contentValues.put(DBManger.TRAIN_STOP_TIME,trainPlan.getStopTime());
+        contentValues.put(DBManger.TRAIN_INSPIRER_TIME,trainPlan.getInspirerTime());
         contentValues.put(DBManger.TRAIN_CREATE_TIME,trainPlan.getCreateTime());
+        contentValues.put(DBManger.TRAIN_PLAN_TYPE,trainPlan.getTrainType()) ;
+        contentValues.put(DBManger.TRAIN_PLAN_TIMES,trainPlan.getTimes());
+        contentValues.put(DBManger.TRAIN_PLAN_CUM_TIME,trainPlan.getCumulativeTime());
 
 
         return contentValues ;

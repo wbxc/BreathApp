@@ -2,21 +2,17 @@ package com.hhd.breath.app.view.ui;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hhd.breath.app.BaseActivity;
-import com.hhd.breath.app.BreathApplication;
 import com.hhd.breath.app.R;
 import com.hhd.breath.app.model.SysDataModel;
 import com.hhd.breath.app.model.TrainPlan;
@@ -42,6 +38,16 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
     RelativeLayout layoutBreathStrength;
     @Bind(R.id.layoutBreathControl)
     RelativeLayout layoutBreathControl;
+    @Bind(R.id.layoutTrainName)
+    RelativeLayout layoutTrainName ;
+    @Bind(R.id.tvTrainName)
+    TextView tvTrainName ;
+
+
+
+
+
+
     @Bind(R.id.tvInspired)
     TextView  tvInspired;
     @Bind(R.id.tvBreathGroups)
@@ -198,19 +204,20 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
         layoutTrainTimes.setOnClickListener(this);
         layoutBreathStrength.setOnClickListener(this);
         btnCreateTrainPlan.setOnClickListener(this);
+        layoutTrainName.setOnClickListener(this);
 
 
 
         layoutInspiredDialog = new SelectDialog(TrainPlanAdd.this, new SelectInterface() {
             @Override
             public void setValue(final String value) {
-                trainPlan.setStopTime(value);
+                trainPlan.setInspirerTime(value);
             }
 
             @Override
             public void setOnClick(final int position) {
                 tvInspired.setText(layoutInspiredModels.get(position).getName());
-                trainPlan.setStopTime(layoutInspiredModels.get(position).getName());
+                trainPlan.setInspirerTime(layoutInspiredModels.get(position).getName());
                 layoutInspiredDialog.dimissDialog();
             }
         },layoutInspiredModels) ;
@@ -343,23 +350,24 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.btnCreateTrainPlan:
                 break;
+            case R.id.layoutTrainName:
+                Intent intent = new Intent(TrainPlanAdd.this,TrainAddName.class) ;
+                startActivityForResult(intent,10);
+                break;
         }
     }
 
-    /**
-     * 数据
-     */
-    private Runnable runnable  = new Runnable() {
-        @Override
-        public void run() {
-
-
-
-        }
-    } ;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case 10 :
+                String trainName = data.getStringExtra("trainName") ;
+                if (isNotEmpty(trainName)){
+                    tvTrainName.setText(trainName);
+                }
+                break;
+        }
     }
 
     private class SelectDialog extends Dialog{
@@ -423,8 +431,6 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
         public void  dimissDialog(){
             this.dismiss();
         }
-
-
     }
 
 

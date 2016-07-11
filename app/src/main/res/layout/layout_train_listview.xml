@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+                android:paddingTop="@dimen/common_dian15"
+              android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:src="@mipmap/icon_bg_plan"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:id="@+id/imgFlag"
+        android:layout_marginLeft="@dimen/common_dian20"
+        android:src="@mipmap/icon_custom_plan"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:id="@+id/layoutContent"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/imgFlag"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="妈妈的训练"
+            android:id="@+id/tvTrainName"
+            android:textColor="@color/white"
+            android:textSize="@dimen/common_text_18sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTrainName"
+            android:id="@+id/tvCreateTime"
+            android:textSize="@dimen/common_text_16sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="@dimen/common_dian5"
+            android:text="创建时间: 2016-06-12"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvCreateTime"
+            android:id="@+id/tvCumulativeTime"
+            android:textSize="@dimen/common_text_16sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="@dimen/common_dian5"
+            android:text="累计时间: 00:04:32"/>
+    </RelativeLayout>
+</RelativeLayout>

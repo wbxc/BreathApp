@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hhd.breath.app.R;
@@ -36,6 +37,8 @@ public class TrainPlanSwipeAdapter extends RecyclerView.Adapter<TrainPlanSwipeAd
         if (trainPlans!=null && !trainPlans.isEmpty()){
             if (position==(trainPlans.size()-1)){
                 return 1 ;
+            }else if (position == 0){
+                return 2 ;
             }
         }
         return super.getItemViewType(position);
@@ -49,11 +52,9 @@ public class TrainPlanSwipeAdapter extends RecyclerView.Adapter<TrainPlanSwipeAd
 
         if (viewType==1){
             view = layoutInflater.inflate(R.layout.layout_add_train_plan,null) ;
-
-
             viewHolder = new ViewHolder(view,viewType) ;
-        }else {
-            view = layoutInflater.inflate(R.layout.adaper_train_listview,null) ;
+        }else{
+            view = layoutInflater.inflate(R.layout.layout_train_listview,null) ;
             viewHolder = new ViewHolder(view,viewType) ;
         }
         return viewHolder;
@@ -68,9 +69,15 @@ public class TrainPlanSwipeAdapter extends RecyclerView.Adapter<TrainPlanSwipeAd
         if (holder.getViewType()==0){
             TrainPlan trainPlan = trainPlans.get(position) ;
             holder.tvTrainName.setText("训练名称:" + trainPlan.getName());
-            holder.tvStrength.setText("呼吸强度:"+trainPlan.getStrength()) ;
-            holder.tvPresenter.setText("呼吸持久:"+trainPlan.getPersistent());
-            holder.tvController.setText("呼吸控制:"+trainPlan.getControl());
+            holder.tvCreateTime.setText("呼吸强度:"+trainPlan.getStrength()) ;
+            holder.tvCumulativeTime.setText("呼吸持久:"+trainPlan.getPersistent());
+            holder.imgFlag.setImageResource(R.mipmap.icon_custom_plan);
+        }else if (holder.getViewType()==2){
+            TrainPlan trainPlan = trainPlans.get(position) ;
+            holder.tvTrainName.setText("训练名称:" + trainPlan.getName());
+            holder.tvCreateTime.setText("呼吸强度:"+trainPlan.getStrength()) ;
+            holder.tvCumulativeTime.setText("呼吸持久:"+trainPlan.getPersistent());
+            holder.imgFlag.setImageResource(R.mipmap.icon_init_plan);
         }
 
         holder.itemView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.layout_swipe_click));
@@ -96,24 +103,21 @@ public class TrainPlanSwipeAdapter extends RecyclerView.Adapter<TrainPlanSwipeAd
 
     public static class  ViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView tvStrength ;
-        private TextView tvPresenter ;
-        private TextView tvController ;
-        private TextView tvStartTime ;
+        private TextView tvCreateTime ;
+        private TextView tvCumulativeTime ;
         private TextView tvTrainName ;
+        private ImageView imgFlag ;
 
         private int viewType ;
         public ViewHolder(View itemView, int viewType) {
             super(itemView);
 
             this.viewType = viewType ;
-            if (viewType==0){
-
-                tvController = (TextView)itemView.findViewById(R.id.tvControl) ;
-                tvPresenter = (TextView)itemView.findViewById(R.id.tvPersistent) ;
-                tvStartTime = (TextView)itemView.findViewById(R.id.tvTrainStartTime) ;
-                tvStrength = (TextView)itemView.findViewById(R.id.tvStrength) ;
+            if (viewType==0 || viewType ==2){
+                tvCumulativeTime = (TextView)itemView.findViewById(R.id.tvCumulativeTime) ;
+                tvCreateTime = (TextView)itemView.findViewById(R.id.tvCreateTime) ;
                 tvTrainName = (TextView)itemView.findViewById(R.id.tvTrainName) ;
+                imgFlag = (ImageView)itemView.findViewById(R.id.imgFlag) ;
             }
         }
 

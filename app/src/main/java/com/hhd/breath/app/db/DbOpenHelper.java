@@ -39,6 +39,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(DBManger.CREATE_MEDICAL_CASEBOOK);
         db.execSQL(DBManger.CREATE_HEALTH_DATA);
         db.execSQL(DBManger.CREATE_TRAIN_PLAN);
+        db.execSQL(DBManger.CREATE_TRAIN_HIS);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.hhd.breath.app.tab.ui;
+package com.hhd.breath.app.view.ui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,7 +27,7 @@ import java.io.File;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MeTabActivity extends BaseActivity implements View.OnClickListener {
+public class MeDetailsActivity extends BaseActivity implements View.OnClickListener {
 
     protected TextView mTopTextView ;
     private RelativeLayout commonQuestion ;
@@ -40,6 +40,7 @@ public class MeTabActivity extends BaseActivity implements View.OnClickListener 
 
     @Bind(R.id.me_userinfo) RelativeLayout userInfo ;
     @Bind(R.id.me_systemsSetting) RelativeLayout systemSetting ;
+    @Bind(R.id.back_re) RelativeLayout layoutBack ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,6 @@ public class MeTabActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void onResume() {
         super.onResume();
-        CommonValues.select_activity = 3 ;
         mTopTextView.setText("我");
         File mFile = new File(Environment.getExternalStorageDirectory().toString() + "/hyTriage/touxiang.jpg") ;
         if (mFile.exists()) {
@@ -84,13 +84,20 @@ public class MeTabActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void initEvent() {
 
-        if (StringUtils.isNotEmpty(ShareUtils.getUserPhone(MeTabActivity.this))){
-            mTvPhoneNumber.setText(ShareUtils.getUserPhone(MeTabActivity.this));
+        if (StringUtils.isNotEmpty(ShareUtils.getUserPhone(MeDetailsActivity.this))){
+            mTvPhoneNumber.setText(ShareUtils.getUserPhone(MeDetailsActivity.this));
         }
 
-        if (StringUtils.isNotEmpty(ShareUtils.getUserName(MeTabActivity.this))){
-            mTvName.setText(ShareUtils.getUserName(MeTabActivity.this));
+        if (StringUtils.isNotEmpty(ShareUtils.getUserName(MeDetailsActivity.this))){
+            mTvName.setText(ShareUtils.getUserName(MeDetailsActivity.this));
         }
+
+        layoutBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MeDetailsActivity.this.finish();
+            }
+        });
 
     }
 
@@ -129,7 +136,7 @@ public class MeTabActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.me_feedSuggestion:
                 //startAction(FeedBackActivity.class);
-                new FeedbackAgent(MeTabActivity.this).startFeedbackActivity();
+                new FeedbackAgent(MeDetailsActivity.this).startFeedbackActivity();
                 // fb.startFeedbackActivity();
                 break;
             case R.id.me_userinfo:
@@ -142,7 +149,7 @@ public class MeTabActivity extends BaseActivity implements View.OnClickListener 
     }
     public void startAction(Class mClass){
         Intent mIntent = new Intent() ;
-        mIntent.setClass(MeTabActivity.this,mClass) ;
+        mIntent.setClass(MeDetailsActivity.this,mClass) ;
         startActivity(mIntent);
     }
 }

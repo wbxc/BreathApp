@@ -6,8 +6,15 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.hhd.breath.app.model.TrainPlan;
 
+import java.security.cert.TrustAnchor;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Administrator on 2016/7/5.
+ *
+ * 训练计划管理    训练计划创建
+ *
  */
 public class TrainPlanService {
 
@@ -34,12 +41,16 @@ public class TrainPlanService {
             db.beginTransaction();
             if (!isExits(db,trainPlan.getName(),trainPlan.getUserId())){
                 db.insert(DBManger.TABLE_TRAIN_PLAN,null,trainPlan.trainPlanToContentValue(trainPlan)) ;
-            }else {
+                flag = true ;
+            }/*else {
                 db.update(DBManger.TABLE_TRAIN_PLAN,trainPlan.trainPlanToContentValue(trainPlan),null,null) ;
+            }*/
+            else{
+                flag = false ;
             }
+
             db.setTransactionSuccessful();
 
-            flag = true ;
         }catch (Exception e){
 
             flag = false ;
@@ -69,6 +80,32 @@ public class TrainPlanService {
         return flag ;
     }
 
+
+    public boolean exits(String userId,String trainType){
+
+        String sql = "select * from "+DBManger.TABLE_TRAIN_PLAN +" WHERE "+DBManger.TRAIN_PLAN_TYPE+" = ? AND "+DBManger.TRAIN_PLAN_USER_ID+" = ?" ;
+
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase() ;
+        Cursor cursor = null;
+        try {
+
+            cursor = db.rawQuery(sql,new String[]{trainType,userId}) ;
+            if (!cursor.isAfterLast()){
+                return  true ;
+            }
+        }catch (Exception e){
+
+        }finally {
+            if (cursor!=null)
+                cursor.close();
+            cursor =null;
+            if (db!=null)
+                db.close();
+            db = null;
+        }
+        return false ;
+    }
+
     public int delete(String name,String userId){
         int flag = 2 ;
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase() ;
@@ -90,4 +127,88 @@ public class TrainPlanService {
         }
         return flag ;
     }
+
+    public TrainPlan find(){
+
+        String sql = "select * from "+DBManger.TABLE_TRAIN_PLAN ;
+
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase() ;
+        Cursor cursor = null;
+        TrainPlan trainPlan = new TrainPlan() ;
+        try {
+
+            cursor = db.rawQuery(sql,null) ;
+
+            if ( cursor!=null &&cursor.moveToNext()){
+
+                trainPlan.setName(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_NAME)));
+                trainPlan.setControl(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLANE_CONTROL)));
+
+            }
+        }catch (Exception e){
+
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+                cursor = null ;
+            }
+
+            if (db!=null){
+                db.close();
+                db = null;
+            }
+        }
+
+        return  trainPlan  ;
+    }
+
+
+    public List<TrainPlan> getTrainPlans(String userId){
+
+        String sql = "select * from "+DBManger.TABLE_TRAIN_PLAN +" WHERE "+DBManger.TRAIN_PLAN_USER_ID +" = ?" ;
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase() ;
+        Cursor cursor = null;
+        List<TrainPlan> trainPlans = new ArrayList<TrainPlan>() ;
+        try {
+            cursor = db.rawQuery(sql,new String[]{userId}) ;
+            if (cursor!=null){
+                while (cursor.moveToNext()){
+                    TrainPlan trainPlan = new TrainPlan() ;
+                    trainPlan.setName(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_NAME)));
+                    trainPlan.setControl(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLANE_CONTROL)));
+                    trainPlan.setCreateTime(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_CREATE_TIME)));
+                    trainPlan.setGroupNumber(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_GROUP_NUMBER)));
+                    trainPlan.setControlLevel(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_CONTROL_LEVEL)));
+                    trainPlan.setCumulativeTime(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_CUM_TIME)));
+                    trainPlan.setPersistent(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_PERSISTENT)));
+                    trainPlan.setPersistentLevel(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_PERSISTENT_LEVEL)));
+                    trainPlan.setInspirerTime(cursor.getColumnName(cursor.getColumnIndex(DBManger.TRAIN_INSPIRER_TIME)));
+                    trainPlan.setStrength(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_STRENGTH)));
+                    trainPlan.setStrengthLevel(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_STRENGTH_LEVEL)));
+                    trainPlan.setTimes(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_TIMES)));
+                    trainPlan.setTrainType(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_TYPE)));
+                    trainPlans.add(trainPlan) ;
+                }
+            }
+        }catch (Exception e){
+
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+                cursor = null;
+            }
+            if (db!=null){
+                db.close();
+                db = null;
+            }
+
+        }
+
+
+
+        return  trainPlans ;
+    }
+
+
+
 }

@@ -82,6 +82,7 @@
     <string name="string_breath_health_check">呼吸健康检测</string>
     <string name="string_create_myself_train">创建自定义训练</string>
     <string name="string_create_train">创建</string>
+    <string name="string_create_train_name">创建训练名称</string>
 
 
 </resources>

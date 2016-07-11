@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,285 +11,424 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:scrollbars="none"
     tools:context="com.hhd.breath.app.view.ui.TrainPlanAdd">
-
-    <LinearLayout
+    <include
+        android:id="@+id/topLayout"
+        layout="@layout/common_login_top"/>
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <include
-            android:id="@+id/topLayout"
-            layout="@layout/common_login_top"/>
-
-        <RelativeLayout
-            android:id="@+id/layoutInspired"
+        android:layout_below="@+id/topLayout"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/common_dian50"
-            android:layout_marginTop="@dimen/common_dian10"
-            android:background="@drawable/select_item_bg">
-
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/common_dian30"
+            android:orientation="vertical">
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian44"
+                android:textSize="@dimen/common_text_16sp"
+                android:text="基本设置"
                 android:layout_marginLeft="@dimen/common_dian20"
-                android:gravity="center"
-                android:text="吸气时间"
-                android:textSize="@dimen/common_text_18sp"/>
+                android:gravity="center_vertical"
+                android:textColor="@color/common_top_color"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@color/common_color_d5d5d5"/>
 
-            <TextView
-                android:id="@+id/tvInspired"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/common_dian5"
-                android:layout_toLeftOf="@+id/imgGo1"
-                android:textColor="@color/black"
-                android:textSize="@dimen/common_text_16sp"/>
+            <RelativeLayout
+                android:id="@+id/layoutTrainName"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian50"
+                android:layout_marginTop="@dimen/common_dian10"
+                android:background="@drawable/select_item_bg">
 
-            <ImageView
-                android:id="@+id/imgGo1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/common_dian20"
-                android:src="@mipmap/icon_common_go_detail"/>
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/common_dian20"
+                    android:gravity="center"
+                    android:text="训练名称"
+                    android:textSize="@dimen/common_text_18sp"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:layout_marginLeft="@dimen/common_dian20"
-            android:layout_marginRight="@dimen/common_dian20"
-            android:background="@color/common_color_d5d5d5"/>
+                <TextView
+                    android:id="@+id/tvTrainName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/common_dian5"
+                    android:layout_toLeftOf="@+id/imgGo11"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/common_text_16sp"/>
 
-        <RelativeLayout
-            android:id="@+id/layoutBreathGroups"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/common_dian50"
-            android:background="@drawable/select_item_bg">
+                <ImageView
+                    android:id="@+id/imgGo11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/common_dian20"
+                    android:src="@mipmap/icon_common_go_detail"/>
+            </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
                 android:layout_marginLeft="@dimen/common_dian20"
-                android:gravity="center"
-                android:text="呼气组数"
-                android:textSize="@dimen/common_text_18sp"/>
-
-            <TextView
-                android:id="@+id/tvBreathGroups"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/common_dian5"
-                android:layout_toLeftOf="@+id/imgGo2"
-                android:textColor="@color/black"
-                android:textSize="@dimen/common_text_16sp"/>
-
-            <ImageView
-                android:id="@+id/imgGo2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/common_dian20"
-                android:src="@mipmap/icon_common_go_detail"/>
-        </RelativeLayout>
+                android:background="@color/common_color_d5d5d5"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:layout_marginLeft="@dimen/common_dian20"
-            android:layout_marginRight="@dimen/common_dian20"
-            android:background="@color/common_color_d5d5d5"/>
 
-        <RelativeLayout
-            android:id="@+id/layoutTrainTimes"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/common_dian50"
-            android:background="@drawable/select_item_bg">
+            <RelativeLayout
+                android:id="@+id/layoutInspired"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian50"
+                android:layout_marginTop="@dimen/common_dian10"
+                android:background="@drawable/select_item_bg">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/common_dian20"
+                    android:gravity="center"
+                    android:text="吸气时间"
+                    android:textSize="@dimen/common_text_18sp"/>
+
+                <TextView
+                    android:id="@+id/tvInspired"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/common_dian5"
+                    android:layout_toLeftOf="@+id/imgGo1"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/common_text_16sp"/>
+
+                <ImageView
+                    android:id="@+id/imgGo1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/common_dian20"
+                    android:src="@mipmap/icon_common_go_detail"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
                 android:layout_marginLeft="@dimen/common_dian20"
-                android:gravity="center"
-                android:text="训练次数"
-                android:textSize="@dimen/common_text_18sp"/>
-
-            <TextView
-                android:id="@+id/tvTrainTimes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/common_dian5"
-                android:layout_toLeftOf="@+id/imgGo3"
-                android:textColor="@color/black"
-                android:textSize="@dimen/common_text_16sp"/>
-
-            <ImageView
-                android:id="@+id/imgGo3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/common_dian20"
-                android:src="@mipmap/icon_common_go_detail"/>
-        </RelativeLayout>
+                android:background="@color/common_color_d5d5d5"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:layout_marginLeft="@dimen/common_dian20"
-            android:layout_marginRight="@dimen/common_dian20"
-            android:background="@color/common_color_d5d5d5"/>
+            <RelativeLayout
+                android:id="@+id/layoutBreathGroups"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian50"
+                android:background="@drawable/select_item_bg">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/common_dian20"
+                    android:gravity="center"
+                    android:text="呼气组数"
+                    android:textSize="@dimen/common_text_18sp"/>
 
-        <RelativeLayout
-            android:id="@+id/layoutBreathTime"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/common_dian50"
-            android:background="@drawable/select_item_bg">
+                <TextView
+                    android:id="@+id/tvBreathGroups"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/common_dian5"
+                    android:layout_toLeftOf="@+id/imgGo2"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/common_text_16sp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
+                <ImageView
+                    android:id="@+id/imgGo2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/common_dian20"
+                    android:src="@mipmap/icon_common_go_detail"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
                 android:layout_marginLeft="@dimen/common_dian20"
-                android:gravity="center"
-                android:text="呼气时间"
-                android:textSize="@dimen/common_text_18sp"/>
-
-            <TextView
-                android:id="@+id/tvBreathTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/common_dian5"
-                android:layout_toLeftOf="@+id/imgGo4"
-                android:textColor="@color/black"
-                android:textSize="@dimen/common_text_16sp"/>
-
-            <ImageView
-                android:id="@+id/imgGo4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/common_dian20"
-                android:src="@mipmap/icon_common_go_detail"/>
-        </RelativeLayout>
+                android:background="@color/common_color_d5d5d5"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:layout_marginLeft="@dimen/common_dian20"
-            android:layout_marginRight="@dimen/common_dian20"
-            android:background="@color/common_color_d5d5d5"/>
+            <RelativeLayout
+                android:id="@+id/layoutTrainTimes"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian50"
+                android:background="@drawable/select_item_bg">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/common_dian20"
+                    android:gravity="center"
+                    android:text="晋级标准"
+                    android:textSize="@dimen/common_text_18sp"/>
 
-        <RelativeLayout
-            android:id="@+id/layoutBreathStrength"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/common_dian50"
-            android:background="@drawable/select_item_bg">
+                <TextView
+                    android:id="@+id/tvTrainTimes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/common_dian5"
+                    android:layout_toLeftOf="@+id/imgGo3"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/common_text_16sp"/>
+
+                <ImageView
+                    android:id="@+id/imgGo3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/common_dian20"
+                    android:src="@mipmap/icon_common_go_detail"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@color/common_color_d5d5d5"/>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian44"
+                android:textSize="@dimen/common_text_16sp"
+                android:textColor="@color/color_nobreath_bg"
+                android:gravity="center_vertical"
                 android:layout_marginLeft="@dimen/common_dian20"
-                android:gravity="center"
-                android:text="呼气力度"
-                android:textSize="@dimen/common_text_18sp"/>
-
-            <TextView
-                android:id="@+id/tvBreathStrength"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/common_dian5"
-                android:layout_toLeftOf="@+id/imgGo5"
-                android:textColor="@color/black"
-                android:textSize="@dimen/common_text_16sp"/>
-
-            <ImageView
-                android:id="@+id/imgGo5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/common_dian20"
-                android:src="@mipmap/icon_common_go_detail"/>
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:layout_marginLeft="@dimen/common_dian20"
-            android:layout_marginRight="@dimen/common_dian20"
-            android:background="@color/common_color_d5d5d5"/>
+                android:text="初始难度参数"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@color/common_color_d5d5d5"/>
 
 
-        <RelativeLayout
-            android:id="@+id/layoutBreathControl"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/common_dian50"
-            android:background="@drawable/select_item_bg">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
+
+
+            <RelativeLayout
+                android:id="@+id/layoutBreathControl"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian50"
+                android:background="@drawable/select_item_bg">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/common_dian20"
+                    android:gravity="center"
+                    android:text="控制度"
+                    android:textSize="@dimen/common_text_18sp"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:id="@+id/ratingbar_re"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/tvBreathControl"
+                    android:layout_height="@dimen/common_dian39">
+                    <RatingBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/level_star_Bar"
+                        android:id="@+id/ratingbar"
+                        android:rating="1"
+                        android:isIndicator="true"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:numStars="3"
+                        />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tvBreathControl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/common_dian5"
+                    android:layout_toLeftOf="@+id/imgGo6"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/common_text_16sp"/>
+
+                <ImageView
+                    android:id="@+id/imgGo6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/common_dian20"
+                    android:src="@mipmap/icon_common_go_detail"/>
+
+            </RelativeLayout>
+
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
                 android:layout_marginLeft="@dimen/common_dian20"
-                android:gravity="center"
-                android:text="控制力度"
-                android:textSize="@dimen/common_text_18sp"/>
-
-            <TextView
-                android:id="@+id/tvBreathControl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/common_dian5"
-                android:layout_toLeftOf="@+id/imgGo6"
-                android:textColor="@color/black"
-                android:textSize="@dimen/common_text_16sp"/>
-
-            <ImageView
-                android:id="@+id/imgGo6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/common_dian20"
-                android:src="@mipmap/icon_common_go_detail"/>
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:layout_marginLeft="@dimen/common_dian20"
-            android:layout_marginRight="@dimen/common_dian20"
-            android:background="@color/common_color_d5d5d5"/>
+                android:background="@color/common_color_d5d5d5"/>
 
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/common_dian44"
-            android:layout_marginLeft="@dimen/common_dian20"
-            android:layout_marginRight="@dimen/common_dian20"
-            android:layout_marginTop="@dimen/common_dian30"
-            android:background="@drawable/btn_common_oval"
-            android:gravity="center"
-            android:text="@string/string_create_train"
-            android:id="@+id/btnCreateTrainPlan"
-            android:textColor="@color/white"
-            android:textSize="@dimen/common_text_18sp"/>
-    </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/layoutBreathStrength"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian50"
+                android:background="@drawable/select_item_bg">
 
-</ScrollView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/common_dian20"
+                    android:gravity="center"
+                    android:text="强弱"
+                    android:textSize="@dimen/common_text_18sp"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:id="@+id/layoutStrengthBar"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/tvBreathStrength"
+                    android:layout_height="@dimen/common_dian39">
+                    <RatingBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/level_moon_Bar"
+                        android:id="@+id/strengthBar"
+                        android:rating="1"
+                        android:isIndicator="true"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:numStars="3"
+                        />
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/tvBreathStrength"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/common_dian5"
+                    android:layout_toLeftOf="@+id/imgGo5"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/common_text_16sp"/>
+
+                <ImageView
+                    android:id="@+id/imgGo5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/common_dian20"
+                    android:src="@mipmap/icon_common_go_detail"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_marginLeft="@dimen/common_dian20"
+                android:layout_marginRight="@dimen/common_dian20"
+                android:background="@color/common_color_d5d5d5"/>
+
+
+
+            <RelativeLayout
+                android:id="@+id/layoutBreathTime"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian50"
+                android:background="@drawable/select_item_bg">
+
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/common_dian20"
+                    android:gravity="center"
+                    android:text="持久度"
+                    android:textSize="@dimen/common_text_18sp"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:id="@+id/layoutPresenterthBar"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/tvBreathTime"
+                    android:layout_height="wrap_content">
+                    <RatingBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/level_sun_Bar"
+                        android:id="@+id/prensenterBar"
+                        android:rating="1"
+                        android:isIndicator="true"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:numStars="3"
+                        />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tvBreathTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/common_dian5"
+                    android:layout_toLeftOf="@+id/imgGo4"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/common_text_16sp"/>
+
+                <ImageView
+                    android:id="@+id/imgGo4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/common_dian20"
+                    android:src="@mipmap/icon_common_go_detail"/>
+            </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_marginLeft="@dimen/common_dian20"
+                android:layout_marginRight="@dimen/common_dian20"
+                android:background="@color/common_color_d5d5d5"/>
+
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_dian44"
+                android:layout_marginLeft="@dimen/common_dian20"
+                android:layout_marginRight="@dimen/common_dian20"
+                android:layout_marginTop="@dimen/common_dian30"
+                android:background="@drawable/btn_common_oval"
+                android:gravity="center"
+                android:text="@string/string_create_train"
+                android:id="@+id/btnCreateTrainPlan"
+                android:textColor="@color/white"
+                android:textSize="@dimen/common_text_18sp"/>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -8,8 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.hhd.breath.app.tab.ui.MeTabActivity">
-    <include layout="@layout/top_layout" android:id="@+id/meTop" />
+    tools:context=".view.ui.MeDetailsActivity">
+    <include layout="@layout/common_login_top" android:id="@+id/meTop" />
     <ScrollView
         android:layout_below="@+id/meTop"
         android:layout_width="match_parent"

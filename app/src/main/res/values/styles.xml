@@ -33,6 +33,39 @@
         <item name="android:minHeight">16dip</item>
         <item name="android:maxHeight">16dip</item>
     </style>
+
+    <style name="level_star_Bar"  parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/level_control_star</item>
+        <item name="android:minHeight">25dip</item>
+        <item name="android:maxHeight">25dip</item>
+    </style>
+
+    <style name="level_moon_Bar"  parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/level_strength_moon</item>
+        <item name="android:minHeight">25dip</item>
+        <item name="android:maxHeight">25dip</item>
+    </style>
+    <style name="level_sun_Bar"  parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/level_prenster_sun</item>
+        <item name="android:minHeight">25dip</item>
+        <item name="android:maxHeight">25dip</item>
+    </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <style name="self_define_ProgressBar" parent="@android:style/Widget.ProgressBar.Horizontal" >
         <item name="android:minHeight">@dimen/common_dian39</item>
         <item name="android:maxHeight">@dimen/common_dian39</item>

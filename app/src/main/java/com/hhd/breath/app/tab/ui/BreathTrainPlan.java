@@ -1,32 +1,26 @@
 package com.hhd.breath.app.tab.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.hhd.breath.app.BaseActivity;
 import com.hhd.breath.app.BreathApplication;
 import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
-import com.hhd.breath.app.andengine.BreathAndEngine;
+import com.hhd.breath.app.db.TrainPlanService;
 import com.hhd.breath.app.main.ui.BreathTrainActivity;
 import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.view.RecycleViewDivider;
+import com.hhd.breath.app.view.ui.MeDetailsActivity;
 import com.hhd.breath.app.view.ui.TrainPlanAdd;
 import com.hhd.breath.app.view.viewHolder.TrainPlanSwipeAdapter;
 import com.hhd.breath.app.wchusbdriver.Global340Driver;
@@ -45,6 +39,8 @@ public class BreathTrainPlan extends BaseActivity {
     SwipeRefreshLayout layoutSwipe ;
     @Bind(R.id.topText)
     TextView topText ;
+    @Bind(R.id.layoutMeDetails)
+    RelativeLayout layoutMeDetails ;
     private Handler handler = new Handler() ;
     private List<TrainPlan> trainPlans ;
     private TrainPlanSwipeAdapter trainPlanSwipeAdapter ;
@@ -63,7 +59,7 @@ public class BreathTrainPlan extends BaseActivity {
         listViewSwipe.setHasFixedSize(true);
         manager.setOrientation(OrientationHelper.VERTICAL);
         listViewSwipe.setLayoutManager(manager);
-        listViewSwipe.addItemDecoration(new RecycleViewDivider(BreathTrainPlan.this, LinearLayoutManager.HORIZONTAL, 3, getResources().getColor(R.color.common_color_cbcbcb)));
+        //listViewSwipe.addItemDecoration(new RecycleViewDivider(BreathTrainPlan.this, LinearLayoutManager.HORIZONTAL, 3, getResources().getColor(R.color.common_color_cbcbcb)));
         //listViewSwipe.addItemDecoration(new RecycleViewDivider(BreathTrainPlan.this, LinearLayoutManager.HORIZONTAL));
         initData();
         initEvent();
@@ -77,6 +73,9 @@ public class BreathTrainPlan extends BaseActivity {
 
     private void initData(){
         trainPlans.clear();
+
+
+        TrainPlanService.getInstance(BreathTrainPlan.this).find() ;
         TrainPlan trainPlan = new TrainPlan() ;
         trainPlan.setName("缩唇呼吸训练(初级)");
         trainPlan.setControl("一级(13)");
@@ -177,6 +176,16 @@ public class BreathTrainPlan extends BaseActivity {
                         layoutSwipe.setRefreshing(false);
                     }
                 }, 500);
+            }
+        });
+
+        layoutMeDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent() ;
+                intent.setClass(BreathTrainPlan.this, MeDetailsActivity.class) ;
+                startActivity(intent);
             }
         });
     }
