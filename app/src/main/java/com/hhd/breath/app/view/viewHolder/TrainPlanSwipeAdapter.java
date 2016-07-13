@@ -2,6 +2,7 @@ package com.hhd.breath.app.view.viewHolder;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import com.hhd.breath.app.model.TrainPlan;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,13 +40,16 @@ public class TrainPlanSwipeAdapter extends RecyclerView.Adapter<TrainPlanSwipeAd
         if (trainPlans!=null && !trainPlans.isEmpty()){
             if (position==(trainPlans.size()-1)){
                 return 1 ;
-            }else if (position == 0){
-                return 2 ;
             }
         }
         return super.getItemViewType(position);
     }
 
+
+    public void setTrainPlans(List<TrainPlan> trainPlans){
+        this.trainPlans = trainPlans ;
+        this.notifyDataSetChanged();
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -68,16 +74,18 @@ public class TrainPlanSwipeAdapter extends RecyclerView.Adapter<TrainPlanSwipeAd
         holder.itemView.setTag(position);
         if (holder.getViewType()==0){
             TrainPlan trainPlan = trainPlans.get(position) ;
-            holder.tvTrainName.setText("训练名称:" + trainPlan.getName());
-            holder.tvCreateTime.setText("呼吸强度:"+trainPlan.getStrength()) ;
-            holder.tvCumulativeTime.setText("呼吸持久:"+trainPlan.getPersistent());
-            holder.imgFlag.setImageResource(R.mipmap.icon_custom_plan);
-        }else if (holder.getViewType()==2){
-            TrainPlan trainPlan = trainPlans.get(position) ;
-            holder.tvTrainName.setText("训练名称:" + trainPlan.getName());
-            holder.tvCreateTime.setText("呼吸强度:"+trainPlan.getStrength()) ;
-            holder.tvCumulativeTime.setText("呼吸持久:"+trainPlan.getPersistent());
-            holder.imgFlag.setImageResource(R.mipmap.icon_init_plan);
+            if (trainPlan.getTrainType().equals("0")){
+                holder.tvTrainName.setText(trainPlan.getName());
+                holder.tvCreateTime.setVisibility(View.GONE);
+                holder.tvCumulativeTime.setText("累计训练时间:"+(trainPlan.getCumulativeTime().equals("0")?"00:00:00":"00:00:01"));   // 累计时间
+                holder.imgFlag.setImageResource(R.mipmap.icon_init_plan);
+            }else {
+                holder.tvTrainName.setText(trainPlan.getName());
+                holder.tvCreateTime.setText("创建时间:"+ (TextUtils.isEmpty(trainPlan.getCreateTime())?"不确定":getDate(trainPlan.getCreateTime()))) ;
+                holder.tvCumulativeTime.setText("累计训练:"+(trainPlan.getCumulativeTime().equals("0")?"00:00:00":"00:00:01"));
+                holder.imgFlag.setImageResource(R.mipmap.icon_custom_plan);
+            }
+
         }
 
         holder.itemView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.layout_swipe_click));
@@ -132,5 +140,11 @@ public class TrainPlanSwipeAdapter extends RecyclerView.Adapter<TrainPlanSwipeAd
 
     public interface OnRecyclerItemClickListener{
        public void onItemClick(View view,int position) ;
+    }
+
+    private String getDate(String time){
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return  formatter.format(new Date(Long.parseLong(time)*1000)) ;
     }
 }

@@ -45,101 +45,193 @@
                         android:layout_marginLeft="15dip"
                         android:layout_height="wrap_content"/>
                 </RelativeLayout>
+
                 <LinearLayout
-                    android:layout_below="@+id/name_top"
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_height="wrap_content">
-                    <RelativeLayout
-                        android:layout_width="0dip"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_centerHorizontal="true"
-                            android:layout_width="wrap_content"
-                            android:textColor="@color/common_top_color"
-                            android:textSize="25sp"
-                            android:text="01:30"
-                            android:id="@+id/time_long"
-                            android:gravity="center"
-                            android:layout_height="@dimen/common_dian39"/>
-                        <TextView
-                            android:layout_below="@+id/time_long"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="训练时长"
-                            android:layout_centerHorizontal="true"
-                            android:textSize="14sp"
-                            android:textColor="@color/common_train_plan_text_color"/>
-                    </RelativeLayout>
-                    <View
-                        android:layout_width="1dip"
-                        android:layout_gravity="center_vertical"
-                        android:background="@color/common_bottom_text_color"
-                        android:layout_height="@dimen/common_dian39"/>
-                    <RelativeLayout
-                        android:layout_width="0dip"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/name_top"
+                    android:layout_marginTop="@dimen/common_dian20"
+                    android:orientation="horizontal">
 
 
-                        <TextView
-                            android:layout_centerHorizontal="true"
-                            android:layout_width="wrap_content"
-                            android:textColor="@color/common_top_color"
-                            android:textSize="25sp"
-                            android:text="30"
-                            android:gravity="center"
-                            android:id="@+id/zushuo"
-                            android:layout_height="@dimen/common_dian39"/>
-                        <TextView
-                            android:layout_below="@+id/zushuo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="动作组数"
-                            android:layout_centerHorizontal="true"
-                            android:textSize="14sp"
-                            android:textColor="@color/common_train_plan_text_color"/>
-
-                    </RelativeLayout>
-                    <View
-                        android:layout_width="1dip"
-                        android:background="@color/common_bottom_text_color"
-                        android:layout_gravity="center_vertical"
-                        android:layout_height="@dimen/common_dian39"/>
                     <RelativeLayout
                         android:layout_width="0dip"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/common_dian15"
+                        android:layout_marginRight="@dimen/common_dian10"
+                        android:layout_weight="1">
+
                         <RelativeLayout
+                            android:id="@+id/layoutTimeLong"
                             android:layout_width="match_parent"
-                            android:id="@+id/ratingbar_re"
-                            android:layout_height="@dimen/common_dian39">
-                            <RatingBar
+                            android:layout_height="@dimen/common_dian39"
+                            android:background="@mipmap/icon_report_left">
+
+                            <TextView
+                                android:id="@+id/tvTimeLongLeft"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                style="@style/roomRatingBar"
-                                android:id="@+id/ratingbar"
-                                android:rating="3"
-                                android:isIndicator="true"
                                 android:layout_centerVertical="true"
-                                android:layout_centerHorizontal="true"
-                                android:numStars="5"
-                                />
+                                android:text="训练\n时长"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/common_text_14sp"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/tvTimeLongLeft"
+                                android:gravity="center"
+                                android:id="@+id/time_long"
+                                android:text="01:30"
+                                android:textColor="@color/common_top_color"
+                                android:textSize="@dimen/common_text_20sp"/>
                         </RelativeLayout>
 
-                        <TextView
-                            android:layout_centerHorizontal="true"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/ratingbar_re"
-                            android:textColor="@color/common_train_plan_text_color"
-                            android:textSize="14sp"
-                            android:text="难度系数"/>
+                        <RelativeLayout
+                            android:id="@+id/layoutGroupNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/common_dian39"
+                            android:layout_below="@+id/layoutTimeLong"
+                            android:layout_marginTop="@dimen/common_dian15"
+                            android:background="@mipmap/icon_report_left">
+
+                            <TextView
+                                android:id="@+id/tvGroupsNumberLeft"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="呼吸\n组数"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/common_text_14sp"/>
+
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/tvGroupsNumberLeft"
+                                android:gravity="center"
+                                android:text="300"
+                                android:id="@+id/zushuo"
+                                android:textColor="@color/color_nobreath_bg"
+                                android:textSize="@dimen/common_text_20sp"/>
+
+
+                        </RelativeLayout>
                     </RelativeLayout>
 
+                    <RelativeLayout
+                        android:layout_width="0dip"
+                        android:layout_height="93dip"
+                        android:layout_marginLeft="@dimen/common_dian10"
+                        android:layout_marginRight="@dimen/common_dian15"
+                        android:layout_weight="1"
+                        android:background="@mipmap/icon_report_right">
+
+                        <TextView
+                            android:id="@+id/tvDifficulty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="8dip"
+                            android:text="当\n前\n难\n度"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/common_text_14sp"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/common_dian20"
+                            android:layout_toRightOf="@+id/tvDifficulty"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/tvControlLeft"
+                                    android:layout_width="@dimen/common_dian50"
+                                    android:layout_height="wrap_content"
+                                    android:text="控制度:"
+                                    android:layout_centerVertical="true"
+                                    android:textSize="@dimen/common_text_14sp"/>
+
+                                <RatingBar
+                                    android:id="@+id/levelControlRa"
+                                    style="@style/level_report_star_Bar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginLeft="@dimen/common_dian5"
+                                    android:layout_toRightOf="@+id/tvControlLeft"
+                                    android:isIndicator="true"
+                                    android:numStars="3"
+                                    android:rating="0"
+                                    />
+
+                            </RelativeLayout>
+
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/common_dian5">
+
+                                <TextView
+                                    android:id="@+id/tvStengthLeft"
+                                    android:layout_width="@dimen/common_dian50"
+                                    android:layout_height="wrap_content"
+                                    android:text="强  弱:"
+                                    android:layout_centerVertical="true"
+                                    android:textSize="@dimen/common_text_14sp"/>
+
+                                <RatingBar
+                                    android:id="@+id/levelStrengthRa"
+                                    style="@style/level_report_moon_Bar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginLeft="@dimen/common_dian5"
+                                    android:layout_toRightOf="@+id/tvStengthLeft"
+                                    android:isIndicator="true"
+                                    android:numStars="3"
+                                    android:rating="0"
+                                    />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/common_dian5">
+
+                                <TextView
+                                    android:id="@+id/tvPresnsterLeft"
+                                    android:layout_width="@dimen/common_dian50"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:text="持久力:"
+                                    android:textSize="@dimen/common_text_14sp"/>
+
+                                <RatingBar
+                                    android:id="@+id/levelPresnsterthRa"
+                                    style="@style/level_report_sun_Bar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_marginLeft="@dimen/common_dian5"
+                                    android:layout_toRightOf="@+id/tvPresnsterLeft"
+                                    android:isIndicator="true"
+                                    android:numStars="3"
+                                    android:rating="0"/>
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
                 </LinearLayout>
             </RelativeLayout>
             <RelativeLayout

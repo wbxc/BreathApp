@@ -44,11 +44,11 @@ public class UploadDataService extends Service {
     BreathTrainingResult breathTrainingResult =null ;
     private String receiver_success = "com.hhd.breath.upload_success" ;
     private String receiver_fail = "com.hhd.breath.upload.fail" ;
-    /***
-     * 请求使用多长时间
-     */
-    private String  filepath ;
-    private String  file_zip_path  ;
+
+
+
+    private String  filepath ;     // 文件路径
+    private String  file_zip_path  ;  // 压缩文件路径
 
 
     public UploadDataService() {

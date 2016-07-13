@@ -18,6 +18,7 @@ import com.hhd.breath.app.R;
 import com.hhd.breath.app.main.ui.BreathReportActivity;
 import com.hhd.breath.app.model.BreathEngine;
 import com.hhd.breath.app.model.BreathTrainingResult;
+import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.service.UploadDataService;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.wchusbdriver.Global340Driver;
@@ -72,18 +73,17 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     private List<Float> floats;
     private int totalTime = 0 ;
     private int totalTime1 = 0 ;
-    private int groupNumbers = 10;
+    private int groupNumbers ;
     private long trainTime ;
-    private int breathLevel = 1 ;
     private float birdPosition  = 0f;
     float newY = 0.0f ;
-    private String trainName =  "缩唇呼吸训练" ;
     private int scoreResult = 0 ;
     private MyHandler mHandler = null;
     private float globalValue = 0f ;
     private boolean isShow = true ;
     private int shanSum = 0 ;
     private Dialog trainEndDialog = null;
+    private TrainPlan trainPlan ;
 
     @Override
     protected void onCreate(Bundle pSavedInstanceState) {
@@ -92,9 +92,14 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         mBreathTime = ShareUtils.getBrathTime(BreathAndEngine.this);
         mPauseTime = ShareUtils.getIntervalTime(BreathAndEngine.this);
         mHandler = new MyHandler(this) ;
-        breathLevel = Integer.parseInt(getIntent().getExtras().getString("level")) ;
-        groupNumbers = getIntent().getExtras().getInt("groupNumbers") ;
-        totalTime  = getIntent().getExtras().getInt("timeLong") ;
+        trainPlan = (TrainPlan) getIntent().getExtras().getSerializable("train_plan") ;
+
+
+        groupNumbers = Integer.parseInt(trainPlan.getGroupNumber()) ;
+        mBreathTime = Integer.parseInt(trainPlan.getPersistentLevel()) ;   ///持久力  表现为呼气时间
+        mPauseTime = Integer.parseInt(trainPlan.getInspirerTime()) ;
+        totalTime = (mBreathTime+mPauseTime)*groupNumbers ; // 总时间长
+
         totalTime1 = totalTime ;
         for (int i=0 ; i<groupNumbers ; i++){
             BreathEngine breathEngine = new BreathEngine() ;
@@ -147,6 +152,10 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                     intent.setClass(BreathAndEngine.this, UploadDataService.class) ;
                     Bundle bundle = new Bundle() ;
                     bundle.putSerializable("breath_result", uploadService());
+                    bundle.putSerializable("train_plan",trainPlan);
+
+
+
                     intent.putExtras(bundle) ;
                     startService(intent) ;
 
@@ -162,6 +171,7 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                     //训练建议
                     Bundle bundle = new Bundle() ;
                     bundle.putSerializable("breathTrainingData", uploadService());
+                    bundle.putSerializable("train_plan",trainPlan);
                     intent.putExtras(bundle) ;
                     startActivity(intent);
                     BreathAndEngine.this.finish();
@@ -186,15 +196,14 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         BreathTrainingResult breathTrainingResult = new BreathTrainingResult();
         breathTrainingResult.setUser_id(ShareUtils.getUserId(BreathAndEngine.this));
         breathTrainingResult.setTrain_group(groupNumbers + "");
-        breathTrainingResult.setBreath_type(String.valueOf(breathLevel));
-        breathTrainingResult.setBreath_name(trainName);
+        breathTrainingResult.setBreath_type(trainPlan.getTrainType());
+        breathTrainingResult.setBreath_name(trainPlan.getName());
         breathTrainingResult.setTrain_last(totalTime1 + "");
         breathTrainingResult.setTrain_result("12");  // 训练结果
         breathTrainingResult.setDifficulty((scoreResult>100?0:(100-scoreResult))+"");
         breathTrainingResult.setTrain_time(trainTime + "");
-        breathTrainingResult.setSuggestion(String.valueOf(2));
+        breathTrainingResult.setSuggestion("");
         breathTrainingResult.setPlatform("1");
-        breathTrainingResult.setDevice_sn(ShareUtils.getSerialNumber(BreathAndEngine.this));
         String fileName = "file_" + String.valueOf(System.currentTimeMillis() / 1000);
         breathTrainingResult.setFname(fileName);  //  文件id  和文件名称 定义一致
         breathTrainingResult.setFile_id(fileName);

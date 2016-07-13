@@ -9,13 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hhd.breath.app.BaseActivity;
+import com.hhd.breath.app.BreathApplication;
 import com.hhd.breath.app.R;
+import com.hhd.breath.app.db.TrainPlanService;
 import com.hhd.breath.app.model.SysDataModel;
 import com.hhd.breath.app.model.TrainPlan;
+import com.hhd.breath.app.net.ThreadPoolWrap;
+import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.widget.WheelView;
 
 import java.util.ArrayList;
@@ -42,11 +47,6 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
     RelativeLayout layoutTrainName ;
     @Bind(R.id.tvTrainName)
     TextView tvTrainName ;
-
-
-
-
-
 
     @Bind(R.id.tvInspired)
     TextView  tvInspired;
@@ -75,6 +75,14 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
     private SelectDialog layoutBreathTimeDialog ;
     private SelectDialog layoutBreathStrengthDialog ;
     private SelectDialog layoutBreathControlDialog ;
+
+
+    @Bind(R.id.controlBar)
+    RatingBar controlBar ;
+    @Bind(R.id.strengthBar)
+    RatingBar strengthBar ;
+    @Bind(R.id.prensenterBar)
+    RatingBar prensenterBar ;
 
 
 
@@ -139,8 +147,19 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
         for (int i=0 ; i<3 ; i++){
             SysDataModel sysDataModel = new SysDataModel() ;
             sysDataModel.setValue((3+i)+"");
-            sysDataModel.setId((3+i)+"");
-            sysDataModel.setName((3+i)+"秒")  ;
+            sysDataModel.setId((i+1)+"");
+            switch (i){
+                case 0:
+                    sysDataModel.setName("初级")  ;
+                    break;
+                case 1:
+                    sysDataModel.setName("中级")  ;
+                    break;
+                case 2:
+                    sysDataModel.setName("高级")  ;
+                    break;
+            }
+
             layoutBreathTimeModels.add(sysDataModel) ;
         }
 
@@ -246,7 +265,7 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
 
             @Override
             public void setOnClick(int result) {
-                tvTrainTimes.setText(layoutTrainTimesModels.get(result).getName());
+                tvTrainTimes.setText(layoutTrainTimesModels.get(result).getName()+"满分");
                 trainPlan.setTimes(layoutTrainTimesModels.get(result).getValue());
                 layoutTrainTimesDialog.dimissDialog();
             }
@@ -262,10 +281,11 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
 
             @Override
             public void setOnClick(int result) {
-                tvBreathTime.setText(layoutBreathTimeModels.get(result).getName());
-                trainPlan.setPersistent(layoutBreathTimeModels.get(result).getName());
+               // tvBreathTime.setText(layoutBreathTimeModels.get(result).getName());
+                prensenterBar.setRating(Float.valueOf(layoutBreathTimeModels.get(result).getId()));
+                trainPlan.setPersistent(layoutBreathTimeModels.get(result).getId());
                 trainPlan.setPersistentLevel(layoutBreathTimeModels.get(result).getValue());
-
+                trainPlan.setCurrentPersistent(layoutBreathTimeModels.get(result).getId());
                 layoutBreathTimeDialog.dimissDialog();
             }
         },layoutBreathTimeModels) ;
@@ -280,8 +300,10 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
             @Override
             public void setOnClick(int result) {
 
-                trainPlan.setStrength(layoutBreathStrengthModels.get(result).getName());
-                tvBreathStrength.setText(layoutBreathStrengthModels.get(result).getName());
+                trainPlan.setStrength(layoutBreathStrengthModels.get(result).getId());
+                strengthBar.setRating(Float.valueOf(layoutBreathStrengthModels.get(result).getId()));
+                trainPlan.setCurrentStrength(layoutBreathStrengthModels.get(result).getId());
+
                 trainPlan.setStrengthLevel(layoutBreathStrengthModels.get(result).getValue());
                 layoutBreathStrengthDialog.dimissDialog();
             }
@@ -297,9 +319,12 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
             @Override
             public void setOnClick(int result) {
 
-                tvBreathControl.setText(layoutBreathControlModels.get(result).getName());
-                trainPlan.setControl(layoutBreathControlModels.get(result).getName());
+         /*       tvBreathControl.setText(layoutBreathControlModels.get(result).getName());*/
+
+                trainPlan.setControl(layoutBreathControlModels.get(result).getId());
                 trainPlan.setControlLevel(layoutBreathControlModels.get(result).getValue());
+                controlBar.setRating(Float.valueOf(layoutBreathControlModels.get(result).getId()));
+                trainPlan.setCurrentControl(layoutBreathControlModels.get(result).getId());
 
 
                 layoutBreathControlDialog.dimissDialog();
@@ -349,6 +374,12 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.btnCreateTrainPlan:
+                if (trainPlan.isNotEmpty(trainPlan)){
+                    ThreadPoolWrap.getThreadPool().executeTask(createTrainPlan);
+                }else {
+
+                    BreathApplication.toast(TrainPlanAdd.this,"训练参数不能为空");
+                }
                 break;
             case R.id.layoutTrainName:
                 Intent intent = new Intent(TrainPlanAdd.this,TrainAddName.class) ;
@@ -356,6 +387,27 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
                 break;
         }
     }
+
+    private Runnable createTrainPlan = new Runnable() {
+        @Override
+        public void run() {
+            String createTime = String.valueOf(System.currentTimeMillis()/1000) ;
+            trainPlan.setCreateTime(createTime);
+            trainPlan.setCumulativeTime("0");
+            int result = TrainPlanService.getInstance(TrainPlanAdd.this).countTrainPlan(ShareUtils.getUserId(TrainPlanAdd.this)) ;
+            trainPlan.setTrainType(String.valueOf(result+1));
+
+
+
+            trainPlan.setUserId(ShareUtils.getUserId(TrainPlanAdd.this));
+            if (TrainPlanService.getInstance(TrainPlanAdd.this).add(trainPlan)){
+                setResult(11,null);
+                TrainPlanAdd.this.finish();
+            }else {
+                BreathApplication.toast(TrainPlanAdd.this,"创建异常");
+            }
+        }
+    } ;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -365,6 +417,7 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
                 String trainName = data.getStringExtra("trainName") ;
                 if (isNotEmpty(trainName)){
                     tvTrainName.setText(trainName);
+                    trainPlan.setName(trainName);
                 }
                 break;
         }

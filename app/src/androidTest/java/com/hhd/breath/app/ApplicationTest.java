@@ -92,4 +92,12 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         Log.e("HealthDataService", "HealthDataService" + fla) ;
     }
 
+    public void testFindCount() throws  Exception{
+
+        int result = TrainPlanService.getInstance(getContext()).countTrainPlan(ShareUtils.getUserId(getContext())) ;
+
+        Log.e("HealthDataService", "HealthDataService" + result) ;
+
+    }
+
 }

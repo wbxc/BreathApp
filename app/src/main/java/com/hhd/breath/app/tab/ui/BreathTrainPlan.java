@@ -19,7 +19,6 @@ import com.hhd.breath.app.db.TrainPlanService;
 import com.hhd.breath.app.main.ui.BreathTrainActivity;
 import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.utils.ShareUtils;
-import com.hhd.breath.app.view.RecycleViewDivider;
 import com.hhd.breath.app.view.ui.MeDetailsActivity;
 import com.hhd.breath.app.view.ui.TrainPlanAdd;
 import com.hhd.breath.app.view.viewHolder.TrainPlanSwipeAdapter;
@@ -37,17 +36,11 @@ public class BreathTrainPlan extends BaseActivity {
     RecyclerView listViewSwipe ;
     @Bind(R.id.layoutSwipe)
     SwipeRefreshLayout layoutSwipe ;
-    @Bind(R.id.topText)
-    TextView topText ;
     @Bind(R.id.layoutMeDetails)
     RelativeLayout layoutMeDetails ;
     private Handler handler = new Handler() ;
     private List<TrainPlan> trainPlans ;
     private TrainPlanSwipeAdapter trainPlanSwipeAdapter ;
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +54,34 @@ public class BreathTrainPlan extends BaseActivity {
         listViewSwipe.setLayoutManager(manager);
         //listViewSwipe.addItemDecoration(new RecycleViewDivider(BreathTrainPlan.this, LinearLayoutManager.HORIZONTAL, 3, getResources().getColor(R.color.common_color_cbcbcb)));
         //listViewSwipe.addItemDecoration(new RecycleViewDivider(BreathTrainPlan.this, LinearLayoutManager.HORIZONTAL));
+
+        if (!TrainPlanService.getInstance(BreathTrainPlan.this).exits(ShareUtils.getUserId(BreathTrainPlan.this),"0")){
+            TrainPlan trainPlan = new TrainPlan() ;
+            trainPlan.setTrainType("0");  // 循序渐进呼气类型
+            trainPlan.setName("循序渐进训练");   // 训练的名称
+            trainPlan.setInspirerTime("3");   // 吸气时间 就是暂停时间
+
+
+            trainPlan.setGroupNumber("10");    // 呼吸训练的组数
+            trainPlan.setTimes("1");           // 完成多少次可以晋级
+            trainPlan.setControlLevel("13");     // 控制强度
+            trainPlan.setControl("1");
+            trainPlan.setStrength("1");
+            trainPlan.setCurrentControl("1");
+            trainPlan.setCurrentStrength("1");
+            trainPlan.setCurrentPersistent("1");
+
+
+            trainPlan.setStrengthLevel("15");
+            trainPlan.setPersistent("1");
+            trainPlan.setPersistentLevel("3");   // 吸气时间
+            trainPlan.setUserId(ShareUtils.getUserId(BreathTrainPlan.this));
+            trainPlan.setCumulativeTime("0");   // 训练累计时间
+            trainPlan.setCreateTime("");
+
+            TrainPlanService.getInstance(BreathTrainPlan.this).add(trainPlan) ;
+        }
+
         initData();
         initEvent();
     }
@@ -73,57 +94,7 @@ public class BreathTrainPlan extends BaseActivity {
 
     private void initData(){
         trainPlans.clear();
-
-
-        TrainPlanService.getInstance(BreathTrainPlan.this).find() ;
-        TrainPlan trainPlan = new TrainPlan() ;
-        trainPlan.setName("缩唇呼吸训练(初级)");
-        trainPlan.setControl("一级(13)");
-        trainPlan.setControlLevel("13");
-        trainPlan.setStrength("初级(15)");
-        trainPlan.setStrengthLevel("15");
-        trainPlan.setPersistent("一级(3)");
-        trainPlan.setPersistentLevel("3");
-        trainPlan.setGroupNumber("10");
-        trainPlans.add(trainPlan) ;
-
-
-
-        TrainPlan trainPlan1 = new TrainPlan() ;
-        trainPlan1.setName("缩唇呼吸训练(中级)");
-        trainPlan1.setControl("二级(10)");
-        trainPlan1.setControlLevel("10");
-        trainPlan1.setStrength("中级(25)");
-        trainPlan1.setStrengthLevel("25");
-        trainPlan1.setPersistent("二级(4)");
-        trainPlan1.setPersistentLevel("4");
-        trainPlan1.setGroupNumber("10");
-        trainPlans.add(trainPlan1) ;
-
-        TrainPlan trainPlan2 = new TrainPlan() ;
-        trainPlan2.setName("缩唇呼吸训练(高级)");
-        trainPlan2.setControl("三级(13)");
-        trainPlan2.setControlLevel("13");
-        trainPlan2.setStrength("高级(32)");
-        trainPlan2.setStrengthLevel("32");
-        trainPlan2.setPersistent("三级(3)");
-        trainPlan2.setPersistentLevel("3");
-        trainPlan2.setGroupNumber("10");
-        trainPlans.add(trainPlan2) ;
-
-
-        TrainPlan trainPlan3 = new TrainPlan() ;
-        trainPlan3.setName("缩唇呼吸训练(高级40)");
-        trainPlan3.setControl("三级(7)");
-        trainPlan3.setControlLevel("7");
-        trainPlan3.setStrength("高级(40)");
-        trainPlan3.setStrengthLevel("40");
-        trainPlan3.setPersistent("三级(3)");
-        trainPlan3.setPersistentLevel("3");
-        trainPlan3.setGroupNumber("10");
-        trainPlans.add(trainPlan3) ;
-
-
+        trainPlans = TrainPlanService.getInstance(BreathTrainPlan.this).getTrainPlans(ShareUtils.getUserId(BreathTrainPlan.this)) ;
         trainPlans.add(new TrainPlan()) ;
     }
 
@@ -135,10 +106,11 @@ public class BreathTrainPlan extends BaseActivity {
             @Override
             public void onItemClick(View view, int position) {
                 if (position == (trainPlans.size() - 1)) {
-                    BreathApplication.toast(BreathTrainPlan.this, "训练计划添加功能暂未实现");
                     Intent intent = new Intent() ;
                     intent.setClass(BreathTrainPlan.this, TrainPlanAdd.class) ;
-                    startActivity(intent);
+                    //startActivity(intent);
+                    startActivityForResult(intent,11);
+
                 } else {
 
                     if (!isNotEmpty(ShareUtils.getSerialNumber(BreathTrainPlan.this))) {
@@ -155,10 +127,10 @@ public class BreathTrainPlan extends BaseActivity {
                     ShareUtils.setBrathTime(BreathTrainPlan.this, Integer.parseInt(trainPlans.get(position).getPersistentLevel()));
 
                     if (Global340Driver.getInstance(BreathTrainPlan.this).checkUsbStatus() == 1) {
-                        BreathTrainActivity.actionStart(BreathTrainPlan.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102), true);
+                        BreathTrainActivity.actionStart(BreathTrainPlan.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102), true,trainPlans.get(position));
                     } else {
                         BreathApplication.toast(BreathTrainPlan.this, getString(R.string.string_health_no_connect));
-                        BreathTrainActivity.actionStart(BreathTrainPlan.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102), false);
+                        BreathTrainActivity.actionStart(BreathTrainPlan.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102), false,trainPlans.get(position));
                     }
                 }
             }
@@ -172,7 +144,7 @@ public class BreathTrainPlan extends BaseActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        initData();
+                        //initData();
                         layoutSwipe.setRefreshing(false);
                     }
                 }, 500);
@@ -188,5 +160,16 @@ public class BreathTrainPlan extends BaseActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case 11:
+                initData();
+                trainPlanSwipeAdapter.setTrainPlans(trainPlans);
+                break;
+        }
     }
 }

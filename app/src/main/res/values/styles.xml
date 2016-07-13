@@ -40,16 +40,39 @@
         <item name="android:maxHeight">25dip</item>
     </style>
 
+    <style name="level_report_star_Bar"  parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/level_report_control_star</item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
+
+
+
     <style name="level_moon_Bar"  parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/level_strength_moon</item>
         <item name="android:minHeight">25dip</item>
         <item name="android:maxHeight">25dip</item>
     </style>
+
+    <style name="level_report_moon_Bar"  parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/level_report_strength_moon</item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
+
+
     <style name="level_sun_Bar"  parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/level_prenster_sun</item>
         <item name="android:minHeight">25dip</item>
         <item name="android:maxHeight">25dip</item>
     </style>
+
+    <style name="level_report_sun_Bar"  parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/level_report_prenster_sun</item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
+
 
 
 

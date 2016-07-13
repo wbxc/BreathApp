@@ -80,28 +80,6 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
         UmengUpdateAgent.update(this) ;
         initEvent();
 
-        if (!TrainPlanService.getInstance(MainTabHomeActivity.this).exits(ShareUtils.getUserId(MainTabHomeActivity.this),"0")){
-
-            TrainPlan trainPlan = new TrainPlan() ;
-            trainPlan.setTrainType("0");  // 循序渐进呼气类型
-            trainPlan.setName("循序渐进训练");   // 训练的名称
-            trainPlan.setInspirerTime("3");   // 吸气时间 就是暂停时间
-            trainPlan.setGroupNumber("10");    // 呼吸训练的组数
-            trainPlan.setTimes("1");           // 完成多少次可以晋级
-            trainPlan.setControlLevel("13");     // 控制强度
-            trainPlan.setControl("1");
-            trainPlan.setStrength("1");
-            trainPlan.setStrengthLevel("15");
-            trainPlan.setPersistent("1");
-            trainPlan.setPersistentLevel("3");
-            trainPlan.setUserId(ShareUtils.getUserId(MainTabHomeActivity.this));
-            trainPlan.setCumulativeTime("");   // 训练累计时间
-            trainPlan.setCreateTime("");
-            TrainPlanService.getInstance(MainTabHomeActivity.this).add(trainPlan) ;
-        }
-
-
-
     }
 
     private void initEvent(){
@@ -244,7 +222,6 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
 
         try {
             mCommonDialog = new BaseDialog(mContext, R.style.Theme_Transparent,"progress_dialog",message) ;
-
             mCommonDialog.show();
         }catch (Exception e){
 
@@ -256,8 +233,6 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
             mCommonDialog.dismiss();
         }
     }
-
-
 
     @Override
     protected void onPause() {
@@ -312,7 +287,7 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
                                 .setTextColor(getResources().getColor(R.color.common_bottom_bar_blue));
                     } else if (i == 2) {
                         ((ImageView) list.get(i).findViewById(R.id.btn_tab_bottom_weixin))
-                                .setBackgroundResource(R.mipmap.icon_tab_me_select);
+                                .setBackgroundResource(R.mipmap.icon_tab_evaluate);
                         ((TextView) list.get(i).findViewById(R.id.tv_main))
                                 .setTextColor(getResources().getColor(R.color.common_bottom_bar_blue));
                     } /*else if (i == 3) {
@@ -338,15 +313,10 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
                                 .setTextColor(getResources().getColor(R.color.common_color_d5d5d5));
                     } else if (i == 2 && i != tabID) {
                         ((ImageView) list.get(i).findViewById(R.id.btn_tab_bottom_weixin))
-                                .setBackgroundResource(R.mipmap.icon_tab_me_unselect);
+                                .setBackgroundResource(R.mipmap.icon_tab_un_evaluate);
                         ((TextView) list.get(i).findViewById(R.id.tv_main))
                                 .setTextColor(getResources().getColor(R.color.common_color_d5d5d5));
-                    }/*else if (i == 3 && i != tabID) {
-                        ((ImageView) list.get(i).findViewById(R.id.btn_tab_bottom_weixin))
-                                .setBackgroundResource(R.mipmap.icon_tab_me_unselect);
-                        ((TextView) list.get(i).findViewById(R.id.tv_main))
-                                .setTextColor(getResources().getColor(R.color.common_color_d5d5d5));
-                    }*/
+                    }
                 }
             }
         }

@@ -26,15 +26,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hhd.breath.app.BaseActivity;
+import com.hhd.breath.app.BreathApplication;
 import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
+import com.hhd.breath.app.andengine.BreathAndEngine;
 import com.hhd.breath.app.db.TrainUnitService;
 import com.hhd.breath.app.model.BreathDetailReport;
 import com.hhd.breath.app.model.BreathDetailSuccess;
 import com.hhd.breath.app.model.BreathTrainingResult;
 import com.hhd.breath.app.model.RecordUnitData;
+import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.net.ManagerRequest;
+import com.hhd.breath.app.net.UploadRecordData;
 import com.hhd.breath.app.service.UploadDataService;
+import com.hhd.breath.app.utils.FileUtils;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.utils.StringUtils;
 import com.hhd.breath.app.utils.UiUtils;
@@ -45,6 +50,8 @@ import com.tencent.mm.sdk.modelmsg.WXFileObject;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,6 +65,7 @@ import retrofit2.Response;
 
 /**
  * 训练完成后查看
+ * 训练完成查看的训练报告
  */
 public class BreathReportActivity extends BaseActivity implements View.OnClickListener {
 
@@ -66,11 +74,7 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
     private int values;
     private int sum;
     private TextView mTextStandardRate;
-    private TextView mTextTimeLong;
-    private TextView mTextGroupNumber;
-    private RatingBar mRatingBar;
     private TextView mTextTrainTime;
-    private TextView mTextSuggestionTime;
     private BreathTrainingResult mRecordDayData;
     private ImageView mImgShare;
     private String phone ;
@@ -83,28 +87,10 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
     private int mStatusHeight = 0 ;
     private IWXAPI api;
     private Dialog completeDialog = null;
-
-
-    private String getSuggestion(String id) {
-        int level = Integer.parseInt(id);
-        String result = "";
-        switch (level) {
-            case 1:
-                result = CommonValues.SUGGESTION_LEVEL_1;
-                break;
-            case 2:
-                result = CommonValues.SUGGESTION_LEVEL_2;
-                break;
-            case 3:
-                result = CommonValues.SUGGESTION_LEVEL_3;
-                break;
-            case 4:
-                result = CommonValues.SUGGESTION_LEVEL_4;
-                break;
-        }
-        return result;
-    }
-
+    private TrainPlan trainPlan ;
+    private String  filepath ;     // 文件路径
+    private String  file_zip_path  ;  // 压缩文件路径
+    private final Handler  handler = new Handler() ;
 
 
 
@@ -116,30 +102,68 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
         mWidth = manager.getDefaultDisplay().getWidth() ;
         api = WXAPIFactory.createWXAPI(this, "wx92ff63ca90677197");
         mRecordDayData = (BreathTrainingResult) getIntent().getExtras().getSerializable("breathTrainingData");
+        trainPlan = (TrainPlan)getIntent().getExtras().getSerializable("train_plan") ;
         initView();
         initEvent();
         mStatusHeight = Utils.getStatusHeight(this) ;
 
+
+
+        filepath =CommonValues.PATH_ZIP+mRecordDayData.getUser_id()+"/"+mRecordDayData.getFname();
+        file_zip_path = CommonValues.PATH_ZIP+mRecordDayData.getUser_id()+"/"+mRecordDayData.getFname()+"_zip" ;
+
+        UploadRecordData.getInstance().setOnUploadProcessListener(new UploadRecordData.OnUploadProcessListener() {
+            @Override
+            public void onUploadDone(int responseCode, String message) {
+
+                // Log.e("onUploadDone", message) ;
+                switch (responseCode){
+                    case UploadRecordData.UPLOAD_SUCCESS_CODE:
+                        FileUtils.deleteFolder(filepath) ;
+                        FileUtils.deleteFolder(file_zip_path) ;
+                        try {
+                            final JSONObject mesJsonObject = new JSONObject(message) ;
+                            if (mesJsonObject.has("code") && mesJsonObject.getString("code").equals("200")){
+
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        Utils.write(mesJsonObject.toString());
+
+                                        BreathApplication.toast(BreathReportActivity.this,mesJsonObject.toString());
+                                    }
+                                }) ;
+                            }
+                        }catch (Exception e){
+
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onUploadProcess(int uploadSize) {
+
+            }
+
+            @Override
+            public void initUpload(int fileSize) {
+
+            }
+        });
+        UploadRecordData.getInstance().uploadRecordData(mRecordDayData);
+
+
+
+
+
+
         mTextStandardRate.setText(mRecordDayData.getDifficulty());
-        mRatingBar.setRating(Float.parseFloat(mRecordDayData.getBreath_type()));  //
-        mTextTimeLong.setText(getTimeLong(Integer.parseInt(mRecordDayData.getTrain_last())));
-        mTextGroupNumber.setText(mRecordDayData.getTrain_group());
         mTextTrainTime.setText(timeStampToData(mRecordDayData.getTrain_time()));
-        mTextSuggestionTime.setText(getSuggestion(mRecordDayData.getSuggestion()));
         mTrainTime = longTimeToTime(mRecordDayData.getTrain_time()) ;
         phone = ShareUtils.getUserPhone(BreathReportActivity.this) ;
         sex = ShareUtils.getUserSex(BreathReportActivity.this) ;
-
-
-
-
-
-        Intent intent = new Intent() ;
-        intent.setClass(BreathReportActivity.this, UploadDataService.class) ;
-        Bundle bundle = new Bundle() ;
-        bundle.putSerializable("breath_result",mRecordDayData);
-        intent.putExtras(bundle) ;
-        startService(intent) ;
 
     }
 
@@ -177,11 +201,7 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
         mBackRelative = (RelativeLayout) findViewById(R.id.back_re);
         topTexView = (TextView) findViewById(R.id.topText);
         mTextStandardRate = (TextView) findViewById(R.id.textStandardRate);
-        mTextTimeLong = (TextView) findViewById(R.id.text_timeLong);
-        mTextGroupNumber = (TextView) findViewById(R.id.tv_groupNumber);
-        mRatingBar = (RatingBar) findViewById(R.id.ratingbar);
         mTextTrainTime = (TextView) findViewById(R.id.text_train_time);
-        mTextSuggestionTime = (TextView) findViewById(R.id.text_suggestion_time);
         mImgShare = (ImageView) findViewById(R.id.img_share);
     }
 

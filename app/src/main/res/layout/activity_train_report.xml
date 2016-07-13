@@ -1,216 +1,766 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/layout_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:id="@+id/layout_root"
-    android:background="@color/white"
     android:paddingTop="@dimen/activity_vertical_margin">
+
     <include
-        layout="@layout/layout_report_top"
-        android:id="@+id/top_layout"/>
+        android:id="@+id/top_layout"
+        layout="@layout/layout_report_top"/>
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_below="@+id/top_layout"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_layout">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/common_dian20"
+            android:orientation="vertical">
+
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:background="@color/common_top_color"
-                android:layout_height="180dip">
+                android:layout_height="180dip"
+                android:background="@color/common_top_color">
+
                 <RelativeLayout
                     android:id="@+id/layout_text"
                     android:layout_width="match_parent"
                     android:layout_height="140dp">
+
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="120sp"
                         android:id="@+id/textStandardRate"
-                        android:gravity="bottom"
-                        android:layout_centerHorizontal="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="bottom"
                         android:textColor="@color/white"
-                        android:text="92"/>
+                        android:textSize="120sp"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:text="%"
                         android:layout_alignParentBottom="true"
                         android:layout_marginBottom="25dp"
                         android:layout_marginLeft="10dp"
                         android:layout_toRightOf="@+id/textStandardRate"
+                        android:text="分"
                         android:textColor="@color/white"
+                        android:textSize="20sp"
                         />
                 </RelativeLayout>
+
                 <RelativeLayout
-                    android:layout_below="@+id/layout_text"
                     android:layout_width="match_parent"
-                    android:background="#1C84BB"
-                    android:layout_height="40dp">
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/layout_text"
+                    android:background="#1C84BB">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:textSize="18sp"
                         android:gravity="center"
+                        android:text="本次呼吸训练得分"
                         android:textColor="@color/white"
-                        android:text="本次呼吸控制达标率"/>
+                        android:textSize="18sp"/>
                 </RelativeLayout>
             </RelativeLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_height="wrap_content">
-                <RelativeLayout
-                    android:layout_width="0dip"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_centerHorizontal="true"
-                        android:layout_width="wrap_content"
-                        android:textColor="@color/common_top_color"
-                        android:textSize="25sp"
-                        android:text="01:30"
-                        android:id="@+id/text_timeLong"
-                        android:gravity="center"
-                        android:layout_height="@dimen/common_dian39"/>
-                    <TextView
-                        android:layout_below="@+id/text_timeLong"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="训练时长"
-                        android:layout_centerHorizontal="true"
-                        android:textSize="14sp"
-                        android:textColor="@color/common_train_plan_text_color"/>
-                </RelativeLayout>
-                <View
-                    android:layout_width="1dip"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/common_bottom_text_color"
-                    android:layout_height="@dimen/common_dian39"/>
-                <RelativeLayout
-                    android:layout_width="0dip"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_centerHorizontal="true"
-                        android:layout_width="wrap_content"
-                        android:textColor="@color/common_top_color"
-                        android:textSize="25sp"
-                        android:text="30"
-                        android:gravity="center"
-                        android:id="@+id/tv_groupNumber"
-                        android:layout_height="@dimen/common_dian39"/>
-                    <TextView
-                        android:layout_below="@+id/tv_groupNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="动作组数"
-                        android:layout_centerHorizontal="true"
-                        android:textSize="14sp"
-                        android:textColor="@color/common_train_plan_text_color"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/common_dian20"
+                android:orientation="horizontal">
 
-                </RelativeLayout>
-                <View
-                    android:layout_width="1dip"
-                    android:background="@color/common_bottom_text_color"
-                    android:layout_gravity="center_vertical"
-                    android:layout_height="@dimen/common_dian39"/>
+
                 <RelativeLayout
                     android:layout_width="0dip"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/common_dian15"
+                    android:layout_marginRight="@dimen/common_dian10"
+                    android:layout_weight="1">
+
                     <RelativeLayout
+                        android:id="@+id/layoutTimeLong"
                         android:layout_width="match_parent"
-                        android:id="@+id/ratingbar_re"
-                        android:layout_height="@dimen/common_dian39">
-                        <RatingBar
+                        android:layout_height="@dimen/common_dian39"
+                        android:background="@mipmap/icon_report_left">
+
+                        <TextView
+                            android:id="@+id/tvTimeLongLeft"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            style="@style/roomRatingBar"
-                            android:id="@+id/ratingbar"
-                            android:rating="3"
-                            android:isIndicator="true"
                             android:layout_centerVertical="true"
-                            android:layout_centerHorizontal="true"
-                            android:numStars="5"
-                            />
+                            android:text="训练\n时长"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/common_text_14sp"/>
+
+                        <TextView
+                            android:id="@+id/tvTimeLongValue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/tvTimeLongLeft"
+                            android:gravity="center"
+                            android:text="01:30"
+                            android:textColor="@color/common_top_color"
+                            android:textSize="@dimen/common_text_20sp"/>
                     </RelativeLayout>
 
+                    <RelativeLayout
+                        android:id="@+id/layoutGroupNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/common_dian39"
+                        android:layout_below="@+id/layoutTimeLong"
+                        android:layout_marginTop="@dimen/common_dian15"
+                        android:background="@mipmap/icon_report_left">
+
+                        <TextView
+                            android:id="@+id/tvGroupsNumberLeft"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="呼吸\n组数"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/common_text_14sp"/>
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/tvGroupsNumberLeft"
+                            android:gravity="center"
+                            android:text="300"
+                            android:textColor="@color/color_nobreath_bg"
+                            android:textSize="@dimen/common_text_20sp"/>
+
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="93dip"
+                    android:layout_marginLeft="@dimen/common_dian10"
+                    android:layout_marginRight="@dimen/common_dian15"
+                    android:layout_weight="1"
+                    android:background="@mipmap/icon_report_right">
+
                     <TextView
-                        android:layout_centerHorizontal="true"
+                        android:id="@+id/tvDifficulty"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/ratingbar_re"
-                        android:textColor="@color/common_train_plan_text_color"
-                        android:textSize="14sp"
-                        android:text="难度系数"/>
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dip"
+                        android:text="当\n前\n难\n度"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/common_text_14sp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/common_dian20"
+                        android:layout_toRightOf="@+id/tvDifficulty"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tvControlLeft"
+                                android:layout_width="@dimen/common_dian50"
+                                android:layout_height="wrap_content"
+                                android:text="控制度:"
+                                android:layout_centerVertical="true"
+                                android:textSize="@dimen/common_text_14sp"/>
+
+                            <RatingBar
+                                android:id="@+id/levelControlRa"
+                                style="@style/level_report_star_Bar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="@dimen/common_dian5"
+                                android:layout_toRightOf="@+id/tvControlLeft"
+                                android:isIndicator="true"
+                                android:numStars="3"
+                                android:rating="1"
+                                />
+
+                        </RelativeLayout>
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/common_dian5">
+
+                            <TextView
+                                android:id="@+id/tvStengthLeft"
+                                android:layout_width="@dimen/common_dian50"
+                                android:layout_height="wrap_content"
+                                android:text="强  弱:"
+                                android:layout_centerVertical="true"
+                                android:textSize="@dimen/common_text_14sp"/>
+
+                            <RatingBar
+                                android:id="@+id/levelStrengthRa"
+                                style="@style/level_report_moon_Bar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="@dimen/common_dian5"
+                                android:layout_toRightOf="@+id/tvStengthLeft"
+                                android:isIndicator="true"
+                                android:numStars="3"
+                                android:rating="1"
+                                />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/common_dian5">
+
+                            <TextView
+                                android:id="@+id/tvPresnsterLeft"
+                                android:layout_width="@dimen/common_dian50"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="持久力:"
+                                android:textSize="@dimen/common_text_14sp"/>
+
+                            <RatingBar
+                                android:id="@+id/levelPresnsterthRa"
+                                style="@style/level_report_sun_Bar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginLeft="@dimen/common_dian5"
+                                android:layout_toRightOf="@+id/tvPresnsterLeft"
+                                android:isIndicator="true"
+                                android:numStars="3"
+                                android:rating="1"
+                                />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="20dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
                 <TextView
+                    android:id="@+id/text_drawable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:drawableLeft="@mipmap/icon_train_record_time"
-                    android:gravity="center_vertical"
+                    android:drawableLeft="@mipmap/icon_report_time"
                     android:drawablePadding="3dp"
-                    android:textSize="16sp"
-                    android:id="@+id/text_drawable"
+                    android:gravity="center_vertical"
+                    android:text="训练时间:"
                     android:textColor="@color/common_top_color"
-                    android:text="训练时间:"/>
+                    android:textSize="16sp"/>
+
                 <TextView
-                    android:layout_below="@+id/text_drawable"
-                    android:layout_width="wrap_content"
                     android:id="@+id/text_train_time"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2015.12.26 13:49"
+                    android:layout_below="@+id/text_drawable"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="5dp"
+                    android:text="2015.12.26 13:49"
                     android:textColor="@color/common_color_9A9A9A"
                     android:textSize="16sp"/>
             </RelativeLayout>
 
+
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="20dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/common_dian15"
+                android:layout_marginRight="@dimen/common_dian15"
+                android:layout_marginTop="@dimen/common_dian20">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:drawableLeft="@mipmap/icon_train_record_suggestion"
-                    android:gravity="center_vertical"
-                    android:drawablePadding="3dp"
-                    android:textSize="16sp"
-                    android:id="@+id/text_suggestion"
+                    android:layout_alignParentLeft="true"
+                    android:drawableLeft="@mipmap/icon_report_test"
+                    android:drawablePadding="@dimen/common_dian10"
+                    android:text="阶段评估:"
                     android:textColor="@color/common_top_color"
-                    android:text="训练建议:"/>
+                    android:textSize="@dimen/common_text_16sp"/>
+
                 <TextView
-                android:layout_below="@+id/text_suggestion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="本难度系数最近5次训练分数"
+                    android:textColor="@color/common_color_9A9A9A"
+                    android:textSize="@dimen/common_text_14sp"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="85dip"
+                android:layout_marginLeft="@dimen/common_dian15"
+                android:layout_marginRight="@dimen/common_dian15"
+                android:layout_marginTop="@dimen/common_dian10"
+                android:background="@drawable/report_bg_test"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/common_dian39"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/common_top_color"
+                        android:textSize="@dimen/common_text_14sp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="@color/common_top_color"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="80"
+                        android:textColor="@color/common_top_color"
+                        android:textSize="@dimen/common_text_18sp"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="match_parent"
+                    android:background="@color/common_top_color"/>
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/common_dian39"
+                        android:gravity="center"
+                        android:text="2"
+                        android:textColor="@color/common_top_color"
+                        android:textSize="@dimen/common_text_14sp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="@color/common_top_color"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="80"
+                        android:textColor="@color/common_top_color"
+                        android:textSize="@dimen/common_text_18sp"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="match_parent"
+                    android:background="@color/common_top_color"/>
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/common_dian39"
+                        android:gravity="center"
+                        android:text="3"
+                        android:textColor="@color/common_top_color"
+                        android:textSize="@dimen/common_text_14sp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="@color/common_top_color"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="80"
+                        android:textColor="@color/common_top_color"
+                        android:textSize="@dimen/common_text_18sp"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="match_parent"
+                    android:background="@color/common_top_color"/>
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/common_dian39"
+                        android:gravity="center"
+                        android:text="4"
+                        android:textColor="@color/common_top_color"
+                        android:textSize="@dimen/common_text_14sp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="@color/common_top_color"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="80"
+                        android:textColor="@color/common_top_color"
+                        android:textSize="@dimen/common_text_18sp"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="match_parent"
+                    android:background="@color/common_top_color"/>
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/common_dian39"
+                        android:gravity="center"
+                        android:text="5"
+                        android:textColor="@color/common_top_color"
+                        android:textSize="@dimen/common_text_14sp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="@color/common_top_color"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="80"
+                        android:textColor="@color/common_top_color"
+                        android:textSize="@dimen/common_text_18sp"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="match_parent"
+                    android:background="@color/common_top_color"/>
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/common_dian39"
+                        android:background="@color/common_top_color"
+                        android:gravity="center"
+                        android:text="平均分"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/common_text_14sp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="@color/white"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:background="@color/common_top_color"
+                        android:gravity="center"
+                        android:text="80"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/common_text_18sp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_suggestion_time"
-                android:layout_marginLeft="@dimen/common_dian20"
-                android:layout_marginRight="@dimen/common_dian20"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/common_color_9A9A9A"
-                android:textSize="16sp"/>
-            </RelativeLayout>
+                android:layout_marginLeft="@dimen/common_dian15"
+                android:layout_marginTop="@dimen/common_dian10"
+                android:text="你还没有达到晋级要求,请继续努力"
+                android:textColor="@color/common_top_color"
+                android:textSize="@dimen/common_text_12sp"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/common_dian15"
+                android:layout_marginTop="@dimen/common_dian25"
+                android:drawableLeft="@mipmap/icon_report_his"
+                android:gravity="center"
+                android:text="历史回顾:"
+                android:textSize="@dimen/common_text_16sp"
+                android:textColor="@color/common_top_color"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/common_dian15"
+                android:text="本训练模式于2016.06.26 启用。\n目前训练6天,合计训练24次"
+                android:layout_marginLeft="@dimen/common_dian15"
+                android:textSize="@dimen/common_text_14sp"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="本模式初始难度为:"
+                android:layout_marginLeft="@dimen/common_dian15"
+                android:layout_marginTop="@dimen/common_dian20"
+                android:textSize="@dimen/common_text_16sp"
+                android:textColor="@color/common_top_color"
+                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/common_dian10"
+                android:layout_marginLeft="@dimen/common_dian15"
+                android:layout_marginRight="@dimen/common_dian15"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvControlInitLeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="控制度:"
+                        android:layout_centerVertical="true"
+                        android:textSize="@dimen/common_text_14sp"/>
+                    <RatingBar
+                        android:id="@+id/levelControlInitRa"
+                        style="@style/level_report_star_Bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/tvControlInitLeft"
+                        android:isIndicator="true"
+                        android:numStars="3"
+                        android:rating="1"/>
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvStrengthInitLeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="强弱:"
+                        android:layout_centerVertical="true"
+                        android:textSize="@dimen/common_text_14sp"/>
+                    <RatingBar
+                        android:id="@+id/levelStrengthInitRa"
+                        style="@style/level_report_moon_Bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/tvStrengthInitLeft"
+                        android:isIndicator="true"
+                        android:numStars="3"
+                        android:rating="1"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvPrensterInitLeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="持久力:"
+                        android:layout_centerVertical="true"
+                        android:textSize="@dimen/common_text_14sp"/>
+                    <RatingBar
+                        android:id="@+id/levelPrensterInitRa"
+                        style="@style/level_report_sun_Bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/tvPrensterInitLeft"
+                        android:isIndicator="true"
+                        android:numStars="3"
+                        android:rating="1"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="目前达到的难度系数:"
+                android:layout_marginLeft="@dimen/common_dian15"
+                android:layout_marginTop="@dimen/common_dian20"
+                android:textSize="@dimen/common_text_16sp"
+                android:textColor="@color/common_top_color"
+                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/common_dian10"
+                android:layout_marginLeft="@dimen/common_dian15"
+                android:layout_marginRight="@dimen/common_dian15"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvControlCurrentLeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="控制度:"
+                        android:layout_centerVertical="true"
+                        android:textSize="@dimen/common_text_14sp"/>
+                    <RatingBar
+                        android:id="@+id/levelControlCurrentRa"
+                        style="@style/level_report_star_Bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/tvControlCurrentLeft"
+                        android:isIndicator="true"
+                        android:numStars="3"
+                        android:rating="1"/>
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvStrengthCurrentLeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="强弱:"
+                        android:layout_centerVertical="true"
+                        android:textSize="@dimen/common_text_14sp"/>
+                    <RatingBar
+                        android:id="@+id/levelStrengthCurrentRa"
+                        style="@style/level_report_moon_Bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/tvStrengthCurrentLeft"
+                        android:isIndicator="true"
+                        android:numStars="3"
+                        android:rating="1"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tvPrensterCurrentLeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="持久力:"
+                        android:layout_centerVertical="true"
+                        android:textSize="@dimen/common_text_14sp"/>
+                    <RatingBar
+                        android:id="@+id/levelPrensterCurrentRa"
+                        style="@style/level_report_sun_Bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/tvPrensterCurrentLeft"
+                        android:isIndicator="true"
+                        android:numStars="3"
+                        android:rating="1"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="您的进步评价:"
+                android:layout_marginTop="@dimen/common_dian15"
+                android:textColor="@color/common_top_color"
+                android:textSize="@dimen/common_text_16sp"
+                android:layout_marginLeft="@dimen/common_dian15"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/common_text_16sp"
+                android:layout_marginLeft="@dimen/common_dian15"
+                android:layout_marginTop="@dimen/common_dian5"
+                android:text="有提高"/>
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

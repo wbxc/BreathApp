@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+                android:layout_gravity="center" android:background="#b0000000"
+                android:gravity="center_horizontal"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="250dip"
+        android:background="@mipmap/icon_his_popu"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:id="@+id/listViewPopu"
+            android:layout_marginTop="@dimen/common_dian20"
+            android:divider="@color/transparent"
+            android:layout_height="wrap_content">
+        </ListView>
+    </LinearLayout>
+</RelativeLayout>

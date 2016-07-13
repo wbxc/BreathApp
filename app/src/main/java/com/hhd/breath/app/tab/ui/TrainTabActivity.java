@@ -79,9 +79,9 @@ public class TrainTabActivity extends BaseActivity {
 
                 if (isNotEmpty(ShareUtils.getSerialNumber(TrainTabActivity.this))){
 
-                    BreathTrainActivity.actionStart(TrainTabActivity.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102),true);
+                    //BreathTrainActivity.actionStart(TrainTabActivity.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102),true);
                 }else {
-                    BreathTrainActivity.actionStart(TrainTabActivity.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102),false);
+                   // BreathTrainActivity.actionStart(TrainTabActivity.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102),false);
                 }
 
             }

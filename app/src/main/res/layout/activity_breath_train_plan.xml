@@ -16,16 +16,12 @@
         android:background="@color/common_top_color"
         android:layout_height="@dimen/common_dian50">
 
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
-            android:text="HyBreath"
-            android:gravity="center|left"
-            android:textColor="@color/white"
-            android:textSize="20sp"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:id="@+id/topText"
             android:layout_marginLeft="@dimen/common_dian20"
-            android:layout_height="wrap_content"/>
+            android:src="@mipmap/icon_navbar_logo"/>
 
         <RelativeLayout
             android:layout_alignParentRight="true"

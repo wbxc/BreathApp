@@ -26,6 +26,7 @@ import com.hhd.breath.app.BreathApplication;
 import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
 import com.hhd.breath.app.andengine.BreathAndEngine;
+import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.net.ThreadPoolWrap;
 import com.hhd.breath.app.service.GlobalUsbService;
 import com.hhd.breath.app.service.TransmitDataDriver;
@@ -35,6 +36,9 @@ import com.hhd.breath.app.wchusbdriver.Global340Driver;
 import java.lang.ref.WeakReference;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * 训练计划详情
@@ -53,7 +57,6 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
     private ImageView imgConnectionTrainQi;
     private TextView trainTimeLong;
     private TextView trainGroupNumber;
-    private RatingBar levelRatingBar;
     private int timeLong;
     private int actionGroupNumber;
     private String trainName;
@@ -82,10 +85,24 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
     private BreathTrainHandler mHandler = null;
     private Dialog errorDialog = null;
 
+    @Bind(R.id.levelControlRa)
+    RatingBar  levelControlRa ;
+    @Bind(R.id.levelStrengthRa)
+    RatingBar levelStrengthRa ;
+    @Bind(R.id.levelPresnsterthRa)
+    RatingBar levelPresnsterthRa ;
+    private TrainPlan trainPlan ;
+
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_breath_train);
+        ButterKnife.bind(this);
         context = BreathTrainActivity.this;
         mUsbBroadCaster = new UsbBroadCaster();
         mHandler = new BreathTrainHandler(BreathTrainActivity.this) ;
@@ -116,6 +133,7 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         trainName = getIntent().getExtras().getString("trainName");
         level = getIntent().getExtras().getString("level");
         isHasPermission = getIntent().getExtras().getBoolean("isHasPermission") ;
+        trainPlan = (TrainPlan) getIntent().getExtras().getSerializable("train_plan") ;
         readBuffer = new byte[512];
         writeBuffer = new byte[512];
     }
@@ -129,7 +147,6 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         start_connect = (RelativeLayout) findViewById(R.id.start_train);
         trainTimeLong = (TextView) findViewById(R.id.time_long);
         trainGroupNumber = (TextView) findViewById(R.id.zushuo);
-        levelRatingBar = (RatingBar) findViewById(R.id.ratingbar);
         mTextTrainName = (TextView) findViewById(R.id.train_name);
         mBreathExplain = (TextView) findViewById(R.id.text_breathExplain);
         imgConnectionTrainQi = (ImageView) findViewById(R.id.img_connect_train_qi);
@@ -143,10 +160,16 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         error_connect.setOnClickListener(this);
         trainTimeLong.setText(getTimeLong(timeLong));
         trainGroupNumber.setText(String.valueOf(ShareUtils.getActionGroup(BreathTrainActivity.this)));
-        levelRatingBar.setRating(Float.parseFloat(level));
-        mTextTrainName.setText(trainName);
+
         mBreathExplain.setText(CommonValues.LEVEL_ONE_DS);
         imgConnectionTrainQi.setOnClickListener(this);
+
+
+        levelControlRa.setRating(Float.valueOf(trainPlan.getCurrentControl()));
+        levelStrengthRa.setRating(Float.valueOf(trainPlan.getCurrentStrength()));
+        levelPresnsterthRa.setRating(Float.valueOf(trainPlan.getCurrentPersistent()));
+        mTextTrainName.setText(trainPlan.getName());
+
     }
 
 
@@ -165,7 +188,7 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         super.onPause();
     }
 
-    public static void actionStart(Activity mActivity, String trainName, String level, String trainCode,boolean isHasPermission) {
+    public static void actionStart(Activity mActivity, String trainName, String level, String trainCode, boolean isHasPermission, TrainPlan trainPlan) {
         Bundle mBundle = new Bundle();
         Intent mIntent = new Intent();
         mIntent.setClass(mActivity, BreathTrainActivity.class);
@@ -173,6 +196,8 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         mBundle.putString("level", level);   // 训练级别
         mBundle.putString("trainCode", trainCode);   // 标示
         mBundle.putBoolean("isHasPermission",isHasPermission);
+        mBundle.putSerializable("train_plan",trainPlan);
+
         mIntent.putExtras(mBundle);
         mActivity.startActivity(mIntent);
     }
@@ -206,7 +231,6 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
                     BreathApplication.toastTest(BreathTrainActivity.this, "已可以接收");
                     startBreathAndEngine() ;
                 }else{
-                    //readThreadData.setReadThread(false);  // if ( transmitDataDriver!=null &&transmitDataDriver.isConnection())
                     try {
                         if (Global340Driver.getInstance(BreathTrainActivity.this).send("2")){
                             GlobalUsbService.isOpenBreath = true ;
@@ -214,7 +238,6 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
                         }
                     }catch (Exception e){
                         BreathApplication.toastTest(BreathTrainActivity.this,e.getMessage());
-                        //BreathApplication.toastTest(BreathTrainActivity.this,getString(R.string.string_health_error_init));
                     }
                 }
                 break;
@@ -231,9 +254,8 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
     private void startBreathAndEngine(){
         Intent intent = new Intent() ;
         Bundle bundle = new Bundle() ;
-        bundle.putInt("timeLong",timeLong);
-        bundle.putString("level", level);
-        bundle.putInt("groupNumbers", actionGroupNumber);
+        bundle.putSerializable("train_plan",trainPlan);
+       // BreathApplication.toast(BreathTrainActivity.this,trainPlan.toString());
         intent.putExtras(bundle) ;
         intent.setClass(BreathTrainActivity.this, BreathAndEngine.class) ;
         startActivity(intent);

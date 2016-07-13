@@ -58,6 +58,7 @@ import retrofit2.Response;
 
 /**
  * 获取历史记录详情
+ * 在线获取
  */
 public class TrainReportActivity extends BaseActivity implements View.OnClickListener {
 
@@ -66,11 +67,7 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
     private int values;
     private int sum;
     private TextView mTextStandardRate;
-    private TextView mTextTimeLong;
-    private TextView mTextGroupNumber;
-    private RatingBar mRatingBar;
     private TextView mTextTrainTime;
-    private TextView mTextSuggestionTime;
     private String mRecordDayDataId;
     private ImageView mImgShare;
 
@@ -133,23 +130,12 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
                 if (response.body().getCode().equals("200")){
                     BreathDetailReport breathDetailReport = response.body().getData() ;
                     mTextStandardRate.setText(breathDetailReport.getDifficulty());
-                    mRatingBar.setRating(Float.parseFloat(breathDetailReport.getBreath_type()));  //
-                    mTextTimeLong.setText(getTimeLong(Integer.parseInt(breathDetailReport.getTrain_last())));
-                    mTextGroupNumber.setText(breathDetailReport.getTrain_group());
                     mTextTrainTime.setText(timeStampToData(breathDetailReport.getTrain_time()));
-                    mTextSuggestionTime.setText(getSuggestion(breathDetailReport.getSuggestion()));
-
-
                     mTrainTime = longTimeToTime(breathDetailReport.getTrain_time()) ;
-
-
                     userName = ShareUtils.getUserName(TrainReportActivity.this);
                     sex =  ShareUtils.getUserSex(TrainReportActivity.this) ;
-
                     birthday = longTimeToTime(ShareUtils.getUserBirthday(TrainReportActivity.this)) ;
                     phone = ShareUtils.getUserPhone(TrainReportActivity.this) ;
-
-
                 }else {
                     Toast.makeText(TrainReportActivity.this,"获取数据失败",Toast.LENGTH_SHORT).show();
                 }
@@ -186,11 +172,7 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
         mBackRelative = (RelativeLayout) findViewById(R.id.back_re);
         topTexView = (TextView) findViewById(R.id.topText);
         mTextStandardRate = (TextView) findViewById(R.id.textStandardRate);
-        mTextTimeLong = (TextView) findViewById(R.id.text_timeLong);
-        mTextGroupNumber = (TextView) findViewById(R.id.tv_groupNumber);
-        mRatingBar = (RatingBar) findViewById(R.id.ratingbar);
         mTextTrainTime = (TextView) findViewById(R.id.text_train_time);
-        mTextSuggestionTime = (TextView) findViewById(R.id.text_suggestion_time);
         mImgShare = (ImageView) findViewById(R.id.img_share);
     }
 

@@ -23,9 +23,11 @@
     <dimen name="common_dian5">5dp</dimen>
     <dimen name="common_dian10">10dp</dimen>
     <dimen name="common_dian15">15dp</dimen>
+    <dimen name="common_dian_60">60dip</dimen>
 
     <dimen name="common_text_18sp">18sp</dimen>
     <dimen name="common_text_16sp">16sp</dimen>
     <dimen name="common_text_14sp">14sp</dimen>
     <dimen name="common_text_20sp">20sp</dimen>
+    <dimen name="common_text_12sp">12sp</dimen>
 </resources>

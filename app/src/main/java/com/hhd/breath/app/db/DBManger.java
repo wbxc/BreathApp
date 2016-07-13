@@ -149,17 +149,20 @@ public class DBManger {
     public static String TRAIN_PLAN_STRENGTH = "strength" ;
     public static String TRAIN_PLAN_GROUP_NUMBER ="groupNumber" ;
     public static String TRAIN_PLAN_PERSISTENT_LEVEL="persistentLevel" ;
+    public static String TRAIN_PLAN_PERSISTENT_CURRENT_LEVEL="current_persistentLevel" ;
     public static String TRAIN_PLAN_CONTROL_LEVEL = "controlLevel" ;
+    public static String TRAIN_PLAN_CONTROL_CURRENT_LEVEL = "current_controlLevel" ;
     public static String TRAIN_PLAN_STRENGTH_LEVEL = "strengthLevel" ;
+    public static String TRAIN_PLAN_STRENGTH_CURRENT_LEVEL = "current_strengthLevel" ;
     public static String TRAIN_BREATH_TIME = "breathTime" ;
     public static String TRAIN_INSPIRER_TIME = "stopTime" ;
     public static String TRAIN_CREATE_TIME = "createTime" ;
-
     public static String TRAIN_PLAN_USER_ID ="user_id" ;
     public static String TRAIN_PLAN_TYPE = "plan_type" ; //  训练的类型  默认和循环渐进
     public static String TRAIN_PLAN_CUM_TIME = "cumulative_time" ;   // 训练累计时间
     public static String TRAIN_PLAN_TIMES = "train_times" ;   //  累计训练多少次合格晋级
     public static String TABLE_TRAIN_PLAN = "trainPlan" ;
+    public static String TRAIN_PLAN_TYPE_NAME = "trainTypeName" ;  // 训练类型名称
 
 
 
@@ -180,12 +183,12 @@ public class DBManger {
             TRAIN_CREATE_TIME+" VARCHAR,"+
             TRAIN_PLAN_TYPE+" VARCHAR,"+
             TRAIN_PLAN_CUM_TIME+" VARCHAR,"+
-            TRAIN_PLAN_TIMES+" VARCHAR"+
+            TRAIN_PLAN_TIMES+" VARCHAR,"+
+            TRAIN_PLAN_TYPE_NAME+" VARCHAR,"+
+            TRAIN_PLAN_CONTROL_CURRENT_LEVEL+" VARCHAR,"+
+            TRAIN_PLAN_STRENGTH_CURRENT_LEVEL+" VARCHAR,"+
+            TRAIN_PLAN_PERSISTENT_CURRENT_LEVEL+" VARCHAR"+
             ")"  ;
-
-
-
-
 
 
 
