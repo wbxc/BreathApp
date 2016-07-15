@@ -30,12 +30,15 @@ import com.hhd.breath.app.BreathApplication;
 import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
 import com.hhd.breath.app.andengine.BreathAndEngine;
+import com.hhd.breath.app.db.TrainPlanService;
 import com.hhd.breath.app.db.TrainUnitService;
 import com.hhd.breath.app.model.BreathDetailReport;
 import com.hhd.breath.app.model.BreathDetailSuccess;
+import com.hhd.breath.app.model.BreathHisLog;
 import com.hhd.breath.app.model.BreathTrainingResult;
 import com.hhd.breath.app.model.RecordUnitData;
 import com.hhd.breath.app.model.TrainPlan;
+import com.hhd.breath.app.model.TrainPlanLog;
 import com.hhd.breath.app.net.ManagerRequest;
 import com.hhd.breath.app.net.UploadRecordData;
 import com.hhd.breath.app.service.UploadDataService;
@@ -91,6 +94,8 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
     private String  filepath ;     // 文件路径
     private String  file_zip_path  ;  // 压缩文件路径
     private final Handler  handler = new Handler() ;
+    private TrainPlanLog trainPlanLog   ;
+    private BreathHisLog breathHisLog ;
 
 
 
@@ -100,14 +105,14 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_train_report);
         WindowManager manager  = this.getWindowManager() ;
         mWidth = manager.getDefaultDisplay().getWidth() ;
+        trainPlanLog = new TrainPlanLog() ;
+        breathHisLog = new BreathHisLog() ;
         api = WXAPIFactory.createWXAPI(this, "wx92ff63ca90677197");
         mRecordDayData = (BreathTrainingResult) getIntent().getExtras().getSerializable("breathTrainingData");
         trainPlan = (TrainPlan)getIntent().getExtras().getSerializable("train_plan") ;
         initView();
         initEvent();
         mStatusHeight = Utils.getStatusHeight(this) ;
-
-
 
         filepath =CommonValues.PATH_ZIP+mRecordDayData.getUser_id()+"/"+mRecordDayData.getFname();
         file_zip_path = CommonValues.PATH_ZIP+mRecordDayData.getUser_id()+"/"+mRecordDayData.getFname()+"_zip" ;
@@ -116,7 +121,6 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onUploadDone(int responseCode, String message) {
 
-                // Log.e("onUploadDone", message) ;
                 switch (responseCode){
                     case UploadRecordData.UPLOAD_SUCCESS_CODE:
                         FileUtils.deleteFolder(filepath) ;
@@ -125,15 +129,18 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                             final JSONObject mesJsonObject = new JSONObject(message) ;
                             if (mesJsonObject.has("code") && mesJsonObject.getString("code").equals("200")){
 
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
+                                JSONObject dataJsonObject = mesJsonObject.getJSONObject("data") ;
+                                String id = dataJsonObject.getString("id") ;  // 获取到的是
+                                trainPlanLog.setUserId(ShareUtils.getUserId(BreathReportActivity.this));
+                                trainPlanLog.setName(trainPlan.getName());
+                                trainPlanLog.setTrainType(trainPlan.getTrainType());
+                                trainPlanLog.setTrainTimes(1);
+                                trainPlanLog.setDays(1);
+                                trainPlanLog.setTrainStartTime(String.valueOf(System.currentTimeMillis()));
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh") ;
+                                trainPlanLog.setTrainDayFlag(simpleDateFormat.format(new Date(System.currentTimeMillis())));
+                                TrainPlanService.getInstance(BreathReportActivity.this).addTrainLog(trainPlanLog);  //本地记录此种模式
 
-                                        Utils.write(mesJsonObject.toString());
-
-                                        BreathApplication.toast(BreathReportActivity.this,mesJsonObject.toString());
-                                    }
-                                }) ;
                             }
                         }catch (Exception e){
 
@@ -153,10 +160,6 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
             }
         });
         UploadRecordData.getInstance().uploadRecordData(mRecordDayData);
-
-
-
-
 
 
         mTextStandardRate.setText(mRecordDayData.getDifficulty());

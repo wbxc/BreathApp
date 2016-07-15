@@ -93,13 +93,10 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         mPauseTime = ShareUtils.getIntervalTime(BreathAndEngine.this);
         mHandler = new MyHandler(this) ;
         trainPlan = (TrainPlan) getIntent().getExtras().getSerializable("train_plan") ;
-
-
         groupNumbers = Integer.parseInt(trainPlan.getGroupNumber()) ;
         mBreathTime = Integer.parseInt(trainPlan.getPersistentLevel()) ;   ///持久力  表现为呼气时间
         mPauseTime = Integer.parseInt(trainPlan.getInspirerTime()) ;
         totalTime = (mBreathTime+mPauseTime)*groupNumbers ; // 总时间长
-
         totalTime1 = totalTime ;
         for (int i=0 ; i<groupNumbers ; i++){
             BreathEngine breathEngine = new BreathEngine() ;

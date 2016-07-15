@@ -9,6 +9,7 @@ import com.hhd.breath.app.db.CaseBookService;
 import com.hhd.breath.app.db.HealthDataService;
 import com.hhd.breath.app.db.ReportService;
 import com.hhd.breath.app.db.TrainDaySevice;
+import com.hhd.breath.app.db.TrainHisService;
 import com.hhd.breath.app.db.TrainPlanService;
 import com.hhd.breath.app.db.TrainUnitService;
 import com.hhd.breath.app.model.BreathTrainingResult;
@@ -17,6 +18,7 @@ import com.hhd.breath.app.model.MedicalHis;
 import com.hhd.breath.app.model.RecordDayData;
 import com.hhd.breath.app.model.RecordUnitData;
 import com.hhd.breath.app.model.TrainPlan;
+import com.hhd.breath.app.model.TrainPlanLog;
 import com.hhd.breath.app.model.TrainReportModel;
 import com.hhd.breath.app.net.UploadRecordData;
 import com.hhd.breath.app.utils.FileUtils;
@@ -99,5 +101,98 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         Log.e("HealthDataService", "HealthDataService" + result) ;
 
     }
+
+
+    public void testAddTrainPlanLog() throws  Exception{
+
+
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss") ;
+        String dateFlag = sdf.format(new Date(System.currentTimeMillis())) ;
+
+
+
+        TrainPlanLog trainPlanLog = new TrainPlanLog() ;
+        trainPlanLog.setUserId(ShareUtils.getUserId(getContext()));
+        trainPlanLog.setName("循序渐进训练");
+        trainPlanLog.setTrainType("0");
+        trainPlanLog.setTrainStartTime(String.valueOf(System.currentTimeMillis()));
+        trainPlanLog.setTrainTimes(0);
+        trainPlanLog.setDays(0);
+        trainPlanLog.setTrainDayFlag(dateFlag);
+
+        TrainPlanService.getInstance(getContext()).addTrainLog(trainPlanLog);
+    }
+
+    public void testFindTrainPlanLog() throws Exception{
+
+        TrainPlanLog trainPlanLog = TrainPlanService.getInstance(getContext()).findTrainPlanLog("循序渐进训练","0") ;
+        Log.e("trainPlanLog","trainPlanLog:"+trainPlanLog.getName()+">>>>>"+trainPlanLog.getTrainTimes()+">>>"+trainPlanLog.getDays()+">>>"+trainPlanLog.getTrainDayFlag()) ;
+
+
+    }
+
+
+    public void testTrainPlan() throws Exception{
+
+        TrainPlanLog trainPlanLog = TrainPlanService.getInstance(getContext()).findTrainPlanLog("我的训练","1") ;
+
+        if (trainPlanLog==null){
+
+            Log.e("trainPlanLog","查询的结果是空值") ;
+        }else {
+            Log.e("trainPlanLog","查询的结果是有值") ;
+        }
+    }
+
+    public void testUpdateTrainPlanLog() throws Exception{
+
+        TrainPlanLog trainPlanLog = TrainPlanService.getInstance(getContext()).findTrainPlanLog("循序渐进训练","0") ;
+        TrainPlanService.getInstance(getContext()).addTrainTimes(trainPlanLog);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm") ;
+        String dateFlag = sdf.format(new Date(System.currentTimeMillis())) ;
+        if (!dateFlag.equals(trainPlanLog.getTrainDayFlag())){
+            trainPlanLog.setTrainDayFlag(dateFlag);
+            TrainPlanService.getInstance(getContext()).addTrainDays(trainPlanLog);
+        }
+    }
+
+    public void testHuanSun() throws  Exception {
+        int sends = 10000  ;
+        StringBuffer sb = new StringBuffer() ;
+        int shi = sends/3600 ;
+        if (shi>9){
+            sb.append(shi).append(":") ;
+        }else {
+            sb.append("0"+shi).append(":") ;
+        }
+        int fens = sends % 3600 ;
+
+        int fen1 = fens /60 ;
+        if (fen1>9){
+            sb.append(fen1).append(":") ;
+        }else {
+            sb.append("0"+fen1).append(":") ;
+        }
+
+        int second = fens%60 ;
+        if (second>9){
+            sb.append(second) ;
+        }else {
+            sb.append("0"+second) ;
+        }
+
+
+        ///cr_file_path" : "http://127.0.0.1:3000/static/images/20160519/573d2e172e33f.zip"
+
+        Log.e("trainPlanLog","查询的"+sb.toString()+"fens"+fens) ;
+
+    }
+
+
+
+
+
 
 }

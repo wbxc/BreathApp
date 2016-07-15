@@ -1,5 +1,9 @@
 package com.hhd.breath.app.model;
 
+import android.content.ContentValues;
+
+import com.hhd.breath.app.db.DBManger;
+
 /**
  * Created by familylove on 2016/7/13.
  *
@@ -14,10 +18,18 @@ public class TrainPlanLog {
 
 
 
-    private String days ;    // 训练的天数
-    private String trainTimes ;   //训练的次数
+    private Integer days ;    // 训练的天数
+    private Integer trainTimes ;   //训练的次数
     private String trainStartTime ; //训练模式开始的时间
+    private String trainDayFlag  ; // 记录最后一次写进的日期2016-07-14
 
+    public String getTrainDayFlag() {
+        return trainDayFlag;
+    }
+
+    public void setTrainDayFlag(String trainDayFlag) {
+        this.trainDayFlag = trainDayFlag;
+    }
 
     public String getName() {
         return name;
@@ -43,19 +55,19 @@ public class TrainPlanLog {
         this.userId = userId;
     }
 
-    public String getDays() {
+    public Integer getDays() {
         return days;
     }
 
-    public void setDays(String days) {
+    public void setDays(Integer days) {
         this.days = days;
     }
 
-    public String getTrainTimes() {
+    public Integer getTrainTimes() {
         return trainTimes;
     }
 
-    public void setTrainTimes(String trainTimes) {
+    public void setTrainTimes(Integer trainTimes) {
         this.trainTimes = trainTimes;
     }
 
@@ -65,5 +77,19 @@ public class TrainPlanLog {
 
     public void setTrainStartTime(String trainStartTime) {
         this.trainStartTime = trainStartTime;
+    }
+
+
+    public ContentValues toContentValues(TrainPlanLog trainPlanLog){
+
+        ContentValues contentValues = new ContentValues() ;
+        contentValues.put(DBManger.TRAIN_PLAN_LOG_NAME,trainPlanLog.getName());
+        contentValues.put(DBManger.TRAIN_PLAN_LOG_TRAIN_TYPE,trainPlanLog.getTrainType());
+        contentValues.put(DBManger.TRAIN_PLAN_LOG_USER_ID,trainPlanLog.getUserId());
+        contentValues.put(DBManger.TRAIN_PLAN_LOG_DAYS,trainPlanLog.getDays()) ;
+        contentValues.put(DBManger.TRAIN_PLAN_LOG_TRAIN_TIMES,trainPlanLog.getTrainTimes());
+        contentValues.put(DBManger.TRAIN_PLAN_LOG_START_TIME,trainPlanLog.getTrainStartTime());
+        contentValues.put(DBManger.TRAIN_PLAN_LOG_DAY_FLAG,trainPlanLog.getTrainDayFlag());
+        return contentValues ;
     }
 }

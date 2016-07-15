@@ -5,8 +5,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.hhd.breath.app.model.TrainPlan;
+import com.hhd.breath.app.model.TrainPlanLog;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -223,4 +226,176 @@ public class TrainPlanService {
         }
         return trainPlans;
     }
+
+
+    /**
+     * 增加训练类型的日志
+     * @param trainPlanLog
+     */
+    public void addTrainLog(TrainPlanLog trainPlanLog){
+
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase() ;
+
+        try {
+            db.beginTransaction();
+            if (!isTrainPlanLogExists(db,trainPlanLog)){
+                db.insert(DBManger.TABLE_TRAIN_PLAN_LOG,null,trainPlanLog.toContentValues(trainPlanLog)) ;
+            }else {
+                addTrainTimes(db,trainPlanLog);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh") ;
+                String dateFlag = sdf.format(new Date(System.currentTimeMillis())) ;
+                if (!trainPlanLog.getTrainDayFlag().equals(dateFlag)){
+                    trainPlanLog.setTrainDayFlag(dateFlag);
+                    addTrainDays(db,trainPlanLog);
+                }
+            }
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+
+        }finally {
+
+            db.endTransaction();
+            if (db!=null){
+                db.close();
+                db = null;
+            }
+        }
+    }
+
+    /**
+     * 检测训练日志是否存在
+     * @param db
+     * @param trainPlanLog
+     * @return
+     */
+    private boolean isTrainPlanLogExists(SQLiteDatabase db , TrainPlanLog trainPlanLog){
+        Cursor cursor = null;
+        try {
+            String sql = "select * from  "+DBManger.TABLE_TRAIN_PLAN_LOG +" where "+DBManger.TRAIN_PLAN_LOG_NAME+" = ? and "+DBManger.TRAIN_PLAN_LOG_TRAIN_TYPE+" = ?" ;
+            cursor = db.rawQuery(sql,new String[]{trainPlanLog.getName(),trainPlanLog.getTrainType()}) ;
+            if (!cursor.isAfterLast()){
+                return true ;
+            }
+        }catch (Exception e){
+
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+                cursor = null;
+            }
+        }
+        return false ;
+    }
+
+
+    // 训练次数累计增加一个
+    public void addTrainTimes(TrainPlanLog trainPlanLog){
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase() ;
+        db.beginTransaction();
+        String updateSql = "update "+DBManger.TABLE_TRAIN_PLAN_LOG+
+                            " SET "+DBManger.TRAIN_PLAN_LOG_TRAIN_TIMES +" = '"+(trainPlanLog.getTrainTimes()+1)+"'" +
+                            " where "+DBManger.TRAIN_PLAN_LOG_NAME+" ='"+trainPlanLog.getName()+"' and "+DBManger.TRAIN_PLAN_LOG_TRAIN_TYPE+" = '"+trainPlanLog.getTrainType()+"'" ;
+        db.execSQL(updateSql);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+
+        if (db!=null){
+            db.close();
+            db = null;
+        }
+    }
+
+
+    // 训练次数累计增加一个
+    private void addTrainTimes(SQLiteDatabase db,TrainPlanLog trainPlanLog){
+        String updateSql = "update "+DBManger.TABLE_TRAIN_PLAN_LOG+
+                " SET "+DBManger.TRAIN_PLAN_LOG_TRAIN_TIMES +" = '"+(trainPlanLog.getTrainTimes()+1)+"'" +
+                " where "+DBManger.TRAIN_PLAN_LOG_NAME+" ='"+trainPlanLog.getName()+"' and "+DBManger.TRAIN_PLAN_LOG_TRAIN_TYPE+" = '"+trainPlanLog.getTrainType()+"'" ;
+        db.execSQL(updateSql);
+    }
+
+
+    // 天累计
+    private void addTrainDays(SQLiteDatabase db,TrainPlanLog trainPlanLog){
+        db.beginTransaction();
+        String update = "update "+DBManger.TABLE_TRAIN_PLAN_LOG+
+                " SET "+DBManger.TRAIN_PLAN_LOG_DAYS+" = '"+(trainPlanLog.getDays()+1)+"'"+"," + DBManger.TRAIN_PLAN_LOG_DAY_FLAG+" = '"+trainPlanLog.getTrainDayFlag()+"'"+
+                " where "+DBManger.TRAIN_PLAN_NAME+" = '"+trainPlanLog.getName()+"' and "+DBManger.TRAIN_PLAN_LOG_TRAIN_TYPE+" = '"+trainPlanLog.getTrainType()+"'" ;
+        db.execSQL(update);
+    }
+
+
+
+
+
+
+
+
+    // 天累计
+    public void addTrainDays(TrainPlanLog trainPlanLog){
+
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase() ;
+
+        db.beginTransaction();
+        String update = "update "+DBManger.TABLE_TRAIN_PLAN_LOG+
+                         " SET "+DBManger.TRAIN_PLAN_LOG_DAYS+" = '"+(trainPlanLog.getDays()+1)+"'"+"," + DBManger.TRAIN_PLAN_LOG_DAY_FLAG+" = '"+trainPlanLog.getTrainDayFlag()+"'"+
+                         " where "+DBManger.TRAIN_PLAN_NAME+" = '"+trainPlanLog.getName()+"' and "+DBManger.TRAIN_PLAN_LOG_TRAIN_TYPE+" = '"+trainPlanLog.getTrainType()+"'" ;
+        db.execSQL(update);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        if (db!=null){
+            db.close();
+            db = null;
+        }
+    }
+
+
+
+
+    /**
+     * 查询trainPlanLog
+     * @param name
+     * @param type
+     * @return
+     */
+    public TrainPlanLog findTrainPlanLog(String name , String type){
+
+        String sql = "select * from  "+DBManger.TABLE_TRAIN_PLAN_LOG+" where "+DBManger.TRAIN_PLAN_LOG_TRAIN_TYPE+" = ? and "+DBManger.TRAIN_PLAN_LOG_NAME+" = ?" ;
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase() ;
+        Cursor cursor = null;
+        TrainPlanLog trainPlanLog = null ;
+
+        try {
+            cursor = db.rawQuery(sql , new String[]{type,name}) ;
+            if (cursor!=null && cursor.moveToNext()){
+                trainPlanLog = new TrainPlanLog() ;
+                trainPlanLog.setName(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_LOG_NAME)));
+                trainPlanLog.setDays(cursor.getInt(cursor.getColumnIndex(DBManger.TRAIN_PLAN_LOG_DAYS)));
+                trainPlanLog.setTrainTimes(cursor.getInt(cursor.getColumnIndex(DBManger.TRAIN_PLAN_LOG_TRAIN_TIMES)));
+                trainPlanLog.setTrainStartTime(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_LOG_START_TIME)));
+                trainPlanLog.setTrainType(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_LOG_TRAIN_TYPE)));
+                trainPlanLog.setUserId(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_LOG_USER_ID)));
+                trainPlanLog.setTrainDayFlag(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_LOG_DAY_FLAG)));
+
+            }
+        }catch (Exception e){
+
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+                cursor = null ;
+            }
+            if (db!=null){
+                db.close();
+                db = null;
+            }
+        }
+        return  trainPlanLog ;
+    }
+
+
+
+
+
+
 }

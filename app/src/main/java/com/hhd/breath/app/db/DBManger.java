@@ -1,5 +1,7 @@
 package com.hhd.breath.app.db;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+
 /**
  * Created by Administrator on 2015/12/16.
  */
@@ -143,6 +145,9 @@ public class DBManger {
                     HEALTH_DATA_COMP_VALUE+" VARCHAR(30))" ;
 
 
+    /**
+     * 训练模式创建
+     */
     public static String TRAIN_PLAN_NAME = "name" ;
     public static String TRAIN_PLAN_PERSISTENT = "persistent" ;
     public static String TRAIN_PLANE_CONTROL = "control" ;
@@ -191,9 +196,33 @@ public class DBManger {
             ")"  ;
 
 
+    public static String TRAIN_PLAN_LOG_NAME = "name" ;
+    public static String TRAIN_PLAN_LOG_TRAIN_TYPE = "trainType" ;
+    public static String TRAIN_PLAN_LOG_USER_ID = "userId" ;
+    public static String TRAIN_PLAN_LOG_DAYS = "days" ;
+    public static String TRAIN_PLAN_LOG_TRAIN_TIMES = "trainTimes" ;
+    public static String TRAIN_PLAN_LOG_START_TIME = "trainStartTime" ;
+
+    public static String TRAIN_PLAN_LOG_DAY_FLAG = "train_day_flag" ;
+
+    public static String TABLE_TRAIN_PLAN_LOG = "train_plan_log" ;
+    public static String CREATE_TABLE_PLAN_LOG = "create table if not exists "+TABLE_TRAIN_PLAN_LOG+"(" +
+            "id integer primary key autoincrement ,"+
+            TRAIN_PLAN_LOG_NAME+" VARCHAR ,"+
+            TRAIN_PLAN_LOG_TRAIN_TYPE+" VARCHAR ,"+
+            TRAIN_PLAN_LOG_USER_ID+" VARCHAR ,"+
+            TRAIN_PLAN_LOG_DAYS+" INTEGER ,"+
+            TRAIN_PLAN_LOG_TRAIN_TIMES+" INTEGER ,"+
+            TRAIN_PLAN_LOG_START_TIME+" VARCHAR,"+
+            TRAIN_PLAN_LOG_DAY_FLAG+" VARCHAR" +
+            ")" ;
 
 
 
+
+    /**
+     * 主界面训练历史
+     */
     public static String TRAIN_HIS_RECORD_ID = "record_id" ;
     public static String TRAIN_HIS_FILE_ID = "file_id" ;
     public static String TRAIN_HIS_USER_ID = "user_id" ;
@@ -215,8 +244,6 @@ public class DBManger {
     public static String TRAIN_HIS_IS_DELETE = "is_delete" ;
     public static String TRAIN_HIS_RECORD_STATE = "record_state" ;
     public static String TRAIN_HIS_FILE_SIZE = "file_size" ;
-
-
     public static String TABLE_TRAIN_HIS = "train_his" ;
     public static String CREATE_TRAIN_HIS = "create table if not exists "+TABLE_TRAIN_HIS+"(" +
             "id integer primary key AUTOINCREMENT ,"+
@@ -243,4 +270,42 @@ public class DBManger {
             TRAIN_HIS_FILE_SIZE+" VARCHAR"+
             ")";
 
+    // 报告记录  附加条件
+    public static String HIS_LOG_RECORD_ID = "record_id" ;
+    public static String HIS_LOG_INIT_CONTROL = "controlLevel" ;
+    public static String HIS_LOG_INIT_STRENGTH = "strengthLevel" ;
+    public static String HIS_LOG_INIT_PERSISTENT = "persistentLevel" ;
+    public static String HIS_LOG_CURRENT_CONTROL="currentControlLevel" ;
+    public static String HIS_LOG_CURRENT_STRENGTH = "currentStrengthLevel" ;
+    public static String HIS_LOG_CURRENT_PERSISTENT = "currentPersistentLevel" ;
+    public static String HIS_LOG_START_TRAIN_TIME = "trainStartTime" ;
+    public static String HIS_LOG_TRAIN_DAYS = "trainDays" ;   // 训练天数
+    public static String HIS_LOG_TRAIN_TIMES = "trainTimes" ;
+    public static String HIS_LOG_TRAIN_AVER_TIMES = "trainAverTimes" ;
+    public static String HIS_LOG_TRAIN_RESULT = "trainResult" ;
+    public static String HIS_LOG_TRAIN_SUCCESS_TIMES = "trainSuccessTimes" ;
+    public static String HIS_LOG_TRAIN_AVER_VALUE = "trainAverValue" ;
+    public static String HIS_LOG_TRAIN_STATE_VALUE = "trainStageValue" ;  // 阶段评估
+
+
+    public static String TABLE_HIS_LOG = "breath_his_log" ;
+
+    public static String CREATE_TABLE_HIS_LOG = "create table if not exists "+TABLE_HIS_LOG+"(" +
+            "id integer primary key autoincrement ,"+
+            HIS_LOG_RECORD_ID+" VARCHAR ,"+
+            HIS_LOG_INIT_CONTROL+" VARCHAR,"+
+            HIS_LOG_INIT_STRENGTH+" VARCHAR,"+
+            HIS_LOG_INIT_PERSISTENT+" VARCHAR,"+
+            HIS_LOG_CURRENT_CONTROL+" VARCHAR,"+
+            HIS_LOG_CURRENT_STRENGTH+" VARCHAR,"+
+            HIS_LOG_CURRENT_PERSISTENT+" VARCHAR,"+
+            HIS_LOG_START_TRAIN_TIME+" VARCHAR,"+
+            HIS_LOG_TRAIN_TIMES+" VARCHAR,"+
+            HIS_LOG_TRAIN_DAYS+" VARCHAR,"+
+            HIS_LOG_TRAIN_AVER_TIMES+" VARCHAR,"+
+            HIS_LOG_TRAIN_AVER_VALUE+" VARCHAR,"+
+            HIS_LOG_TRAIN_RESULT+" VARCHAR,"+
+            HIS_LOG_TRAIN_SUCCESS_TIMES+" VARCHAR,"+
+            HIS_LOG_TRAIN_STATE_VALUE+" VARCHAR"+
+            ")" ;
 }

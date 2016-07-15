@@ -1,5 +1,9 @@
 package com.hhd.breath.app.model;
 
+import android.content.ContentValues;
+
+import com.hhd.breath.app.db.DBManger;
+
 /**
  * Created by familylove on 2016/7/13.
  * 这个类是用于本地存储  每一条信息获取的额外的值训练参数记录值
@@ -35,6 +39,29 @@ public class BreathHisLog {
 
     private String trainStageValue ; // 阶段考评值   50,100,30,200
 
+
+
+    public ContentValues toContentValues(BreathHisLog breathHisLog){
+
+        ContentValues contentValues = new ContentValues() ;
+        contentValues.put(DBManger.HIS_LOG_RECORD_ID,breathHisLog.getRecord_id());
+        contentValues.put(DBManger.HIS_LOG_INIT_CONTROL,breathHisLog.getControlLevel());
+        contentValues.put(DBManger.HIS_LOG_INIT_STRENGTH,breathHisLog.getStrengthLevel()) ;
+        contentValues.put(DBManger.HIS_LOG_INIT_PERSISTENT,breathHisLog.getPersistentLevel());
+        contentValues.put(DBManger.HIS_LOG_CURRENT_CONTROL,breathHisLog.getCurrentControlLevel());
+        contentValues.put(DBManger.HIS_LOG_CURRENT_STRENGTH,breathHisLog.getCurrentStrengthLevel());
+        contentValues.put(DBManger.HIS_LOG_CURRENT_PERSISTENT,breathHisLog.getCurrentPersistentLevel());
+        contentValues.put(DBManger.HIS_LOG_START_TRAIN_TIME,breathHisLog.getTrainStartTime());
+        contentValues.put(DBManger.HIS_LOG_TRAIN_DAYS,breathHisLog.getTrainDays());
+        contentValues.put(DBManger.HIS_LOG_TRAIN_TIMES,breathHisLog.getTrainTimes());
+        contentValues.put(DBManger.HIS_LOG_TRAIN_AVER_TIMES,breathHisLog.getTrainAverTimes());
+        contentValues.put(DBManger.HIS_LOG_TRAIN_RESULT,breathHisLog.getTrainResult());
+        contentValues.put(DBManger.HIS_LOG_TRAIN_SUCCESS_TIMES,breathHisLog.getTrainSuccessTimes());
+        contentValues.put(DBManger.HIS_LOG_TRAIN_AVER_VALUE,breathHisLog.getTrainAverValue());
+        contentValues.put(DBManger.HIS_LOG_TRAIN_STATE_VALUE,breathHisLog.getTrainStageValue());
+
+        return contentValues ;
+    }
 
     public String getRecord_id() {
         return record_id;
