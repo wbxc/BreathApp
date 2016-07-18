@@ -1,11 +1,14 @@
 package com.hhd.breath.app.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.model.TrainPlanLog;
+import com.hhd.breath.app.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,6 +68,42 @@ public class TrainPlanService {
         }
         return flag;
     }
+
+    public void updateTrainPlan(TrainPlan trainPlan) {
+
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+        try {
+
+            ContentValues contentValues = new ContentValues() ;
+            contentValues.put(DBManger.TRAIN_PLAN_CUM_TIME,trainPlan.getCumulativeTime());
+            contentValues.put(DBManger.TRAIN_PLAN_CONTROL_CURRENT_LEVEL,trainPlan.getCurrentControl());
+            contentValues.put(DBManger.TRAIN_PLAN_CONTROL_LEVEL,trainPlan.getControlLevel());
+
+            contentValues.put(DBManger.TRAIN_PLAN_STRENGTH_CURRENT_LEVEL,trainPlan.getCurrentStrength());
+            contentValues.put(DBManger.TRAIN_PLAN_STRENGTH_LEVEL,trainPlan.getStrengthLevel());
+
+            contentValues.put(DBManger.TRAIN_PLAN_PERSISTENT_CURRENT_LEVEL,trainPlan.getCurrentPersistent());
+            contentValues.put(DBManger.TRAIN_PLAN_PERSISTENT_LEVEL,trainPlan.getPersistentLevel()) ;
+
+
+
+            db.beginTransaction();
+            db.update(DBManger.TABLE_TRAIN_PLAN,contentValues,DBManger.TRAIN_PLAN_TYPE+" = ? and "+DBManger.TRAIN_PLAN_NAME+" = ?",new String[]{trainPlan.getTrainType(),trainPlan.getName()});
+
+            db.setTransactionSuccessful();
+
+        } catch (Exception e) {
+
+
+        } finally {
+            db.endTransaction();
+            if (db != null) {
+                db.close();
+                db = null;
+            }
+        }
+    }
+
 
 
     public int countTrainPlan(String userId){
@@ -175,6 +214,51 @@ public class TrainPlanService {
         return trainPlan;
     }
 
+    public TrainPlan findTrainPlan(String user_id ,String trainType){
+
+        String sql = "select * from " + DBManger.TABLE_TRAIN_PLAN + " where " + DBManger.TRAIN_PLAN_USER_ID + " = ?  and "+DBManger.TRAIN_PLAN_TYPE+" = ?";
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = null;
+        TrainPlan trainPlan = null ;
+        try {
+            cursor = db.rawQuery(sql,new String[]{user_id,trainType}) ;
+            if (cursor!=null && cursor.moveToNext()){
+                trainPlan = new TrainPlan() ;
+                trainPlan.setName(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_NAME)));
+                trainPlan.setControl(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLANE_CONTROL)));
+                trainPlan.setCreateTime(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_CREATE_TIME)));
+                trainPlan.setGroupNumber(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_GROUP_NUMBER)));
+                trainPlan.setControlLevel(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_CONTROL_LEVEL)));
+                trainPlan.setCumulativeTime(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_CUM_TIME)));
+                trainPlan.setPersistent(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_PERSISTENT)));
+                trainPlan.setPersistentLevel(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_PERSISTENT_LEVEL)));
+                trainPlan.setInspirerTime(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_INSPIRER_TIME)));
+                trainPlan.setStrength(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_STRENGTH)));
+                trainPlan.setStrengthLevel(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_STRENGTH_LEVEL)));
+                trainPlan.setTimes(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_TIMES)));
+                trainPlan.setTrainType(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_TYPE)));
+                trainPlan.setCurrentControl(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_CONTROL_CURRENT_LEVEL)));
+                trainPlan.setCurrentStrength(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_STRENGTH_CURRENT_LEVEL)));
+                trainPlan.setCurrentPersistent(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_PERSISTENT_CURRENT_LEVEL)));
+                trainPlan.setUserId(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_USER_ID)));
+            }
+        }catch (Exception e){
+
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+                cursor = null;
+            }
+
+            if (db!=null){
+                db.close();
+                db = null;
+            }
+
+        }
+        return trainPlan ;
+    }
+
 
     /**
      *  获取所有的
@@ -208,6 +292,8 @@ public class TrainPlanService {
                     trainPlan.setCurrentControl(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_CONTROL_CURRENT_LEVEL)));
                     trainPlan.setCurrentStrength(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_STRENGTH_CURRENT_LEVEL)));
                     trainPlan.setCurrentPersistent(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_PERSISTENT_CURRENT_LEVEL)));
+                    trainPlan.setUserId(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_USER_ID)));
+
                     trainPlans.add(trainPlan);
                 }
             }
@@ -226,6 +312,9 @@ public class TrainPlanService {
         }
         return trainPlans;
     }
+
+
+
 
 
     /**
@@ -252,6 +341,7 @@ public class TrainPlanService {
             db.setTransactionSuccessful();
         }catch (Exception e){
 
+            Utils.write("shujuku"+e.getMessage());
         }finally {
 
             db.endTransaction();

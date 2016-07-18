@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Html;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,22 +27,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hhd.breath.app.BaseActivity;
-import com.hhd.breath.app.BreathApplication;
 import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
-import com.hhd.breath.app.andengine.BreathAndEngine;
+import com.hhd.breath.app.db.TrainHisService;
 import com.hhd.breath.app.db.TrainPlanService;
-import com.hhd.breath.app.db.TrainUnitService;
 import com.hhd.breath.app.model.BreathDetailReport;
 import com.hhd.breath.app.model.BreathDetailSuccess;
 import com.hhd.breath.app.model.BreathHisLog;
 import com.hhd.breath.app.model.BreathTrainingResult;
-import com.hhd.breath.app.model.RecordUnitData;
 import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.model.TrainPlanLog;
 import com.hhd.breath.app.net.ManagerRequest;
+import com.hhd.breath.app.net.ThreadPoolWrap;
 import com.hhd.breath.app.net.UploadRecordData;
-import com.hhd.breath.app.service.UploadDataService;
 import com.hhd.breath.app.utils.FileUtils;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.utils.StringUtils;
@@ -59,10 +57,13 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 
@@ -72,12 +73,7 @@ import retrofit2.Response;
  */
 public class BreathReportActivity extends BaseActivity implements View.OnClickListener {
 
-    private RelativeLayout mBackRelative;
-    private TextView topTexView;
-    private int values;
-    private int sum;
-    private TextView mTextStandardRate;
-    private TextView mTextTrainTime;
+
     private BreathTrainingResult mRecordDayData;
     private ImageView mImgShare;
     private String phone ;
@@ -93,9 +89,61 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
     private TrainPlan trainPlan ;
     private String  filepath ;     // 文件路径
     private String  file_zip_path  ;  // 压缩文件路径
-    private final Handler  handler = new Handler() ;
     private TrainPlanLog trainPlanLog   ;
     private BreathHisLog breathHisLog ;
+    private String record_id = "" ;
+
+
+
+    private RelativeLayout layoutBack;
+    private TextView tvTop;
+    private TextView tvScore;
+    private TextView tvTrainTime;
+    @Bind(R.id.tvBreathGroups)
+    TextView tvBreathGroups ;
+    @Bind(R.id.levelControlRa)
+    RatingBar levelControlRa ;
+    @Bind(R.id.levelStrengthRa)
+    RatingBar levelStrengthRa ;
+    @Bind(R.id.levelPersistentRa)
+    RatingBar levelPersistentRa ;
+    @Bind(R.id.tvDifficultyShow)
+    TextView tvDifficultyShow ; // 难度系数显示
+    @Bind(R.id.levelControlInitRa)
+    RatingBar levelControlInitRa ;
+    @Bind(R.id.levelStrengthInitRa)
+    RatingBar levelStrengthInitRa ;
+    @Bind(R.id.levelPrensterInitRa)
+    RatingBar levelPrensterInitRa ;
+    @Bind(R.id.levelControlCurrentRa)
+    RatingBar levelControlCurrentRa ;
+    @Bind(R.id.levelStrengthCurrentRa)
+    RatingBar levelStrengthCurrentRa ;
+    @Bind(R.id.levelPrensterCurrentRa)
+    RatingBar levelPrensterCurrentRa ;
+    @Bind(R.id.tvTrainResult)
+    TextView tvTrainResult ;   // 训练结果
+    @Bind(R.id.tvHisContent)
+    TextView tvHisContent ;
+
+    private String str_startTime ;
+    private String str_train_days ;
+    private String str_train_times ;
+    private String str_train_aver_times ;
+    private String str_train_result ;
+    @Bind(R.id.tv1) TextView tv1 ;
+    @Bind(R.id.tv2) TextView tv2 ;
+    @Bind(R.id.tv3) TextView tv3 ;
+    @Bind(R.id.tv4) TextView tv4 ;
+    @Bind(R.id.tv5) TextView tv5 ;
+    @Bind(R.id.tvAverValue) TextView tvAverValue ;
+    private String timeLast = "0" ;
+
+
+
+
+
+
 
 
 
@@ -103,6 +151,7 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_train_report);
+        ButterKnife.bind(this);
         WindowManager manager  = this.getWindowManager() ;
         mWidth = manager.getDefaultDisplay().getWidth() ;
         trainPlanLog = new TrainPlanLog() ;
@@ -110,6 +159,11 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
         api = WXAPIFactory.createWXAPI(this, "wx92ff63ca90677197");
         mRecordDayData = (BreathTrainingResult) getIntent().getExtras().getSerializable("breathTrainingData");
         trainPlan = (TrainPlan)getIntent().getExtras().getSerializable("train_plan") ;
+        String trainType = getIntent().getExtras().getString("train_type") ;
+       // trainPlan = TrainPlanService.getInstance(BreathReportActivity.this).findTrainPlan(ShareUtils.getUserId(BreathReportActivity.this),trainType) ;
+        timeLast = mRecordDayData.getTrain_last() ;
+
+
         initView();
         initEvent();
         mStatusHeight = Utils.getStatusHeight(this) ;
@@ -119,32 +173,43 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
 
         UploadRecordData.getInstance().setOnUploadProcessListener(new UploadRecordData.OnUploadProcessListener() {
             @Override
-            public void onUploadDone(int responseCode, String message) {
+            public void onUploadDone(int responseCode, final String message) {
 
                 switch (responseCode){
                     case UploadRecordData.UPLOAD_SUCCESS_CODE:
+
                         FileUtils.deleteFolder(filepath) ;
                         FileUtils.deleteFolder(file_zip_path) ;
+                        String id = "" ;
                         try {
-                            final JSONObject mesJsonObject = new JSONObject(message) ;
-                            if (mesJsonObject.has("code") && mesJsonObject.getString("code").equals("200")){
+                            JSONObject mesJsonObject = new JSONObject(message) ;
 
+                            Utils.write(mesJsonObject.toString());     /////第一个
+
+                            if (mesJsonObject.has("code") && mesJsonObject.getString("code").equals("200")){
                                 JSONObject dataJsonObject = mesJsonObject.getJSONObject("data") ;
-                                String id = dataJsonObject.getString("id") ;  // 获取到的是
-                                trainPlanLog.setUserId(ShareUtils.getUserId(BreathReportActivity.this));
-                                trainPlanLog.setName(trainPlan.getName());
-                                trainPlanLog.setTrainType(trainPlan.getTrainType());
-                                trainPlanLog.setTrainTimes(1);
-                                trainPlanLog.setDays(1);
-                                trainPlanLog.setTrainStartTime(String.valueOf(System.currentTimeMillis()));
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh") ;
-                                trainPlanLog.setTrainDayFlag(simpleDateFormat.format(new Date(System.currentTimeMillis())));
-                                TrainPlanService.getInstance(BreathReportActivity.this).addTrainLog(trainPlanLog);  //本地记录此种模式
+                                id = dataJsonObject.getString("id") ;  // 获取到的是
 
                             }
                         }catch (Exception e){
 
+                            Utils.write(e.getMessage());
+
                         }
+                        trainPlanLog.setUserId(ShareUtils.getUserId(BreathReportActivity.this));
+                        trainPlanLog.setName(trainPlan.getName());
+                        trainPlanLog.setTrainType(trainPlan.getTrainType());
+                        trainPlanLog.setTrainTimes(1);
+                        trainPlanLog.setDays(1);
+                        trainPlanLog.setTrainStartTime(String.valueOf(System.currentTimeMillis()));
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh") ;
+                        trainPlanLog.setTrainDayFlag(simpleDateFormat.format(new Date(System.currentTimeMillis())));
+                        TrainPlanService.getInstance(BreathReportActivity.this).addTrainLog(trainPlanLog);  //本地记录此种模式
+                        Utils.write("数据插入成功");
+                        Message msg = Message.obtain() ;
+                        msg.what = 40 ;
+                        msg.obj = id ;
+                        handler.sendMessage(msg) ;
                         break;
                 }
             }
@@ -161,15 +226,216 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
         });
         UploadRecordData.getInstance().uploadRecordData(mRecordDayData);
 
-
-        mTextStandardRate.setText(mRecordDayData.getDifficulty());
-        mTextTrainTime.setText(timeStampToData(mRecordDayData.getTrain_time()));
+        tvScore.setText(mRecordDayData.getDifficulty());
+        tvTrainTime.setText(timeStampToData(mRecordDayData.getTrain_time()));
         mTrainTime = longTimeToTime(mRecordDayData.getTrain_time()) ;
+        tvBreathGroups.setText(mRecordDayData.getTrain_group());
+
+
         phone = ShareUtils.getUserPhone(BreathReportActivity.this) ;
         sex = ShareUtils.getUserSex(BreathReportActivity.this) ;
 
     }
+    @Override
+    protected void initView() {
+        layoutBack = (RelativeLayout) findViewById(R.id.back_re);
+        tvTop = (TextView) findViewById(R.id.topText);
+        tvScore = (TextView) findViewById(R.id.tvScore);
+        tvTrainTime = (TextView) findViewById(R.id.tvTrainTime);
+        mImgShare = (ImageView) findViewById(R.id.img_share);
+    }
 
+    private  Handler  handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 40 :
+                    //Toast.makeText(BreathReportActivity.this,"显示40",Toast.LENGTH_SHORT).show();
+                    record_id = (String) msg.obj ;
+                    ManagerRequest.getInstance().getRequestNetApi().getBreathDetailReport(record_id).enqueue(new retrofit2.Callback<BreathDetailSuccess>() {
+                        @Override
+                        public void onResponse(Call<BreathDetailSuccess> call, Response<BreathDetailSuccess> response) {
+
+                            if (response.body().getCode().equals("200")){
+
+                                if (TrainHisService.getInstance(BreathReportActivity.this).addBreathDetialReport(response.body().getData())){
+                                    new Thread(runnable).start();
+                                }
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<BreathDetailSuccess> call, Throwable t) {
+
+                        }
+                    });
+                    break;
+            }
+        }
+    } ;
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+
+            TrainPlanLog PlanLog = TrainPlanService.getInstance(BreathReportActivity.this).findTrainPlanLog(trainPlan.getName(),trainPlan.getTrainType()) ;
+            List<BreathDetailReport> breathDetailReports = new ArrayList<BreathDetailReport>() ;
+            List<BreathDetailReport>  breathDetailReports1 = TrainHisService.getInstance(BreathReportActivity.this).findFiveBreathDetailReports(trainPlan.getTrainType(),ShareUtils.getUserId(BreathReportActivity.this)) ;
+            for (int k= 0 ; k <breathDetailReports1.size() ; k++ ){
+                breathDetailReports.add(breathDetailReports1.get(breathDetailReports1.size()-1-k)) ;
+
+            }
+            if (breathDetailReports!=null){
+
+                StringBuffer sb = new StringBuffer() ;
+                float sumValue = 0f;
+                for (int i=0 ; i< breathDetailReports.size() ; i++){
+                    sb.append(breathDetailReports.get(i).getDifficulty()) ;
+                    sumValue +=Integer.parseInt(breathDetailReports.get(i).getDifficulty()) ;
+                    if (i!=4){
+                        sb.append(",") ;
+                    }
+                }
+
+                if (breathDetailReports.size()<5){
+
+                    for (int j = breathDetailReports.size() ; j<5 ; j++){
+
+                        sb.append("暂无")  ;
+
+                        if (j!=4){
+                            sb.append(",") ;
+                        }
+                    }
+                }
+                String averValue = String.valueOf(sumValue/breathDetailReports.size()) ; // 最近五次 或小于五次的平均值
+                breathHisLog.setTrainStageValue(sb.toString());
+                breathHisLog.setTrainAverValue(averValue);
+                breathHisLog.setControlLevel(trainPlan.getControl());
+                breathHisLog.setStrengthLevel(trainPlan.getStrength());
+                breathHisLog.setPersistentLevel(trainPlan.getPersistent());
+
+
+                int times = Integer.parseInt(trainPlan.getTimes()) ;
+                int upgradeValue = 0 ;
+                if (breathDetailReports.size()>times){
+                    for (int k = breathDetailReports.size()-times ; k<breathDetailReports.size();k++){
+                        upgradeValue +=Integer.parseInt(breathDetailReports.get(k).getDifficulty()) ;
+                    }
+                }
+
+                if (upgradeValue == (times*100)){
+                    istigao = true ;
+                    int c = Integer.parseInt(trainPlan.getCurrentControl()) ;
+                    switch (c){
+                        case 1:
+                            trainPlan.setCurrentControl(String.valueOf(2));
+                            trainPlan.setControlLevel(String.valueOf(CommonValues.c_z_value));
+                            break;
+                        case 2:
+                            trainPlan.setCurrentControl(String.valueOf(3));
+                            trainPlan.setControlLevel(String.valueOf(CommonValues.c_h_value));
+                            break;
+                        case 3:
+                            int s = Integer.parseInt(trainPlan.getCurrentStrength()) ;
+                            switch (s){
+                                case 1:
+                                    trainPlan.setCurrentStrength(String.valueOf(2));
+                                    trainPlan.setStrengthLevel(CommonValues.s_z_value);
+                                    break;
+                                case 2:
+                                    trainPlan.setCurrentStrength(String.valueOf(3));
+                                    trainPlan.setStrengthLevel(CommonValues.s_h_value);
+                                    break;
+                                case 3:
+                                    int p = Integer.parseInt(trainPlan.getCurrentPersistent());
+                                    switch (p){
+                                        case 1:
+                                            trainPlan.setCurrentPersistent(String.valueOf(2));
+                                            trainPlan.setPersistentLevel(CommonValues.p_z_value);
+                                            break;
+                                        case 2:
+                                            trainPlan.setCurrentPersistent(String.valueOf(3));
+                                            trainPlan.setPersistentLevel(CommonValues.p_z_value);
+                                            break;
+                                        case 3:
+                                            break;
+                                    }
+                                    break;
+                            }
+                            break;
+                    }
+                    String cumulativeTime = trainPlan.getCumulativeTime() ;
+                    int cumulativeTimeInt = Integer.parseInt(cumulativeTime)+Integer.parseInt(timeLast) ;
+                    trainPlan.setCumulativeTime(String.valueOf(cumulativeTimeInt));
+
+
+                    TrainPlanService.getInstance(BreathReportActivity.this).updateTrainPlan(trainPlan) ;
+                    // 时间的累加
+                }
+
+                breathHisLog.setCurrentControlLevel(trainPlan.getCurrentControl());
+                breathHisLog.setCurrentStrengthLevel(trainPlan.getCurrentStrength());
+                breathHisLog.setCurrentPersistentLevel(trainPlan.getCurrentPersistent());
+                breathHisLog.setTrainDays(String.valueOf(PlanLog.getDays()));
+                breathHisLog.setRecord_id(record_id);
+                breathHisLog.setTrainStartTime(PlanLog.getTrainStartTime());
+                breathHisLog.setTrainTimes(String.valueOf(PlanLog.getTrainTimes()));
+                breathHisLog.setTrainSuccessTimes(trainPlan.getTimes());
+                breathHisLog.setTrainAverTimes(String.valueOf(PlanLog.getTrainTimes()/PlanLog.getDays()));
+
+
+            }
+            //结果判断
+            if (istigao){
+                breathHisLog.setTrainResult("有提高，继续努力");
+            }else {
+                breathHisLog.setTrainResult("继续努力");
+            }
+
+            Utils.write(breathHisLog.toString());
+            TrainHisService.getInstance(BreathReportActivity.this).addBreathHisLog(breathHisLog);
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    str_startTime = breathHisLog.getTrainStartTime() ;
+                    str_train_days = breathHisLog.getTrainDays() ;
+                    str_train_result = breathHisLog.getTrainResult() ;
+                    str_train_times = breathHisLog.getTrainTimes() ;
+                    str_train_aver_times = breathHisLog.getTrainAverTimes() ;
+                    tvHisContent.setText(Html.fromHtml(reportHisBack(str_startTime,str_train_days,str_train_times,str_train_aver_times,str_train_result)));
+                    levelControlRa.setRating(Float.valueOf(breathHisLog.getCurrentControlLevel()));
+                    levelStrengthRa.setRating(Float.valueOf(breathHisLog.getCurrentStrengthLevel()));
+                    levelPersistentRa.setRating(Float.valueOf(breathHisLog.getCurrentPersistentLevel()));
+
+
+                    levelControlInitRa.setRating(Float.valueOf(breathHisLog.getControlLevel()));
+                    levelStrengthInitRa.setRating(Float.valueOf(breathHisLog.getStrengthLevel()));
+                    levelPrensterInitRa.setRating(Float.valueOf(breathHisLog.getPersistentLevel()));
+
+                    levelControlCurrentRa.setRating(Float.valueOf(breathHisLog.getCurrentControlLevel()));
+                    levelStrengthCurrentRa.setRating(Float.valueOf(breathHisLog.getCurrentStrengthLevel()));
+                    levelPrensterCurrentRa.setRating(Float.valueOf(breathHisLog.getCurrentPersistentLevel()));
+                    tvAverValue.setText(breathHisLog.getTrainAverValue());
+                    tvDifficultyShow.setText("本难度系数最近"+trainPlan.getTimes()+"次训练分数");
+                    String value = breathHisLog.getTrainStageValue() ;
+                    String[] arrayStr = value.split(",") ;
+
+                    if (arrayStr.length == 5){
+                        tv1.setText(arrayStr[0]);
+                        tv2.setText(arrayStr[1]);
+                        tv3.setText(arrayStr[2]);
+                        tv4.setText(arrayStr[3]);
+                        tv5.setText(arrayStr[4]);
+                    }
+                }
+            }) ;
+        }
+    } ;
+
+
+    boolean istigao = false ;
     protected String timeStampToData(String timeStamp){
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd  HH:mm:ss") ;
@@ -199,21 +465,21 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
         }
         return "00:00" ;
     }
-    @Override
-    protected void initView() {
-        mBackRelative = (RelativeLayout) findViewById(R.id.back_re);
-        topTexView = (TextView) findViewById(R.id.topText);
-        mTextStandardRate = (TextView) findViewById(R.id.textStandardRate);
-        mTextTrainTime = (TextView) findViewById(R.id.text_train_time);
-        mImgShare = (ImageView) findViewById(R.id.img_share);
-    }
+
+
+
+
+
+
 
     @Override
     protected void initEvent() {
-        mBackRelative.setOnClickListener(this);
+        layoutBack.setOnClickListener(this);
         mImgShare.setOnClickListener(this);
-        topTexView.setText("训练报告");
+        tvTop.setText("训练报告");
     }
+
+
 
 
     public static void actionStart(Activity mActivity, String mRecordDayDataId) {

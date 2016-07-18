@@ -12,6 +12,8 @@ import com.hhd.breath.app.db.TrainDaySevice;
 import com.hhd.breath.app.db.TrainHisService;
 import com.hhd.breath.app.db.TrainPlanService;
 import com.hhd.breath.app.db.TrainUnitService;
+import com.hhd.breath.app.model.BreathDetailReport;
+import com.hhd.breath.app.model.BreathHisLog;
 import com.hhd.breath.app.model.BreathTrainingResult;
 import com.hhd.breath.app.model.HealthData;
 import com.hhd.breath.app.model.MedicalHis;
@@ -86,6 +88,12 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         trainPlan.setStrengthLevel("15");
         trainPlan.setPersistent("1");
         trainPlan.setPersistentLevel("3");
+
+
+
+
+
+
         trainPlan.setUserId(ShareUtils.getUserId(getContext()));
         trainPlan.setCumulativeTime("");   // 训练累计时间
         trainPlan.setCreateTime("");
@@ -125,10 +133,18 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         TrainPlanService.getInstance(getContext()).addTrainLog(trainPlanLog);
     }
 
-    public void testFindTrainPlanLog() throws Exception{
+    public void testSan() throws Exception{
 
-        TrainPlanLog trainPlanLog = TrainPlanService.getInstance(getContext()).findTrainPlanLog("循序渐进训练","0") ;
+        /*TrainPlanLog trainPlanLog = TrainPlanService.getInstance(getContext()).findTrainPlanLog("循序渐进训练","0") ;
         Log.e("trainPlanLog","trainPlanLog:"+trainPlanLog.getName()+">>>>>"+trainPlanLog.getTrainTimes()+">>>"+trainPlanLog.getDays()+">>>"+trainPlanLog.getTrainDayFlag()) ;
+*/
+        List<TrainPlan> trainPlens = TrainPlanService.getInstance(getContext()).getTrainPlans(ShareUtils.getUserId(getContext())) ;
+
+
+        //TrainPlan trainPlan = TrainPlanService.getInstance(getContext()).findTrainPlan(ShareUtils.getUserId(getContext()),"0") ;
+        for (int i=0 ; i<trainPlens.size() ; i++){
+            Log.e("trainPlanLog","trainPlanLog:"+trainPlens.get(i).toString()) ;
+        }
 
 
     }
@@ -136,26 +152,50 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     public void testTrainPlan() throws Exception{
 
-        TrainPlanLog trainPlanLog = TrainPlanService.getInstance(getContext()).findTrainPlanLog("我的训练","1") ;
+       /* TrainPlanLog trainPlanLog = TrainPlanService.getInstance(getContext()).findTrainPlanLog("循序渐进训练","0") ;
 
         if (trainPlanLog==null){
 
             Log.e("trainPlanLog","查询的结果是空值") ;
         }else {
             Log.e("trainPlanLog","查询的结果是有值") ;
-        }
+        }*/
+
+
+
+        TrainPlan trainPlan = TrainPlanService.getInstance(getContext()).findTrainPlan(ShareUtils.getUserId(getContext()),"0") ;
+        Log.e("trainPlanLog",""+trainPlan.toString()) ;
+
+
+       /* List<BreathDetailReport> breathDetailReports = TrainHisService.getInstance(getContext()).findFiveBreathDetailReports("0",ShareUtils.getUserId(getContext())) ;
+
+        Log.e("trainPlanLog","breathDetailReports"+breathDetailReports.size()) ;
+        if (breathDetailReports!=null && !breathDetailReports.isEmpty()){
+
+            for (int i=0 ; i<breathDetailReports.size() ; i++){
+                Log.e("trainPlanLog",""+breathDetailReports.get(i).toString()) ;
+            }
+        }*/
     }
 
     public void testUpdateTrainPlanLog() throws Exception{
 
-        TrainPlanLog trainPlanLog = TrainPlanService.getInstance(getContext()).findTrainPlanLog("循序渐进训练","0") ;
-        TrainPlanService.getInstance(getContext()).addTrainTimes(trainPlanLog);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm") ;
+/*        TrainPlanLog trainPlanLog = TrainPlanService.getInstance(getContext()).findTrainPlanLog("循序渐进训练","0") ;
+
+        Log.e("trainPlanLog",trainPlanLog.toString()) ;*/
+
+        BreathHisLog trainPlanLog = TrainHisService.getInstance(getContext()).findBreathHisLog("14688209464508") ;
+        Log.e("trainPlanLog",trainPlanLog.toString()) ;
+
+
+
+        // TrainPlanService.getInstance(getContext()).addTrainTimes(trainPlanLog);
+       /* SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm") ;
         String dateFlag = sdf.format(new Date(System.currentTimeMillis())) ;
         if (!dateFlag.equals(trainPlanLog.getTrainDayFlag())){
             trainPlanLog.setTrainDayFlag(dateFlag);
             TrainPlanService.getInstance(getContext()).addTrainDays(trainPlanLog);
-        }
+        }*/
     }
 
     public void testHuanSun() throws  Exception {
@@ -187,6 +227,43 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         ///cr_file_path" : "http://127.0.0.1:3000/static/images/20160519/573d2e172e33f.zip"
 
         Log.e("trainPlanLog","查询的"+sb.toString()+"fens"+fens) ;
+
+    }
+
+    public void  testUpdateTrainPlan() throws Exception{
+
+
+        TrainPlan trainPlan = new TrainPlan() ;
+        trainPlan.setTrainType("0");  // 循序渐进呼气类型
+        trainPlan.setName("循序渐进训练");   // 训练的名称
+        trainPlan.setInspirerTime("3");   // 吸气时间 就是暂停时间
+
+
+        trainPlan.setGroupNumber("10");    // 呼吸训练的组数
+        trainPlan.setTimes("1");           // 完成多少次可以晋级
+        trainPlan.setControlLevel("10");     // 控制强度
+        trainPlan.setControl("1");
+        trainPlan.setStrength("1");
+
+
+        trainPlan.setStrengthLevel("15");
+        trainPlan.setPersistent("1");
+        trainPlan.setPersistentLevel("3");   // 吸气时间
+        trainPlan.setUserId(ShareUtils.getUserId(getContext()));
+        trainPlan.setCumulativeTime("300");   // 训练累计时间
+        trainPlan.setCreateTime("");
+
+
+        trainPlan.setCurrentStrength("1");
+        trainPlan.setCurrentControl("2");
+        trainPlan.setCurrentPersistent("1");
+
+
+
+
+        TrainPlanService.getInstance(getContext()).updateTrainPlan(trainPlan);
+
+
 
     }
 

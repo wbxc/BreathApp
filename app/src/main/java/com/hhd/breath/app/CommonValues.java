@@ -114,6 +114,20 @@ public class CommonValues {
     public static float CAMERA_HEIGHT = 900 ; //800 ;
 
 
+    public static String c_l_value = "13" ;
+    public static String c_z_value = "10" ;
+    public static String c_h_value = "7" ;
+
+
+    public static String s_l_value = "15" ;
+    public static String s_z_value = "25" ;
+    public static String s_h_value = "35" ;
+
+    public static String p_l_value = "3" ;
+    public static String p_z_value = "4" ;
+    public static String p_h_value = "5" ;
+
+
 
 
 }

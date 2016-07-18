@@ -12,6 +12,7 @@ import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,9 +28,7 @@ import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
 import com.hhd.breath.app.andengine.BreathAndEngine;
 import com.hhd.breath.app.model.TrainPlan;
-import com.hhd.breath.app.net.ThreadPoolWrap;
 import com.hhd.breath.app.service.GlobalUsbService;
-import com.hhd.breath.app.service.TransmitDataDriver;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.wchusbdriver.Global340Driver;
 
@@ -89,7 +88,7 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
     RatingBar  levelControlRa ;
     @Bind(R.id.levelStrengthRa)
     RatingBar levelStrengthRa ;
-    @Bind(R.id.levelPresnsterthRa)
+    @Bind(R.id.levelPersistentRa)
     RatingBar levelPresnsterthRa ;
     private TrainPlan trainPlan ;
 
@@ -126,14 +125,16 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
 
     private void initData() {
         actionGroupNumber = ShareUtils.getActionGroup(BreathTrainActivity.this);
-        int sum = ShareUtils.getBrathTime(BreathTrainActivity.this)
-                + ShareUtils.getIntervalTime(BreathTrainActivity.this);
-        timeLong = sum * ShareUtils.getActionGroup(BreathTrainActivity.this);
+
         trainCode = getIntent().getExtras().getString("trainCode");
         trainName = getIntent().getExtras().getString("trainName");
         level = getIntent().getExtras().getString("level");
         isHasPermission = getIntent().getExtras().getBoolean("isHasPermission") ;
         trainPlan = (TrainPlan) getIntent().getExtras().getSerializable("train_plan") ;
+        int sum = Integer.parseInt(trainPlan.getInspirerTime()) +Integer.parseInt(trainPlan.getPersistentLevel()) ;
+        timeLong = sum * Integer.parseInt(trainPlan.getGroupNumber());
+
+
         readBuffer = new byte[512];
         writeBuffer = new byte[512];
     }
@@ -159,8 +160,7 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         start_connect.setOnClickListener(this);
         error_connect.setOnClickListener(this);
         trainTimeLong.setText(getTimeLong(timeLong));
-        trainGroupNumber.setText(String.valueOf(ShareUtils.getActionGroup(BreathTrainActivity.this)));
-
+        trainGroupNumber.setText(trainPlan.getGroupNumber());
         mBreathExplain.setText(CommonValues.LEVEL_ONE_DS);
         imgConnectionTrainQi.setOnClickListener(this);
 
@@ -228,7 +228,6 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.start_train:
                 if (GlobalUsbService.isOpenBreath){
-                    BreathApplication.toastTest(BreathTrainActivity.this, "已可以接收");
                     startBreathAndEngine() ;
                 }else{
                     try {

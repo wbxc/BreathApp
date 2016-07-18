@@ -24,6 +24,10 @@ public class TrainAddName extends BaseActivity {
     TextView topText ;
     @Bind(R.id.edtTrainName)
     EditText edtTrainName ;
+    @Bind(R.id.layout_right)
+    RelativeLayout tvRight ;
+
+
 
 
     @Override
@@ -37,6 +41,17 @@ public class TrainAddName extends BaseActivity {
     @Override
     protected void initEvent() {
         topText.setText(getResources().getString(R.string.string_create_train_name));
+        tvRight.setVisibility(View.VISIBLE);
+        tvRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TrainAddName.this,TrainPlanAdd.class) ;
+                intent.putExtra("trainName",edtTrainName.getText().toString().trim()) ;
+                setResult(10,intent);
+
+                TrainAddName.this.finish();
+            }
+        });
 
         layoutBack.setOnClickListener(new View.OnClickListener() {
             @Override

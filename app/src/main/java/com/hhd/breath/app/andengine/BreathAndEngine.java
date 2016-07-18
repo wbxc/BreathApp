@@ -15,10 +15,12 @@ import android.widget.Toast;
 
 import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
+import com.hhd.breath.app.db.TrainPlanService;
 import com.hhd.breath.app.main.ui.BreathReportActivity;
 import com.hhd.breath.app.model.BreathEngine;
 import com.hhd.breath.app.model.BreathTrainingResult;
 import com.hhd.breath.app.model.TrainPlan;
+import com.hhd.breath.app.model.TrainPlanLog;
 import com.hhd.breath.app.service.UploadDataService;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.wchusbdriver.Global340Driver;
@@ -145,13 +147,13 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                 @Override
                 public void onClick(View v) {
 
+
+
                     Intent intent = new Intent() ;
                     intent.setClass(BreathAndEngine.this, UploadDataService.class) ;
                     Bundle bundle = new Bundle() ;
                     bundle.putSerializable("breath_result", uploadService());
                     bundle.putSerializable("train_plan",trainPlan);
-
-
 
                     intent.putExtras(bundle) ;
                     startService(intent) ;
@@ -163,12 +165,15 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
             btnTrainEnd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    //TrainPlanService.getInstance(BreathAndEngine.this).addTrainLog(trainPlanLog);
                     Intent intent = new Intent() ;
                     intent.setClass(BreathAndEngine.this, BreathReportActivity.class) ;
                     //训练建议
                     Bundle bundle = new Bundle() ;
                     bundle.putSerializable("breathTrainingData", uploadService());
                     bundle.putSerializable("train_plan",trainPlan);
+                    bundle.putString("train_type",trainPlan.getTrainType());
                     intent.putExtras(bundle) ;
                     startActivity(intent);
                     BreathAndEngine.this.finish();

@@ -260,9 +260,6 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
             case 2:
                 mTabHost.setCurrentTab(2);
                 break;
-           /* case 3:
-                mTabHost.setCurrentTab(3);
-                break;*/
         }
     }
 
@@ -290,12 +287,7 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
                                 .setBackgroundResource(R.mipmap.icon_tab_evaluate);
                         ((TextView) list.get(i).findViewById(R.id.tv_main))
                                 .setTextColor(getResources().getColor(R.color.common_bottom_bar_blue));
-                    } /*else if (i == 3) {
-                        ((ImageView) list.get(i).findViewById(R.id.btn_tab_bottom_weixin))
-                                .setBackgroundResource(R.mipmap.icon_tab_me_select);
-                        ((TextView) list.get(i).findViewById(R.id.tv_main))
-                                .setTextColor(getResources().getColor(R.color.common_bottom_bar_blue));
-                    }*/
+                    }
                 }
             } else {// 其他按钮设置为没选中
                 mTabWidget.getChildAt(Integer.valueOf(i)).setBackgroundDrawable(null);
@@ -326,7 +318,7 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
     private void initBottomView() {
         setIndicator(R.mipmap.icon_tab_train_select, 0, new Intent(this, BreathTrainPlan.class));
         setIndicator(R.mipmap.icon_tab_hisrecord_unselect, 1, new Intent(this, HisTabActivity.class));
-        setIndicator(R.mipmap.icon_tab_me_unselect, 2, new Intent(this, BreathCheck.class));
+        setIndicator(R.mipmap.icon_tab_un_evaluate, 2, new Intent(this, BreathCheck.class));
 
     }
 

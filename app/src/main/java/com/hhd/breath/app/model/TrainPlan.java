@@ -26,6 +26,7 @@ public class TrainPlan  implements Serializable{
     private String currentPersistent;
     private String currentControl;
     private String currentStrength;
+    private String times ;  //  训练多少次成功后过关
 
 
 
@@ -88,7 +89,7 @@ public class TrainPlan  implements Serializable{
         this.cumulativeTime = cumulativeTime;
     }
 
-    private String times ;
+
 
     public String getTimes() {
         return times;

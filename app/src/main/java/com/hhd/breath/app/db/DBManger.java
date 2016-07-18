@@ -220,6 +220,9 @@ public class DBManger {
 
 
 
+
+
+
     /**
      * 主界面训练历史
      */
@@ -229,7 +232,7 @@ public class DBManger {
     public static String TRAIN_HIS_BREATH_TYPE = "breath_type" ;
     public static String TRAIN_HIS_TRAIN_GROUP = "train_group" ;
     public static String TRAIN_HIS_TRAIN_LAST = "train_last" ;
-    public static String TRAIN_HIS_TRAIN_TIME = " train_time" ;
+    public static String TRAIN_HIS_TRAIN_TIME = "train_time" ;
     public static String TRAIN_HIS_TRAIN_RESULT = "train_result" ;
     public static String TRAIN_HIS_FILE_UPLOAD_TIME = "file_upload_time" ;
     public static String TRAIN_HIS_DIFFICULTY = "difficulty" ;

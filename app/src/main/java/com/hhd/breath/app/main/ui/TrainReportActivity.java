@@ -13,8 +13,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
+import android.text.Html;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,15 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hhd.breath.app.BaseActivity;
-import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
-import com.hhd.breath.app.db.TrainUnitService;
+import com.hhd.breath.app.db.TrainHisService;
 import com.hhd.breath.app.model.BreathDetailReport;
 import com.hhd.breath.app.model.BreathDetailSuccess;
-import com.hhd.breath.app.model.RecordUnitData;
+import com.hhd.breath.app.model.BreathHisLog;
 import com.hhd.breath.app.net.ManagerRequest;
-import com.hhd.breath.app.net.ThreadPoolWrap;
-import com.hhd.breath.app.tab.ui.TrainTabActivity;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.utils.StringUtils;
 import com.hhd.breath.app.utils.UiUtils;
@@ -42,15 +38,15 @@ import com.hhd.breath.app.utils.Util;
 import com.hhd.breath.app.utils.Utils;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXFileObject;
-import com.tencent.mm.sdk.modelmsg.WXImageObject;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,69 +55,129 @@ import retrofit2.Response;
 /**
  * 获取历史记录详情
  * 在线获取
+ *
+ * 上拉加载  下拉刷新
+ * 没有加上筛选
+ *
  */
 public class TrainReportActivity extends BaseActivity implements View.OnClickListener {
 
-    private RelativeLayout mBackRelative;
-    private TextView topTexView;
-    private int values;
-    private int sum;
-    private TextView mTextStandardRate;
-    private TextView mTextTrainTime;
+    private RelativeLayout layoutBack;
+    private TextView tvTop;
+    private TextView tvScore;
+
+    private TextView tvTrainTime;
     private String mRecordDayDataId;
     private ImageView mImgShare;
-
-
     private String phone ;
     private String userName ;
     private String sex ;
     private String birthday ;
     private String mTrainTime ;
-
-
-
-
-
-    private String getSuggestion(String id) {
-        int level = Integer.parseInt(id);
-        String result = "";
-        switch (level) {
-            case 1:
-                result = CommonValues.SUGGESTION_LEVEL_1;
-                break;
-            case 2:
-                result = CommonValues.SUGGESTION_LEVEL_2;
-                break;
-            case 3:
-                result = CommonValues.SUGGESTION_LEVEL_3;
-                break;
-            case 4:
-                result = CommonValues.SUGGESTION_LEVEL_4;
-                break;
-        }
-
-        return result;
-    }
-
-
     private int mWidth = 0 ;
     private int mHeight = 0  ;
     private int mStatusHeight = 0 ;
     private IWXAPI api;
+    @Bind(R.id.tvBreathGroups)
+    TextView tvBreathGroups ;
+
+    @Bind(R.id.levelControlRa)
+    RatingBar levelControlRa ;
+    @Bind(R.id.levelStrengthRa)
+    RatingBar levelStrengthRa ;
+    @Bind(R.id.levelPersistentRa)
+    RatingBar levelPersistentRa ;
+    @Bind(R.id.tvDifficultyShow)
+    TextView tvDifficultyShow ; // 难度系数显示
+    @Bind(R.id.levelControlInitRa)
+    RatingBar levelControlInitRa ;
+    @Bind(R.id.levelStrengthInitRa)
+    RatingBar levelStrengthInitRa ;
+    @Bind(R.id.levelPrensterInitRa)
+    RatingBar levelPrensterInitRa ;
+    @Bind(R.id.levelControlCurrentRa)
+    RatingBar levelControlCurrentRa ;
+    @Bind(R.id.levelStrengthCurrentRa)
+    RatingBar levelStrengthCurrentRa ;
+    @Bind(R.id.levelPrensterCurrentRa)
+    RatingBar levelPrensterCurrentRa ;
+    @Bind(R.id.tvTrainResult)
+    TextView tvTrainResult ;   // 训练结果
+    @Bind(R.id.tvHisContent)
+    TextView tvHisContent ;
+
+    private BreathHisLog breathHisLog ;
+
+    private String str_startTime ;
+    private String str_train_days ;
+    private String str_train_result ;
+    private String str_train_times ;
+    private String str_train_aver_times ;
+
+    @Bind(R.id.tv1) TextView tv1 ;
+    @Bind(R.id.tv2) TextView tv2 ;
+    @Bind(R.id.tv3) TextView tv3 ;
+    @Bind(R.id.tv4) TextView tv4 ;
+    @Bind(R.id.tv5) TextView tv5 ;
+    @Bind(R.id.tvAverValue) TextView tvAverValue ;
+
+
+
+    private void showBreathHisLog(){
+
+
+        if (breathHisLog==null){
+            return  ;
+        }
+        str_startTime = breathHisLog.getTrainStartTime() ;
+        str_train_days = breathHisLog.getTrainDays() ;
+        str_train_result = breathHisLog.getTrainResult() ;
+        str_train_times = breathHisLog.getTrainTimes() ;
+        str_train_aver_times = breathHisLog.getTrainAverTimes() ;
+        tvHisContent.setText(Html.fromHtml(reportHisBack(str_startTime,str_train_days,str_train_times,str_train_aver_times,str_train_result)));
+        levelControlRa.setRating(Float.valueOf(breathHisLog.getCurrentControlLevel()));
+        levelStrengthRa.setRating(Float.valueOf(breathHisLog.getCurrentStrengthLevel()));
+        levelPersistentRa.setRating(Float.valueOf(breathHisLog.getCurrentPersistentLevel()));
+
+
+        levelControlInitRa.setRating(Float.valueOf(breathHisLog.getControlLevel()));
+        levelStrengthInitRa.setRating(Float.valueOf(breathHisLog.getStrengthLevel()));
+        levelPrensterInitRa.setRating(Float.valueOf(breathHisLog.getPersistentLevel()));
+
+        levelControlCurrentRa.setRating(Float.valueOf(breathHisLog.getCurrentControlLevel()));
+        levelStrengthCurrentRa.setRating(Float.valueOf(breathHisLog.getCurrentStrengthLevel()));
+        levelPrensterCurrentRa.setRating(Float.valueOf(breathHisLog.getCurrentPersistentLevel()));
+        tvAverValue.setText(breathHisLog.getTrainAverValue());
+        tvDifficultyShow.setText("本难度系数最近"+breathHisLog.getTrainSuccessTimes()+"次训练分数");
+        String value = breathHisLog.getTrainStageValue() ;
+        String[] arrayStr = value.split(",") ;
+
+        if (arrayStr.length == 5){
+            tv1.setText(arrayStr[0]);
+            tv2.setText(arrayStr[1]);
+            tv3.setText(arrayStr[2]);
+            tv4.setText(arrayStr[3]);
+            tv5.setText(arrayStr[4]);
+        }
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_train_report);
+        ButterKnife.bind(this);
+        breathHisLog = new BreathHisLog() ;
+        mRecordDayDataId = getIntent().getExtras().getString("mRecordDayDataId");
         WindowManager manager  = this.getWindowManager() ;
         mWidth = manager.getDefaultDisplay().getWidth() ;
         api = WXAPIFactory.createWXAPI(this, "wx92ff63ca90677197");
-        initData();
         initView();
         initEvent();
         mStatusHeight = Utils.getStatusHeight(this) ;
 
-
+        breathHisLog = TrainHisService.getInstance(TrainReportActivity.this).findBreathHisLog(mRecordDayDataId) ;
 
         ManagerRequest.getInstance().getRequestNetApi().getBreathDetailReport(mRecordDayDataId).enqueue(new Callback<BreathDetailSuccess>() {
             @Override
@@ -129,19 +185,21 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
 
                 if (response.body().getCode().equals("200")){
                     BreathDetailReport breathDetailReport = response.body().getData() ;
-                    mTextStandardRate.setText(breathDetailReport.getDifficulty());
-                    mTextTrainTime.setText(timeStampToData(breathDetailReport.getTrain_time()));
+
+                    tvScore.setText(breathDetailReport.getDifficulty());
+                    tvTrainTime.setText(timeStampToData(breathDetailReport.getTrain_time()));
                     mTrainTime = longTimeToTime(breathDetailReport.getTrain_time()) ;
                     userName = ShareUtils.getUserName(TrainReportActivity.this);
                     sex =  ShareUtils.getUserSex(TrainReportActivity.this) ;
                     birthday = longTimeToTime(ShareUtils.getUserBirthday(TrainReportActivity.this)) ;
                     phone = ShareUtils.getUserPhone(TrainReportActivity.this) ;
+                    tvBreathGroups.setText(breathDetailReport.getTrain_group());
+                    showBreathHisLog() ;
                 }else {
                     Toast.makeText(TrainReportActivity.this,"获取数据失败",Toast.LENGTH_SHORT).show();
                 }
 
             }
-
             @Override
             public void onFailure(Call<BreathDetailSuccess> call, Throwable t) {
 
@@ -150,38 +208,32 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
     }
 
 
-    public static void actionStart(Activity mActivity, String mRecordDayDataId) {
 
+
+    public static void actionStart(Activity mActivity, String mRecordDayDataId) {
         Intent mIntent = new Intent();
         mIntent.setClass(mActivity, TrainReportActivity.class);
         Bundle mBundle = new Bundle();
         mBundle.putString("mRecordDayDataId", mRecordDayDataId);
         mIntent.putExtras(mBundle);
-
         mActivity.startActivity(mIntent);
     }
 
-    private void initData() {
-       /* values = getIntent().getExtras().getInt("values") ;
-        sum = getIntent().getExtras().getInt("sum") ;*/
-        mRecordDayDataId = getIntent().getExtras().getString("mRecordDayDataId");
-    }
 
     @Override
     protected void initView() {
-        mBackRelative = (RelativeLayout) findViewById(R.id.back_re);
-        topTexView = (TextView) findViewById(R.id.topText);
-        mTextStandardRate = (TextView) findViewById(R.id.textStandardRate);
-        mTextTrainTime = (TextView) findViewById(R.id.text_train_time);
+        layoutBack = (RelativeLayout) findViewById(R.id.back_re);
+        tvTop = (TextView) findViewById(R.id.topText);
+        tvScore = (TextView) findViewById(R.id.tvScore);
+        tvTrainTime = (TextView) findViewById(R.id.tvTrainTime);
         mImgShare = (ImageView) findViewById(R.id.img_share);
     }
 
     @Override
     protected void initEvent() {
-        mBackRelative.setOnClickListener(this);
+        layoutBack.setOnClickListener(this);
         mImgShare.setOnClickListener(this);
-
-        topTexView.setText("训练报告");
+        tvTop.setText("训练报告");
     }
 
     @Override

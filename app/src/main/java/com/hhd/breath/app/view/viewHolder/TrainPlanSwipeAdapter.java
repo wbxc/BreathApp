@@ -77,12 +77,12 @@ public class TrainPlanSwipeAdapter extends RecyclerView.Adapter<TrainPlanSwipeAd
             if (trainPlan.getTrainType().equals("0")){
                 holder.tvTrainName.setText(trainPlan.getName());
                 holder.tvCreateTime.setVisibility(View.GONE);
-                holder.tvCumulativeTime.setText("累计训练时间:"+(trainPlan.getCumulativeTime().equals("0")?"00:00:00":"00:00:01"));   // 累计时间
+                holder.tvCumulativeTime.setText("累计训练时间:"+(trainPlan.getCumulativeTime().equals("0")?"00:00:00":sumTimeToStr(trainPlan.getCumulativeTime())));   // 累计时间
                 holder.imgFlag.setImageResource(R.mipmap.icon_init_plan);
             }else {
                 holder.tvTrainName.setText(trainPlan.getName());
                 holder.tvCreateTime.setText("创建时间:"+ (TextUtils.isEmpty(trainPlan.getCreateTime())?"不确定":getDate(trainPlan.getCreateTime()))) ;
-                holder.tvCumulativeTime.setText("累计训练:"+(trainPlan.getCumulativeTime().equals("0")?"00:00:00":"00:00:01"));
+                holder.tvCumulativeTime.setText("累计训练:"+(trainPlan.getCumulativeTime().equals("0")?"00:00:00":sumTimeToStr(trainPlan.getCumulativeTime())));
                 holder.imgFlag.setImageResource(R.mipmap.icon_custom_plan);
             }
 
@@ -100,6 +100,34 @@ public class TrainPlanSwipeAdapter extends RecyclerView.Adapter<TrainPlanSwipeAd
 
 
     }
+
+    protected String sumTimeToStr(String sumTime)  {
+        int sends = Integer.parseInt(sumTime)  ;
+        StringBuffer sb = new StringBuffer() ;
+        int shi = sends/3600 ;
+        if (shi>9){
+            sb.append(shi).append(":") ;
+        }else {
+            sb.append("0"+shi).append(":") ;
+        }
+        int fens = sends % 3600 ;
+
+        int fen1 = fens /60 ;
+        if (fen1>9){
+            sb.append(fen1).append(":") ;
+        }else {
+            sb.append("0"+fen1).append(":") ;
+        }
+
+        int second = fens%60 ;
+        if (second>9){
+            sb.append(second) ;
+        }else {
+            sb.append("0"+second) ;
+        }
+        return sb.toString() ;
+    }
+
 
     @Override
     public int getItemCount() {

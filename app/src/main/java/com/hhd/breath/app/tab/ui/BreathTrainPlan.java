@@ -115,7 +115,7 @@ public class BreathTrainPlan extends BaseActivity {
 
                     if (!isNotEmpty(ShareUtils.getSerialNumber(BreathTrainPlan.this))) {
                         String result = Global340Driver.getInstance(BreathTrainPlan.this).readSerial() ;
-                        BreathApplication.toast(BreathTrainPlan.this, result+"序列号");
+                       // BreathApplication.toast(BreathTrainPlan.this, result+"序列号");
                         ShareUtils.setSerialNumber(BreathTrainPlan.this,result);
 
                     }
@@ -129,7 +129,6 @@ public class BreathTrainPlan extends BaseActivity {
                     if (Global340Driver.getInstance(BreathTrainPlan.this).checkUsbStatus() == 1) {
                         BreathTrainActivity.actionStart(BreathTrainPlan.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102), true,trainPlans.get(position));
                     } else {
-                        BreathApplication.toast(BreathTrainPlan.this, getString(R.string.string_health_no_connect));
                         BreathTrainActivity.actionStart(BreathTrainPlan.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102), false,trainPlans.get(position));
                     }
                 }

@@ -92,4 +92,18 @@ public class TrainPlanLog {
         contentValues.put(DBManger.TRAIN_PLAN_LOG_DAY_FLAG,trainPlanLog.getTrainDayFlag());
         return contentValues ;
     }
+
+
+    @Override
+    public String toString() {
+        return "TrainPlanLog{" +
+                "name='" + name + '\'' +
+                ", trainType='" + trainType + '\'' +
+                ", userId='" + userId + '\'' +
+                ", days=" + days +
+                ", trainTimes=" + trainTimes +
+                ", trainStartTime='" + trainStartTime + '\'' +
+                ", trainDayFlag='" + trainDayFlag + '\'' +
+                '}';
+    }
 }

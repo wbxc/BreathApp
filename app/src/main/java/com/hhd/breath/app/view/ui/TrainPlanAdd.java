@@ -84,11 +84,15 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.prensenterBar)
     RatingBar prensenterBar ;
 
-
-
-
-    private final Handler handler = new Handler() ;
     private TrainPlan trainPlan ;
+    @Bind(R.id.tvRight)
+    TextView tvRight ;
+
+    @Bind(R.id.layout_right)
+    RelativeLayout layout_right ;
+
+
+
 
 
     @Override
@@ -214,6 +218,9 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
     @Override
     protected void initEvent() {
         super.initEvent();
+        layout_right.setVisibility(View.VISIBLE);
+        tvRight.setText("说明");
+
         topText.setText(getResources().getString(R.string.string_create_myself_train));
         layoutBack.setOnClickListener(this);
         layoutInspired.setOnClickListener(this);
@@ -224,6 +231,9 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
         layoutBreathStrength.setOnClickListener(this);
         btnCreateTrainPlan.setOnClickListener(this);
         layoutTrainName.setOnClickListener(this);
+        layout_right.setOnClickListener(this);
+
+
 
 
 
@@ -236,7 +246,7 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
             @Override
             public void setOnClick(final int position) {
                 tvInspired.setText(layoutInspiredModels.get(position).getName());
-                trainPlan.setInspirerTime(layoutInspiredModels.get(position).getName());
+                trainPlan.setInspirerTime(layoutInspiredModels.get(position).getValue());
                 layoutInspiredDialog.dimissDialog();
             }
         },layoutInspiredModels) ;
@@ -385,6 +395,12 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
                 Intent intent = new Intent(TrainPlanAdd.this,TrainAddName.class) ;
                 startActivityForResult(intent,10);
                 break;
+            case R.id.layout_right:
+                Intent intent1 = new Intent() ;
+                intent1.setClass(TrainPlanAdd.this,CreateTrainInstruction.class) ;
+                startActivity(intent1);
+                break;
+
         }
     }
 
@@ -396,6 +412,7 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
             trainPlan.setCumulativeTime("0");
             int result = TrainPlanService.getInstance(TrainPlanAdd.this).countTrainPlan(ShareUtils.getUserId(TrainPlanAdd.this)) ;
             trainPlan.setTrainType(String.valueOf(result+1));
+            trainPlan.setUserId(ShareUtils.getUserId(TrainPlanAdd.this));
 
 
 

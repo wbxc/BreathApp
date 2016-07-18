@@ -1,7 +1,8 @@
-package com.hhd.breath.app.main.ui;
+package com.hhd.breath.app.view.ui;
 
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -10,47 +11,47 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.hhd.breath.app.BaseActivity;
 import com.hhd.breath.app.R;
 
-public class ComQuestionActivity extends BaseActivity {
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
-    private RelativeLayout mBackRelative;
-    private TextView mTopTextView;
-    private WebView mWebView;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+public class CreateTrainInstruction extends BaseActivity {
+
+    @Bind(R.id.back_re)
+    RelativeLayout layoutBack ;
+    @Bind(R.id.topText)
+    TextView topText ;
+    @Bind(R.id.instructionContent)
+    WebView instructionContent ;
+
+    //http://101.201.39.122/ftpuser01/app/shuoming.html
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_com_question);
-        initView();
+        setContentView(R.layout.activity_create_train_instruction);
+        ButterKnife.bind(this);
+
         initEvent();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
+
 
     }
 
-    @Override
-    protected void initView() {
-
-        mBackRelative = (RelativeLayout) findViewById(R.id.back_re);
-        mTopTextView = (TextView) findViewById(R.id.topText);
-        mWebView = (WebView) findViewById(R.id.question_web);
-    }
 
     @Override
     protected void initEvent() {
+        super.initEvent();
 
-        WebSettings mWebSettings = mWebView.getSettings();
+        topText.setText("训练模式说明");
+
+        WebSettings mWebSettings = instructionContent.getSettings();
         mWebSettings.setJavaScriptEnabled(true);
         mWebSettings.setSupportZoom(true);
         mWebSettings.setBuiltInZoomControls(true);
@@ -65,17 +66,8 @@ public class ComQuestionActivity extends BaseActivity {
             mWebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
         }
 
-
-        mTopTextView.setText("常见问题");
-        mBackRelative.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ComQuestionActivity.this.finish();
-            }
-        });
-
-        mWebView.setWebChromeClient(new WebChromeClient());
-        mWebView.setWebViewClient(new WebViewClient() {
+        instructionContent.setWebChromeClient(new WebChromeClient());
+        instructionContent.setWebViewClient(new WebViewClient() {
 
 
             @Override
@@ -88,7 +80,7 @@ public class ComQuestionActivity extends BaseActivity {
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
                 hideProgress();
-                Toast.makeText(ComQuestionActivity.this,"加载错误",Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateTrainInstruction.this,"加载错误",Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -103,24 +95,15 @@ public class ComQuestionActivity extends BaseActivity {
                 return super.shouldOverrideUrlLoading(view, url);
             }
         });
-        //http://101.201.39.122/ftpuser01/app/faq.html
-        //mWebView.loadUrl("http://www.cs-metro.com/huihuxi/cn.html");
-        mWebView.loadUrl("http://101.201.39.122/ftpuser01/app/faq.html");
-    }
+        instructionContent.loadUrl("http://101.201.39.122/ftpuser01/app/shuoming.html");
 
-    @Override
-    public void onStart() {
-        super.onStart();
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
+        layoutBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateTrainInstruction.this.finish();
+            }
+        });
 
     }
 }

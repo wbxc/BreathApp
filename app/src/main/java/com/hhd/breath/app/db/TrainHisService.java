@@ -4,8 +4,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.widget.LinearSmoothScroller;
+import android.util.Log;
 
 import com.hhd.breath.app.main.ui.BreathTrainActivity;
+import com.hhd.breath.app.model.BreathDetailReport;
 import com.hhd.breath.app.model.BreathHisLog;
 import com.hhd.breath.app.model.BreathHistoricalData;
 import com.hhd.breath.app.utils.Utils;
@@ -57,6 +59,13 @@ public class TrainHisService  {
     }
 
 
+
+
+
+
+
+
+
     public void  addList(List<BreathHistoricalData> BreathHistoricalDatas){
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase() ;
         try {
@@ -77,8 +86,103 @@ public class TrainHisService  {
                 db = null ;
             }
         }
+    }
+
+    /**
+     * 增加本地记录
+     * @param data
+     */
+    public boolean addBreathDetialReport(BreathDetailReport data){
+
+        boolean flag = false ;
+
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase() ;
+
+        try {
+
+            db.beginTransaction();
+            db.insert(DBManger.TABLE_TRAIN_HIS,null,data.toContentValues(data)) ;
+            db.setTransactionSuccessful();
+            flag = true ;
+
+        }catch (Exception e){
+
+            flag = false ;
+        }finally {
+            db.endTransaction();
+            if (db!=null){
+                db.close();
+                db = null ;
+            }
+        }
+
+        return flag ;
 
     }
+
+
+    /**
+     * 返回最近五条记录
+     * @return
+     */
+    public List<BreathDetailReport> findFiveBreathDetailReports(String breath_type,String user_id){
+
+        //select * from users order by id limit 10 offset 0;//offset代表从第几条记录“之后“开始查询，limit表明查询多少条结果
+        /*sqlitecmd.CommandText = string.Format("select * from GuestInfo order by GuestId limit {0} offset {0}*{1}", size, index-1);//size:每页显示条数，index页码*/
+
+
+        //ASC
+
+        List<BreathDetailReport> breathDetailReports = new ArrayList<BreathDetailReport>() ;
+        String sql = "select * from "+DBManger.TABLE_TRAIN_HIS+" where "+DBManger.TRAIN_HIS_BREATH_TYPE+" = ? and "+DBManger.TRAIN_HIS_USER_ID+" = ?"+" order by "+DBManger.TRAIN_HIS_RECORD_ID+" DESC  limit 5 offset 0" ;
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase() ;
+        Cursor cursor = null;
+        try {
+            cursor  = db.rawQuery(sql,new String[]{breath_type,user_id}) ;
+            if (cursor!=null){
+                while (cursor.moveToNext()){
+                    BreathDetailReport breathDetailReport = new BreathDetailReport() ;
+                    breathDetailReport.setRecord_id(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_RECORD_ID)));
+                    breathDetailReport.setBreath_type(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_BREATH_TYPE)));
+                    breathDetailReport.setDevice_sn(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_DEVICE_SN)));
+                    breathDetailReport.setDifficulty(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_DIFFICULTY)));
+                    breathDetailReport.setFile_id(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_FILE_ID)));
+                    breathDetailReport.setFile_md5(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_FILE_MD5)));
+                    breathDetailReport.setFile_n_name(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_FILE_N_NAME)));
+                    breathDetailReport.setFile_path(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_FILE_PATH)));
+                    breathDetailReport.setFile_o_name(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_FILE_O_NAME)));
+                    breathDetailReport.setFile_size(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_FILE_SIZE)));
+                    breathDetailReport.setFile_type(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_FILE_TYPE)));
+                    breathDetailReport.setFile_upload_time(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_FILE_UPLOAD_TIME)));
+                    breathDetailReport.setIs_delete(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_IS_DELETE)));
+                    breathDetailReport.setTrain_time(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_TRAIN_TIME)));
+                    breathDetailReport.setPlatform(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_PLATFORM)));
+                    breathDetailReport.setTrain_group(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_TRAIN_GROUP)));
+                    breathDetailReport.setTrain_last(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_TRAIN_LAST)));
+                    breathDetailReport.setTrain_result(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_TRAIN_RESULT)));
+                    breathDetailReport.setUser_id(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_HIS_USER_ID)));
+
+                    breathDetailReports.add(breathDetailReport) ;
+                }
+            }
+        }catch (Exception e){
+
+            Log.e("trainPlanLog",e.getMessage()) ;
+
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+                cursor = null;
+            }
+            if (db!=null){
+                db.close();
+                db = null;
+            }
+        }
+        return  breathDetailReports ;
+    }
+
+
 
     public List<BreathHistoricalData> getList(String user_id,String breath_type){
 

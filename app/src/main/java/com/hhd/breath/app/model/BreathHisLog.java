@@ -182,4 +182,26 @@ public class BreathHisLog {
     public void setTrainStageValue(String trainStageValue) {
         this.trainStageValue = trainStageValue;
     }
+
+
+    @Override
+    public String toString() {
+        return "BreathHisLog{" +
+                "record_id='" + record_id + '\'' +
+                ", persistentLevel='" + persistentLevel + '\'' +
+                ", controlLevel='" + controlLevel + '\'' +
+                ", strengthLevel='" + strengthLevel + '\'' +
+                ", currentPersistentLevel='" + currentPersistentLevel + '\'' +
+                ", currentControlLevel='" + currentControlLevel + '\'' +
+                ", currentStrengthLevel='" + currentStrengthLevel + '\'' +
+                ", trainStartTime='" + trainStartTime + '\'' +
+                ", trainDays='" + trainDays + '\'' +
+                ", trainTimes='" + trainTimes + '\'' +
+                ", trainAverTimes='" + trainAverTimes + '\'' +
+                ", trainResult='" + trainResult + '\'' +
+                ", trainSuccessTimes='" + trainSuccessTimes + '\'' +
+                ", trainAverValue='" + trainAverValue + '\'' +
+                ", trainStageValue='" + trainStageValue + '\'' +
+                '}';
+    }
 }

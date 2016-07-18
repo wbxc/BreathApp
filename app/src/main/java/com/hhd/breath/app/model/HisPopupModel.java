@@ -8,6 +8,15 @@ public class HisPopupModel {
     private String name ;
     private String flag ;
     private String userId ;
+    private String breath_type ;
+
+    public String getBreath_type() {
+        return breath_type;
+    }
+
+    public void setBreath_type(String breath_type) {
+        this.breath_type = breath_type;
+    }
 
     public String getName() {
         return name;

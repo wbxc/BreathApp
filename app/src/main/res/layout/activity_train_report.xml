@@ -36,7 +36,7 @@
                     android:layout_height="140dp">
 
                     <TextView
-                        android:id="@+id/textStandardRate"
+                        android:id="@+id/tvScore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
@@ -51,7 +51,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_marginBottom="25dp"
                         android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@+id/textStandardRate"
+                        android:layout_toRightOf="@+id/tvScore"
                         android:text="分"
                         android:textColor="@color/white"
                         android:textSize="20sp"
@@ -141,6 +141,7 @@
                             android:layout_toRightOf="@+id/tvGroupsNumberLeft"
                             android:gravity="center"
                             android:text="300"
+                            android:id="@+id/tvBreathGroups"
                             android:textColor="@color/color_nobreath_bg"
                             android:textSize="@dimen/common_text_20sp"/>
 
@@ -197,7 +198,7 @@
                                 android:layout_toRightOf="@+id/tvControlLeft"
                                 android:isIndicator="true"
                                 android:numStars="3"
-                                android:rating="1"
+                                android:rating="0"
                                 />
 
                         </RelativeLayout>
@@ -227,7 +228,7 @@
                                 android:layout_toRightOf="@+id/tvStengthLeft"
                                 android:isIndicator="true"
                                 android:numStars="3"
-                                android:rating="1"
+                                android:rating="0"
                                 />
                         </RelativeLayout>
 
@@ -245,7 +246,7 @@
                                 android:textSize="@dimen/common_text_14sp"/>
 
                             <RatingBar
-                                android:id="@+id/levelPresnsterthRa"
+                                android:id="@+id/levelPersistentRa"
                                 style="@style/level_report_sun_Bar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -255,7 +256,7 @@
                                 android:layout_toRightOf="@+id/tvPresnsterLeft"
                                 android:isIndicator="true"
                                 android:numStars="3"
-                                android:rating="1"
+                                android:rating="0"
                                 />
 
                         </RelativeLayout>
@@ -282,7 +283,7 @@
                     android:textSize="16sp"/>
 
                 <TextView
-                    android:id="@+id/text_train_time"
+                    android:id="@+id/tvTrainTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/text_drawable"
@@ -306,7 +307,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:drawableLeft="@mipmap/icon_report_test"
-                    android:drawablePadding="@dimen/common_dian10"
+                    android:drawablePadding="@dimen/common_dian5"
                     android:text="阶段评估:"
                     android:textColor="@color/common_top_color"
                     android:textSize="@dimen/common_text_16sp"/>
@@ -317,6 +318,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:text="本难度系数最近5次训练分数"
+                    android:id="@+id/tvDifficultyShow"
                     android:textColor="@color/common_color_9A9A9A"
                     android:textSize="@dimen/common_text_14sp"/>
 
@@ -355,7 +357,8 @@
                         android:layout_height="0dip"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="80"
+                        android:text=""
+                        android:id="@+id/tv1"
                         android:textColor="@color/common_top_color"
                         android:textSize="@dimen/common_text_18sp"/>
 
@@ -390,7 +393,8 @@
                         android:layout_height="0dip"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="80"
+                        android:text=""
+                        android:id="@+id/tv2"
                         android:textColor="@color/common_top_color"
                         android:textSize="@dimen/common_text_18sp"/>
 
@@ -425,7 +429,8 @@
                         android:layout_height="0dip"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="80"
+                        android:text=""
+                        android:id="@+id/tv3"
                         android:textColor="@color/common_top_color"
                         android:textSize="@dimen/common_text_18sp"/>
                 </LinearLayout>
@@ -460,7 +465,8 @@
                         android:layout_height="0dip"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="80"
+                        android:text=""
+                        android:id="@+id/tv4"
                         android:textColor="@color/common_top_color"
                         android:textSize="@dimen/common_text_18sp"/>
                 </LinearLayout>
@@ -495,7 +501,8 @@
                         android:layout_height="0dip"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="80"
+                        android:text=""
+                        android:id="@+id/tv5"
                         android:textColor="@color/common_top_color"
                         android:textSize="@dimen/common_text_18sp"/>
                 </LinearLayout>
@@ -531,7 +538,8 @@
                         android:layout_weight="1"
                         android:background="@color/common_top_color"
                         android:gravity="center"
-                        android:text="80"
+                        android:text=""
+                        android:id="@+id/tvAverValue"
                         android:textColor="@color/white"
                         android:textSize="@dimen/common_text_18sp"/>
                 </LinearLayout>
@@ -556,12 +564,14 @@
                 android:drawableLeft="@mipmap/icon_report_his"
                 android:gravity="center"
                 android:text="历史回顾:"
+                android:drawablePadding="@dimen/common_dian5"
                 android:textSize="@dimen/common_text_16sp"
                 android:textColor="@color/common_top_color"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/common_dian15"
+                android:id="@+id/tvHisContent"
                 android:text="本训练模式于2016.06.26 启用。\n目前训练6天,合计训练24次"
                 android:layout_marginLeft="@dimen/common_dian15"
                 android:textSize="@dimen/common_text_14sp"
@@ -604,7 +614,7 @@
                         android:layout_toRightOf="@+id/tvControlInitLeft"
                         android:isIndicator="true"
                         android:numStars="3"
-                        android:rating="1"/>
+                        android:rating="0"/>
                 </RelativeLayout>
 
 
@@ -629,7 +639,7 @@
                         android:layout_toRightOf="@+id/tvStrengthInitLeft"
                         android:isIndicator="true"
                         android:numStars="3"
-                        android:rating="1"/>
+                        android:rating="0"/>
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="0dip"
@@ -652,7 +662,7 @@
                         android:layout_toRightOf="@+id/tvPrensterInitLeft"
                         android:isIndicator="true"
                         android:numStars="3"
-                        android:rating="1"/>
+                        android:rating="0"/>
                 </RelativeLayout>
             </LinearLayout>
 
@@ -694,7 +704,7 @@
                         android:layout_toRightOf="@+id/tvControlCurrentLeft"
                         android:isIndicator="true"
                         android:numStars="3"
-                        android:rating="1"/>
+                        android:rating="0"/>
                 </RelativeLayout>
 
 
@@ -719,7 +729,7 @@
                         android:layout_toRightOf="@+id/tvStrengthCurrentLeft"
                         android:isIndicator="true"
                         android:numStars="3"
-                        android:rating="1"/>
+                        android:rating="0"/>
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="0dip"
@@ -742,7 +752,7 @@
                         android:layout_toRightOf="@+id/tvPrensterCurrentLeft"
                         android:isIndicator="true"
                         android:numStars="3"
-                        android:rating="1"/>
+                        android:rating="0"/>
                 </RelativeLayout>
             </LinearLayout>
             <TextView
@@ -757,6 +767,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/common_text_16sp"
+                android:id="@+id/tvTrainResult"
                 android:layout_marginLeft="@dimen/common_dian15"
                 android:layout_marginTop="@dimen/common_dian5"
                 android:text="有提高"/>

@@ -31,6 +31,7 @@ import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
 import com.hhd.breath.app.adapter.TrainExpandableAdapter;
 import com.hhd.breath.app.db.TrainHisService;
+import com.hhd.breath.app.db.TrainPlanService;
 import com.hhd.breath.app.imp.TrainRecordImp;
 import com.hhd.breath.app.main.ui.TrainReportActivity;
 import com.hhd.breath.app.model.BreathHisDataShow;
@@ -39,7 +40,9 @@ import com.hhd.breath.app.model.BreathTempData;
 import com.hhd.breath.app.model.HisPopupModel;
 import com.hhd.breath.app.model.RecordDayData;
 import com.hhd.breath.app.model.RecordUnitData;
+import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.net.ManagerRequest;
+import com.hhd.breath.app.net.ThreadPoolWrap;
 import com.hhd.breath.app.utils.ConvertDateUtil;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.utils.UiUtils;
@@ -62,10 +65,8 @@ public class HisTabActivity extends BaseActivity {
 
     private DrawableCenterTextView hisTopTextView;
     private PullToRefreshExpandableListView history_recordContent;
-    private List<RecordDayData> mTrainRecordDatas;
     private TrainExpandableAdapter mTrainExpandableAdapter;
     private MyExpandableListView mExpandableListView;
-    private List<RecordUnitData> mRecordUnitDatas;
     private List<BreathHisDataShow> mShowRecordDayDatas;
     private int sumIndex = 1;  //跳过几行
     private RelativeLayout layoutContent;
@@ -74,10 +75,10 @@ public class HisTabActivity extends BaseActivity {
     private List<BreathHisDataShow> breathResultShow;
     private RelativeLayout layoutTop ;
     private PopupWindow popupWindow = null;
-
     private ListView popupListView = null;
     private PopupAdapter popupAdapter;
     private List<HisPopupModel> hisPopupModels;
+    private List<BreathHisDataShow> tempBreathHisShow ;
 
 
     @Override
@@ -88,6 +89,7 @@ public class HisTabActivity extends BaseActivity {
         user_id = ShareUtils.getUserId(HisTabActivity.this);
         breathHisDataShows = new ArrayList<BreathHisDataShow>();
         breathResultShow = new ArrayList<BreathHisDataShow>();
+        tempBreathHisShow = new ArrayList<BreathHisDataShow>() ;
 
         initData();
         initView();
@@ -102,22 +104,17 @@ public class HisTabActivity extends BaseActivity {
         hisPopupModel1.setName("全部训练");
         hisPopupModels.add(hisPopupModel1) ;
 
+        List<TrainPlan> trainPlanList = TrainPlanService.getInstance(HisTabActivity.this).getTrainPlans(ShareUtils.getUserId(HisTabActivity.this)) ;
 
-        HisPopupModel hisPopupModel2 = new HisPopupModel() ;
-        hisPopupModel2.setFlag("0");
-        hisPopupModel2.setName("循环渐进训练计划");
-        hisPopupModels.add(hisPopupModel2) ;
-
-
-
-
-
-
+        for (int i=0 ; i<trainPlanList.size() ; i++){
+            HisPopupModel hisPopupModel = new HisPopupModel() ;
+            hisPopupModel.setFlag("0");
+            hisPopupModel.setName(trainPlanList.get(i).getName());
+            hisPopupModel.setBreath_type(trainPlanList.get(i).getTrainType());
+            hisPopupModels.add(hisPopupModel) ;
+        }
 
 
-
-        mTrainRecordDatas = new ArrayList<RecordDayData>();
-        mRecordUnitDatas = new ArrayList<RecordUnitData>();
         mShowRecordDayDatas = new ArrayList<BreathHisDataShow>();
         mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, mShowRecordDayDatas);
     }
@@ -128,6 +125,7 @@ public class HisTabActivity extends BaseActivity {
         history_recordContent = (PullToRefreshExpandableListView) findViewById(R.id.history_recordContent);
         layoutContent = (RelativeLayout) findViewById(R.id.layout_content);
         layoutTop = (RelativeLayout)findViewById(R.id.top) ;
+        hisTopTextView.setText("全部训练");
     }
 
     @Override
@@ -217,7 +215,7 @@ public class HisTabActivity extends BaseActivity {
 
                 if (breathHistoricalDatas.size() > 0) {
 
-                    for (int i = 0; i < breathHistoricalDatas.size(); i++) {
+                    for (int i = 0; i < breathHistoricalDatas.size(); i++) {  // 统计天数
 
                         if (breathHistoricalDatas.get(i).getTrain_time().length() == 10) {
                             String measureTime = ConvertDateUtil.timestampToTime(breathHistoricalDatas.get(i).getTrain_time()).substring(0, 10);
@@ -235,7 +233,7 @@ public class HisTabActivity extends BaseActivity {
                         }
                     }
 
-                    for (int i1 = 0; i1 < breathHistoricalDatas.size(); i1++) {
+                    for (int i1 = 0; i1 < breathHistoricalDatas.size(); i1++) {   // 统计每天有多少条数
                         if (breathHistoricalDatas.get(i1).getTrain_time().length() == 10) {
                             String measureTime = ConvertDateUtil.timestampToTime(breathHistoricalDatas.get(i1).getTrain_time()).substring(0, 10);
                             for (int j1 = 0; j1 < breathResultShow.size(); j1++) {
@@ -245,6 +243,8 @@ public class HisTabActivity extends BaseActivity {
                         }
                     }
                 }
+
+                tempBreathHisShow = breathResultShow ;
                 mTrainExpandableAdapter.refresh(breathResultShow);
                 for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
                     mExpandableListView.expandGroup(i);
@@ -267,6 +267,8 @@ public class HisTabActivity extends BaseActivity {
         map.put("page_num", String.valueOf(sumIndex));
         map.put("page_few", "10");
         breathHisDataShows.clear();
+        breathResultShow.clear();
+
         ManagerRequest.getInstance().getRequestNetApi()
                 .getBreathHisListMap(map)
                 .enqueue(new Callback<BreathTempData>() {
@@ -318,7 +320,8 @@ public class HisTabActivity extends BaseActivity {
                                      }
                                  }
                                  breathResultShow.addAll(breathHisDataShows);
-                                 mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathHisDataShows);
+                                 tempBreathHisShow = breathResultShow ;
+                                 mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow);
                                  mExpandableListView.setAdapter(mTrainExpandableAdapter);
                                  for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
                                      mExpandableListView.expandGroup(i);
@@ -346,7 +349,7 @@ public class HisTabActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         CommonValues.select_activity = 1;
-        hisTopTextView.setText("全部训练历史");
+
         if (!CommonValues.check_his_report) {
             sumIndex = 0;
         } else {
@@ -404,10 +407,61 @@ public class HisTabActivity extends BaseActivity {
                     popupAdapter.notifyDataSetChanged();
                     hisTopTextView.setText(hisPopupModels.get(position).getName());
 
+                    ThreadPoolWrap.getThreadPool().executeTask(new ShowClass(hisPopupModels.get(position)));
                     popupWindow.dismiss();
                 }
             }
         });
+    }
+
+    protected class ShowClass implements Runnable{
+
+        private HisPopupModel hisPopupModel ;
+
+        public ShowClass(HisPopupModel hisPopupModel) {
+            this.hisPopupModel = hisPopupModel;
+        }
+
+        @Override
+        public void run() {
+
+            breathResultShow = tempBreathHisShow  ;
+            List<BreathHisDataShow> runBreathHisDataShows = new ArrayList<BreathHisDataShow>() ;
+
+            for (int i = 0 ; i< breathResultShow.size() ; i++){
+
+
+                List<BreathHistoricalData> breathHistoricalDatas = breathResultShow.get(i).getBreathHistoricalDatas() ;
+                List<BreathHistoricalData> tempBreathHistoricalDatas1 = new ArrayList<BreathHistoricalData>() ;
+                for (int j=0 ; j<breathHistoricalDatas.size() ; j++){
+                    if (breathHistoricalDatas.get(j).getBreath_type().equals(hisPopupModel.getBreath_type())){
+                        tempBreathHistoricalDatas1.add(breathHistoricalDatas.get(j)) ;
+                    }
+                }
+                if (tempBreathHistoricalDatas1!=null && !tempBreathHistoricalDatas1.isEmpty() && tempBreathHistoricalDatas1.size()!=0){
+                    BreathHisDataShow breathHisDataShow = new BreathHisDataShow() ;
+                    breathHisDataShow.setMeasure_time(breathResultShow.get(i).getMeasure_time());
+                    breathHisDataShow.setBreathHistoricalDatas(tempBreathHistoricalDatas1);
+                    runBreathHisDataShows.add(breathHisDataShow);
+                }
+
+            }
+
+            breathResultShow = runBreathHisDataShows ;
+
+            HisTabActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow);
+                    mExpandableListView.setAdapter(mTrainExpandableAdapter);
+                    for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
+                        mExpandableListView.expandGroup(i);
+                    }
+                }
+            });
+
+        }
     }
 
     public void backgroundAlpha(float bgAlpha) {
@@ -428,9 +482,9 @@ public class HisTabActivity extends BaseActivity {
         }
 
 
-        public void setPopupHisModels(List<HisPopupModel> popupHisModels){
+        public void setPopupHisModels(List<HisPopupModel> pupHisModels){
 
-            this.hisPopupModels = hisPopupModels ;
+            this.hisPopupModels = pupHisModels ;
             notifyDataSetChanged();
         }
 

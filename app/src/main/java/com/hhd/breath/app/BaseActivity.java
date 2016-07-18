@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 
 import com.hhd.breath.app.utils.ActivityCollector;
@@ -47,6 +48,18 @@ public abstract  class BaseActivity extends FragmentActivity {
         parity = 0;
         flowControl = 0;
         ActivityCollector.addActivity(this);
+    }
+
+    protected String reportHisBack(String startTime,String days,String trainTimes,String averTimes,String result){
+
+
+        String html="<html><body>"
+                +"本训练模式于<font color=\"#1fbaf3\">"+timeStampToDay(startTime)+"</font>启用。<br>"
+                +"目前训练<font color=\"#1fbaf3\">"+days+"天</font>,合计训练<font color=\"#1fbaf3\">"+trainTimes+"次</font>," +
+                "平均每天训练<font color=\"#1fbaf3\">"+averTimes+"次</font>,<br>" +
+                "您的训练安排<font color=\"#1fbaf3\">"+result+"</font> 。" +
+                "</body></html>";
+        return html ;
     }
 
     @Override
@@ -105,6 +118,15 @@ public abstract  class BaseActivity extends FragmentActivity {
         long timeLong = Long.parseLong(timeStamp)*1000 ;
         return sdf.format(new Date(timeLong)) ;
     }
+
+    protected String timeStampToDay(String timeStamp){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd") ;
+        long timeLong = Long.parseLong(timeStamp) ;
+        return sdf.format(new Date(timeLong)) ;
+    }
+
+
 
 
     protected void showProgressDialog(Context mContext , String message){

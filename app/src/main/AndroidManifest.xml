@@ -398,6 +398,8 @@
         </activity>
         <activity android:name=".view.ui.TrainAddName">
         </activity>
+        <activity android:name=".view.ui.CreateTrainInstruction">
+        </activity>
     </application>
 
 </manifest>
