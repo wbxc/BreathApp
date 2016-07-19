@@ -158,7 +158,7 @@ public class LoginBreathActivity extends BaseActivity {
                             @Override
                             public void onFailure(Call<BreathSuccessUser> call, Throwable t) {
                                 hideProgress();
-                                Toast.makeText(LoginBreathActivity.this, "登录异常", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginBreathActivity.this, getResources().getString(R.string.string_user_login_error), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

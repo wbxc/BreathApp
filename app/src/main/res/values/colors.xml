@@ -38,4 +38,5 @@
     <color name="color_nobreath_bg">#ff1FBAF3</color>
     <color name="color_liner_bg">#dddddd</color>
     <color name="red">#FF4500</color>
+    <color name="color_btn_get_code_gray">#D9D9D9</color>
 </resources>

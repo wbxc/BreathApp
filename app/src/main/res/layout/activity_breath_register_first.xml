@@ -28,6 +28,7 @@
             android:id="@+id/edtPhone"
             android:singleLine="true"
             android:inputType="number"
+            android:textColorHint="@color/common_bottom_text_color"
             android:imeOptions="actionNext"
             android:textSize="@dimen/common_text_16sp"
             android:layout_centerVertical="true"/>
@@ -53,6 +54,7 @@
             android:layout_marginLeft="@dimen/common_dian30"
             android:layout_marginRight="@dimen/common_dian30"
             android:hint="@string/string_register_pass"
+            android:textColorHint="@color/common_bottom_text_color"
             android:id="@+id/edtPassword"
             android:imeOptions="actionNext"
             android:singleLine="true"
@@ -84,6 +86,7 @@
             android:imeOptions="actionDone"
             android:id="@+id/edtOkPassword"
             android:singleLine="true"
+            android:textColorHint="@color/common_bottom_text_color"
             android:inputType="textPassword"
             android:textSize="@dimen/common_text_16sp"
             android:layout_centerVertical="true"/>

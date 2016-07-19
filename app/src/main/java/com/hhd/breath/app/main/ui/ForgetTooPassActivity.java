@@ -36,6 +36,7 @@ public class ForgetTooPassActivity extends BaseActivity {
     @Bind(R.id.btnGetCheckCode) Button btnGetCheckCode ;
     @Bind(R.id.btnCheckCode) Button btnCheckCode ;
     @Bind(R.id.editCheckCode) EditText editCheckCode ;
+    @Bind(R.id.tvPhoneName) TextView tvPhoneName ;
 
     private String phone ;
     private Timer mTimer = null ;
@@ -51,6 +52,8 @@ public class ForgetTooPassActivity extends BaseActivity {
         mForgetHandler = new ForgetHandler(this) ;
         initView();
         initEvent();
+        btnGetCheckCode.setBackgroundResource(R.drawable.btn_get_v_code);
+        btnGetCheckCode.setEnabled(false);
         startTimer();
     }
 
@@ -58,6 +61,7 @@ public class ForgetTooPassActivity extends BaseActivity {
     protected void initView() {
         tvTop.setText("忘记密码");
         btnCheckCode.setText("验证");
+        tvPhoneName.setText(phone);
     }
 
 
@@ -84,14 +88,13 @@ public class ForgetTooPassActivity extends BaseActivity {
     protected void function23(){
         sumTime++ ;
         if (sumTime < 180){
-            btnGetCheckCode.setText(""+(180-sumTime));
-            btnGetCheckCode.setTextColor(getResources().getColor(R.color.common_color_878787));
+            btnGetCheckCode.setText(""+(180-sumTime)+"s");
         }else {
             stopTimer();
             sumTime = 0 ;
-            btnGetCheckCode.setEnabled(true);
             btnGetCheckCode.setText("重新获取");
-            btnGetCheckCode.setTextColor(getResources().getColor(R.color.white));
+            btnGetCheckCode.setBackgroundResource(R.drawable.common_btn_select);
+            btnGetCheckCode.setEnabled(true);
         }
     }
     @Override
@@ -166,7 +169,10 @@ public class ForgetTooPassActivity extends BaseActivity {
                     @Override
                     public void onSuccess(String msg) {
                         startTimer();
+                        btnGetCheckCode.setBackgroundResource(R.drawable.btn_get_v_code);
                         btnGetCheckCode.setEnabled(false);
+
+
                     }
 
                     @Override

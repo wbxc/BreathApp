@@ -14,11 +14,13 @@ import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
 import com.hhd.breath.app.main.ui.AboutUsActivity;
 import com.hhd.breath.app.main.ui.ComQuestionActivity;
+import com.hhd.breath.app.main.ui.PerUserInfoActivity;
 import com.hhd.breath.app.main.ui.SystemSettingActivity;
 import com.hhd.breath.app.main.ui.UserDetailsActivity;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.utils.StringUtils;
 import com.hhd.breath.app.widget.CircularImage;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.message.PushAgent;
 
@@ -61,6 +63,8 @@ public class MeDetailsActivity extends BaseActivity implements View.OnClickListe
         if (mFile.exists()) {
             Bitmap bm = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().toString() + "/hyTriage/touxiang.jpg");
             imgUserAvatar.setImageBitmap(bm);
+        }else {
+            ImageLoader.getInstance().displayImage(ShareUtils.getUserImage(MeDetailsActivity.this),imgUserAvatar);
         }
     }
 
@@ -141,6 +145,7 @@ public class MeDetailsActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.me_userinfo:
                 startAction(UserDetailsActivity.class);
+                //startAction(PerUserInfoActivity.class);
                 break;
             case R.id.me_systemsSetting:
                 startAction(SystemSettingActivity.class);

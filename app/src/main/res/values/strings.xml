@@ -29,6 +29,7 @@
     <string name="string_login">登录</string>
     <string name="string_login_out">退出登录</string>
     <string name="string_login_error">登录名或密码不能为空</string>
+    <string name="string_pass_no_same">两次密码不一致</string>
     <string name="string_perfect_userinfo">完善资料</string>
     <string name="string_please_xiqi">请吸气</string>
     <string name="string_please_huqi">请呼气</string>
@@ -48,6 +49,7 @@
     <string name="string_user_commit">用户提交</string>
     <string name="string_user_commit_success">用户修改成功</string>
     <string name="string_user_commit_error">用户修改失败</string>
+    <string name="string_user_login_error">登录失败,请检查账户和网络</string>
 
 
     <string name="string_xiqi_info">对准呼吸器,缓缓吸气 \n</string>

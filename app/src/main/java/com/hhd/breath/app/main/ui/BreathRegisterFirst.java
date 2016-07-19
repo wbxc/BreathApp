@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hhd.breath.app.BaseActivity;
+import com.hhd.breath.app.BreathApplication;
 import com.hhd.breath.app.R;
 import com.hhd.breath.app.net.ManagerRequest;
 
@@ -110,15 +111,16 @@ public class BreathRegisterFirst extends BaseActivity implements View.OnClickLis
                         }
                     },phone);
                 }else {
-                    edtOkPassword.setText("");
-                    edtPassword.setText("");
+                    BreathApplication.toast(BreathRegisterFirst.this,getResources().getString(R.string.string_pass_no_same));
+                   /* edtOkPassword.setText("");
+                    edtPassword.setText("");*/
                 }
             }else {
                 Toast.makeText(BreathRegisterFirst.this,"密码不能为空",Toast.LENGTH_SHORT).show();
             }
         }else {
             Toast.makeText(BreathRegisterFirst.this,"手机不能为空",Toast.LENGTH_SHORT).show();
-            edtPassword.setText("");
+            //edtPassword.setText("");
         }
     }
 }

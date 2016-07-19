@@ -97,7 +97,7 @@ public class PerUserInfoActivity extends BaseActivity implements View.OnClickLis
     private File tempFile;
     private Bitmap bitmap;
 
-
+    private String user_disease ;
 
     @Bind(R.id.img_user_Avatar)
     CircularImage imageCircular ;
@@ -214,23 +214,11 @@ public class PerUserInfoActivity extends BaseActivity implements View.OnClickLis
                 temp = position ;
                 if (position<medicalHises.size()) {
 
+
                     if (medicalHises.get(position).getType() > 0) {
                         medicalHises.get(position).setType(0);
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                caseBookService.update(medicalHises.get(temp).getId(), String.valueOf(0)) ;
-                            }
-                        }).start();
                     } else {
                         medicalHises.get(position).setType(1);
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                CaseBookService.getInstance(PerUserInfoActivity.this).update(medicalHises.get(temp).getId(), String.valueOf(1)) ;
-                            }
-                        }).start();
-
                     }
                 }
                 PerUserInfoActivity.this.runOnUiThread(new Runnable() {
@@ -241,8 +229,10 @@ public class PerUserInfoActivity extends BaseActivity implements View.OnClickLis
                         mGradViewAdapter.refresh(medicalHises);
 
                         for (int i=0 ; i< medicalHises.size() ; i++){
-                            if (medicalHises.get(i).getType()>0)
+                            if (medicalHises.get(i).getType()>0){
+                                user_disease = String.valueOf(medicalHises.get(i).getId()) ;
                                 selectMedical = 1 ;
+                            }
                         }
 
                         if (selectMedical>0)
@@ -421,7 +411,11 @@ public class PerUserInfoActivity extends BaseActivity implements View.OnClickLis
                     showProgressDialog("信息保存中");
                     String user_id = ShareUtils.getUserId(PerUserInfoActivity.this) ;
                     String full_name = mEditTextName.getText().toString().trim() ;
-                    ManagerRequest.getInstance().modifyUserInfo(user_id, urlAvatar, full_name, updateTime, String.valueOf(sexIndex), "", new ManagerRequest.IDataCallBack() {
+
+
+
+
+                    ManagerRequest.getInstance().modifyUserInfo(user_id, urlAvatar, full_name, updateTime, String.valueOf(sexIndex), user_disease, new ManagerRequest.IDataCallBack() {
                         @Override
                         public void onNetError(String msg) {
                             BreathApplication.toast(PerUserInfoActivity.this, "网络连接异常");

@@ -47,23 +47,22 @@ public class BreathRegisterSecond extends BaseActivity  implements View.OnClickL
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-
             sumTime++ ;
             if (sumTime < 180){
-                btnGetCheckCode.setText("重新发送"+(180-sumTime));
-                btnGetCheckCode.setTextColor(getResources().getColor(R.color.common_color_878787));
+                btnGetCheckCode.setText((180-sumTime)+" s");
+                btnGetCheckCode.setTextColor(getResources().getColor(R.color.white));
             }else {
                 stopTimer();
                 sumTime = 0 ;
                 btnGetCheckCode.setEnabled(true);
-                btnGetCheckCode.setText("获取验证码");
+                btnGetCheckCode.setBackgroundResource(R.drawable.common_btn_select);
+                btnGetCheckCode.setText("重新获取");
                 btnGetCheckCode.setTextColor(getResources().getColor(R.color.white));
             }
 
 
         }
     }  ;
-
 
 
     @Override
@@ -75,6 +74,7 @@ public class BreathRegisterSecond extends BaseActivity  implements View.OnClickL
         password = getIntent().getExtras().getString("password") ;
         initView();
         initEvent();
+        btnGetCheckCode() ;
     }
 
     @Override
@@ -202,6 +202,7 @@ public class BreathRegisterSecond extends BaseActivity  implements View.OnClickL
             @Override
             public void onSuccess() {
 
+                btnGetCheckCode.setBackgroundResource(R.drawable.btn_get_v_code);
                 btnGetCheckCode.setEnabled(false);
                 startTimer();
                 tvShowPhone.setVisibility(View.VISIBLE);

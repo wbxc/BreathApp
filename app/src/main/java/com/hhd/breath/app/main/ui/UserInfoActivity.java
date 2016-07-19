@@ -263,17 +263,20 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    String sex = "0" ;
+
+
     private void commitUserInfo(){
 
-        String sex = "0" ;
-        if (mTextSex.getText().toString().trim()!=null ){
+
+/*        if (mTextSex.getText().toString().trim()!=null ){
             if (mTextSex.getText().toString().trim().equals("男")){
                 sex = "0"  ;
             }else {
                 sex = "1" ;
             }
 
-        }
+        }*/
         showProgressDialog(getString(R.string.string_user_commit));
         ManagerRequest.getInstance().modifyUserInfo(ShareUtils.getUserId(UserInfoActivity.this), urlAvatar,
                 mTextName.getText().toString().trim(), dataBirthday, sex, "", new ManagerRequest.IDataCallBack() {
@@ -322,10 +325,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
             if (sexDialog.isShowing()){
                 sexDialog.dismiss();
-
             }
             mTextSex.setText(mSexResult);
-            ShareUtils.setUserSex(UserInfoActivity.this,sysDataModels.get(mSelectIndex).getName());
+
         }
     } ;
 
@@ -336,7 +338,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             super.onSelected(selectedIndex, item);
             mSelectIndex = selectedIndex ;
             mSexResult = sysDataModels.get(mSelectIndex).getName() ;
-
+            sex = sysDataModels.get(mSelectIndex).getValue() ;
+            ShareUtils.setUserSex(UserInfoActivity.this,sysDataModels.get(mSelectIndex).getName());
             UserInfoActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

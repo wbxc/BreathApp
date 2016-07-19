@@ -70,18 +70,10 @@ public class DBManger {
     public static String TRAIN_RECORD_LEVEL = "train_record_level" ;
     public static String TRAIN_RECORD_STANDARD_RATE = "train_record_standard_rate" ;
     public static String TRAIN_RECORD_FOREIGN_ID = "train_record_foreign_id" ;
-
-
-
-
-
     public static String TRAIN_RECORD_TIME_LONG = "train_record_time_long" ;
     public static String TRAIN_RECORD_GROUP_NUMBER = "train_record_group_number" ;
     public static String TRAIN_RECORD_SUGGESTION = "train_record_suggestion" ;
     public static String TRAIN_RECORD_TRAIN_NAME = "train_record_train_name" ;
-
-
-
 
     public static String TRAIN_RECORD_TRAIN_PHONE = "train_record_train_phone" ;
     public static String TRAIN_RECORD_TRAIN_SEX = "train_record_train_sex" ;
@@ -116,16 +108,33 @@ public class DBManger {
             +")";
 
 
-    public static String MEDICAL_HIS_ID = "medical_his_id" ;
-    public static String MEDICAL_HIS_NAME = "medical_his_name" ;
-    public static String MEDICAL_HIS_TYPE = "medical_his_type" ;
+    public static String MEDICAL_HIS_ID = "medical_his_id" ;     // 用户id
+    public static String MEDICAL_HIS_NAME = "medical_his_name" ;  // 病例的名称
+    public static String MEDICAL_HIS_TYPE = "medical_his_type" ;  // 病例的类型
+    public static String MEDICAL_HIS_USER_ID = "medical_his_user_id" ; // 用户的id
     public static String TABLE_MEDICAL_HIS = "medical_his" ;
+
+
+
+
 
     public static String CREATE_MEDICAL_CASEBOOK =
             "create table if not exists "+TABLE_MEDICAL_HIS+" ( id integer primary key AUTOINCREMENT ," +
-            MEDICAL_HIS_ID+" VARCHAR(10) ,"+
-            MEDICAL_HIS_NAME+" VARCHAR(100) ,"+
-            MEDICAL_HIS_TYPE+" VARCHAR(10)"+")" ;
+                    MEDICAL_HIS_USER_ID+"  VARCHAR ,"+
+                    MEDICAL_HIS_ID+"  VARCHAR ,"+
+                    MEDICAL_HIS_NAME+" VARCHAR ,"+
+                    MEDICAL_HIS_TYPE+"  VARCHAR )" ;
+
+
+
+
+
+
+
+
+
+
+
 
     public static String TABLE_HEALTH_DATA = "health_data" ;
     public static String HEALTH_DATA_TIME = "data_time" ;

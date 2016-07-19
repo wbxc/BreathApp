@@ -14,6 +14,9 @@ import java.util.List;
 
 /**
  * Created by Administrator on 2016/2/16.
+ *
+ * 本地存储用户的病例
+ *
  */
 public class CaseBookService {
 
@@ -34,17 +37,31 @@ public class CaseBookService {
                 if (instance == null){
                     instance = new CaseBookService(context) ;
                 }
-
                 if (instance.dbOpenHelper==null){
                     instance.dbOpenHelper = new DbOpenHelper(context) ;
                 }
-
                 return instance ;
             }
-
         }
         return instance ;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public List<MedicalHis> getMedicalHis(){
 
@@ -79,6 +96,15 @@ public class CaseBookService {
         }
         return null;
     }
+
+
+
+
+
+
+
+
+
 
     /**
      *
@@ -156,7 +182,6 @@ public class CaseBookService {
                 statement.bindString(2,medicalHis.getName());
                 statement.bindString(3,String.valueOf(medicalHis.getType()));
                 statement.executeInsert() ;
-                //db.insert(DBManger.TABLE_MEDICAL_HIS,null,medicalHis.getContentValues(medicalHis)) ;
             }
             db.setTransactionSuccessful();
 

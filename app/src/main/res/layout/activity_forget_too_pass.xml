@@ -34,7 +34,7 @@
                 android:textColor="@color/common_top_color"/>
             <TextView
                 android:layout_width="match_parent"
-                android:text="15301399059"
+                android:text=" "
                 android:layout_toRightOf="@+id/tvPhoneName"
                 android:textColor="@color/common_top_color"
                 android:layout_marginLeft="@dimen/common_dian10"
@@ -62,18 +62,30 @@
                 android:layout_alignParentLeft="true"
                 android:singleLine="true"
                 android:inputType="number"
+                android:layout_above="@+id/view1"
                 android:layout_marginRight="@dimen/common_dian20"
                 android:layout_toLeftOf="@+id/btnGetCheckCode"
-                android:textColorHint="@color/common_color_878787"
+                android:textColorHint="@color/common_bottom_text_color"
                 android:textSize="@dimen/common_text_16sp"/>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dip"
+                android:id="@+id/view1"
+                android:layout_marginTop="3dip"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/btnGetCheckCode"
+                android:layout_marginRight="@dimen/common_dian20"
+                android:background="@color/common_bottom_text_color"/>
+
+
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/common_btn_select"
                 android:text="重新获取"
-                android:paddingLeft="@dimen/common_dian10"
-                android:paddingRight="@dimen/common_dian10"
+                android:paddingLeft="@dimen/common_dian15"
+                android:paddingRight="@dimen/common_dian15"
                 android:id="@+id/btnGetCheckCode"
                 android:textColor="@color/white"
                 android:gravity="center"

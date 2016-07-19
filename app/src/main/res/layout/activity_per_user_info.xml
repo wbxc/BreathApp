@@ -63,7 +63,7 @@
                         android:singleLine="true"
                         android:textSize="16sp"
                         android:textColor="@color/common_color_343434"
-                        android:textColorHint="@color/common_color_9A9A9A"
+                        android:textColorHint="@color/common_bottom_text_color"
                         android:layout_centerVertical="true"/>
                 </RelativeLayout>
                 <View
@@ -82,6 +82,7 @@
                         android:hint="选择您的性别"
                         android:textSize="16sp"
                         android:id="@+id/tv_sex"
+                        android:textColorHint="@color/common_bottom_text_color"
                         android:layout_toLeftOf="@+id/view1"
                         android:layout_centerVertical="true"/>
                     <ImageView
@@ -107,6 +108,7 @@
                         android:background="@null"
                         android:hint="选择您的生日"
                         android:textSize="16sp"
+                        android:textColorHint="@color/common_bottom_text_color"
                         android:id="@+id/tv_birthday"
                         android:layout_toLeftOf="@+id/view2"
                         android:layout_centerVertical="true"/>
@@ -135,6 +137,7 @@
                         android:textSize="16sp"
                         android:id="@+id/tv_medical"
                         android:textColor="@color/common_color_343434"
+                        android:textColorHint="@color/common_bottom_text_color"
                         android:layout_toLeftOf="@+id/view3"
                         android:layout_centerVertical="true"/>
 

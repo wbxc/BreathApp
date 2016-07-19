@@ -50,6 +50,7 @@ public class BreathTrainPlan extends BaseActivity {
         trainPlans = new ArrayList<TrainPlan>() ;
         LinearLayoutManager  manager = new LinearLayoutManager(this) ;
         listViewSwipe.setHasFixedSize(true);
+        //layoutSwipe.setRefreshing(false);
         manager.setOrientation(OrientationHelper.VERTICAL);
         listViewSwipe.setLayoutManager(manager);
         //listViewSwipe.addItemDecoration(new RecycleViewDivider(BreathTrainPlan.this, LinearLayoutManager.HORIZONTAL, 3, getResources().getColor(R.color.common_color_cbcbcb)));
@@ -135,6 +136,7 @@ public class BreathTrainPlan extends BaseActivity {
             }
         });
         listViewSwipe.setAdapter(trainPlanSwipeAdapter);
+
 
         layoutSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

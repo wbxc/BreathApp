@@ -507,6 +507,7 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        handler.removeMessages(40);
     }
 
     @Override

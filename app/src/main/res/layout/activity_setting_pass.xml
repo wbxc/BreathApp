@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_below="@+id/tv1"
             android:id="@+id/layout1"
-            android:layout_marginTop="@dimen/common_dian10"
+            android:layout_marginTop="@dimen/common_dian20"
             android:layout_height="@dimen/common_dian44">
             <EditText
                 android:layout_width="match_parent"
@@ -44,7 +44,14 @@
                 android:textSize="@dimen/common_text_16sp"
                 android:singleLine="true"
                 android:hint="请输入6-18位新密码"
+                android:layout_above="@+id/view1"
                 android:layout_height="match_parent"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:id="@+id/view1"
+                android:layout_alignParentBottom="true"
+                android:background="@color/common_bottom_text_color"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_below="@+id/layout1"
@@ -60,8 +67,15 @@
                 android:background="@null"
                 android:id="@+id/editOkPass"
                 android:singleLine="true"
+                android:layout_above="@+id/view2"
                 android:inputType="textPassword"
                 android:layout_height="match_parent"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:id="@+id/view2"
+                android:layout_alignParentBottom="true"
+                android:background="@color/common_bottom_text_color"/>
         </RelativeLayout>
         <Button
             android:layout_width="match_parent"

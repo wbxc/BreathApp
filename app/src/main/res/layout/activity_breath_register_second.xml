@@ -46,9 +46,16 @@
                 android:layout_centerVertical="true"
                 android:id="@+id/editCheckCode"
                 android:inputType="number"
+                android:textColorHint="@color/common_bottom_text_color"
                 android:textSize="@dimen/common_text_18sp"
-                android:background="@null"
-                />
+                android:background="@null"/>
+            <View
+                android:layout_width="120dip"
+                android:layout_height="1dip"
+                android:layout_marginLeft="@dimen/common_dian30"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/editCheckCode"
+                android:background="@color/common_bottom_text_color"/>
             <Button
                 android:layout_width="120dip"
                 android:id="@+id/btnGetCheckCode"
@@ -56,7 +63,7 @@
                 android:layout_marginRight="@dimen/common_dian30"
                 android:textSize="@dimen/common_text_16sp"
                 android:text="@string/string_get_check_code"
-                android:background="@drawable/btn_get_code"
+                android:background="@drawable/common_btn_select"
                 android:layout_centerVertical="true"
                 android:textColor="@color/white"
                 android:layout_height="@dimen/common_dian44"/>

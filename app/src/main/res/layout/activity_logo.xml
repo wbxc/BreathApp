@@ -8,6 +8,7 @@
         android:layout_height="match_parent"
         android:id="@+id/loadingImage"
         android:scaleType="fitXY"
-        android:src="@mipmap/loading_image"/>
+        android:src="@mipmap/loading_image"
+       />
 
 </LinearLayout>

@@ -257,6 +257,7 @@ public class HisTabActivity extends BaseActivity {
                     if (popupModel!=null && !popupModel.getBreath_type().equals("-1")){
                         ThreadPoolWrap.getThreadPool().executeTask(new ShowClass(popupModel));
                     }else {
+                        breathResultShow = tempBreathHisShow ;
                         mTrainExpandableAdapter.refresh(breathResultShow);
                         for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
                             mExpandableListView.expandGroup(i);
@@ -349,12 +350,12 @@ public class HisTabActivity extends BaseActivity {
                                      if (!history_recordContent.isShown()){
                                          layoutContent.setVisibility(View.GONE);
                                          history_recordContent.setVisibility(View.VISIBLE);
-
                                      }
 
                                      if (popupModel!=null && !popupModel.getBreath_type().equals("-1")){
                                          ThreadPoolWrap.getThreadPool().executeTask(new ShowClass(popupModel));
                                      }else {
+                                         breathResultShow = tempBreathHisShow ;
                                          mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow);
                                          mExpandableListView.setAdapter(mTrainExpandableAdapter);
                                          for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
@@ -452,7 +453,32 @@ public class HisTabActivity extends BaseActivity {
                     popupAdapter.notifyDataSetChanged();
                     hisTopTextView.setText(hisPopupModels.get(position).getName());
 
-                    ThreadPoolWrap.getThreadPool().executeTask(new ShowClass(hisPopupModels.get(position)));
+                    popupModel = hisPopupModels.get(position) ;
+
+                    if (!popupModel.getBreath_type().equals("-1")){
+                        ThreadPoolWrap.getThreadPool().executeTask(new ShowClass(popupModel));
+                    }else {
+                        breathResultShow = tempBreathHisShow ;
+                        if (breathResultShow!=null && !breathResultShow.isEmpty()){
+                            if (!history_recordContent.isShown()){
+                                layoutContent.setVisibility(View.GONE);
+                                history_recordContent.setVisibility(View.VISIBLE);
+                            }
+                            mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow);
+                            mExpandableListView.setAdapter(mTrainExpandableAdapter);
+
+                            for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
+                                mExpandableListView.expandGroup(i);
+                            }
+                        }else {
+
+                            if (!layoutContent.isShown()){
+                                history_recordContent.setVisibility(View.GONE);
+                                layoutContent.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                    }
                     popupWindow.dismiss();
                 }
             }
@@ -498,11 +524,27 @@ public class HisTabActivity extends BaseActivity {
                 @Override
                 public void run() {
 
-                    mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow);
-                    mExpandableListView.setAdapter(mTrainExpandableAdapter);
-                    for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
-                        mExpandableListView.expandGroup(i);
+                    if (breathResultShow!=null && !breathResultShow.isEmpty()){
+
+                        if (!history_recordContent.isShown()){
+                            layoutContent.setVisibility(View.GONE);
+                            history_recordContent.setVisibility(View.VISIBLE);
+                        }
+
+                        mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow);
+                        mExpandableListView.setAdapter(mTrainExpandableAdapter);
+                        for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
+                            mExpandableListView.expandGroup(i);
+                        }
+
+                    }else {
+                        if (!layoutContent.isShown()){
+                            history_recordContent.setVisibility(View.GONE);
+                            layoutContent.setVisibility(View.VISIBLE);
+                        }
+
                     }
+
                 }
             });
 
@@ -578,6 +620,8 @@ public class HisTabActivity extends BaseActivity {
             }
             if (position==(hisPopupModels.size()-1)){
                 viewHolder.view1.setVisibility(View.GONE);
+            }else {
+                viewHolder.view1.setVisibility(View.VISIBLE);
             }
 
 
