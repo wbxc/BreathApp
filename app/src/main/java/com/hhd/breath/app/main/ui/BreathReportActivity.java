@@ -388,12 +388,12 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
             }
             //结果判断
             if (istigao){
-                breathHisLog.setTrainResult("有提高，继续努力");
+                breathHisLog.setTrainResult("有提高，继续努力!!");
             }else {
-                breathHisLog.setTrainResult("继续努力");
+                breathHisLog.setTrainResult("继续努力!!");
             }
 
-            Utils.write(breathHisLog.toString());
+            //Utils.write(breathHisLog.toString());
             TrainHisService.getInstance(BreathReportActivity.this).addBreathHisLog(breathHisLog);
 
             handler.post(new Runnable() {

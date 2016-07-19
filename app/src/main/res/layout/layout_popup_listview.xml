@@ -30,6 +30,7 @@
         android:layout_height="1dip"
         android:layout_marginRight="@dimen/common_dian20"
         android:layout_marginLeft="@dimen/common_dian20"
+        android:id="@+id/view1"
         android:layout_below="@+id/layoutContent"
         android:background="@color/common_color_d5d5d5"/>
 

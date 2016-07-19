@@ -51,6 +51,7 @@ import com.hhd.breath.app.utils.Utils;
 import com.hhd.breath.app.widget.DrawableCenterTextView;
 
 import org.andengine.entity.text.Text;
+import org.andengine.util.adt.bounds.IFloatBounds;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,6 +80,7 @@ public class HisTabActivity extends BaseActivity {
     private PopupAdapter popupAdapter;
     private List<HisPopupModel> hisPopupModels;
     private List<BreathHisDataShow> tempBreathHisShow ;
+    private HisPopupModel popupModel = null ;
 
 
     @Override
@@ -102,6 +104,7 @@ public class HisTabActivity extends BaseActivity {
         HisPopupModel hisPopupModel1 = new HisPopupModel() ;
         hisPopupModel1.setFlag("0");
         hisPopupModel1.setName("全部训练");
+        hisPopupModel1.setBreath_type("-1");
         hisPopupModels.add(hisPopupModel1) ;
 
         List<TrainPlan> trainPlanList = TrainPlanService.getInstance(HisTabActivity.this).getTrainPlans(ShareUtils.getUserId(HisTabActivity.this)) ;
@@ -245,10 +248,30 @@ public class HisTabActivity extends BaseActivity {
                 }
 
                 tempBreathHisShow = breathResultShow ;
-                mTrainExpandableAdapter.refresh(breathResultShow);
-                for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
-                    mExpandableListView.expandGroup(i);
+
+                if (breathResultShow!=null && !breathResultShow.isEmpty()){
+                    if (!history_recordContent.isShown()){
+                        layoutContent.setVisibility(View.GONE);
+                        history_recordContent.setVisibility(View.VISIBLE);
+                    }
+                    if (popupModel!=null && !popupModel.getBreath_type().equals("-1")){
+                        ThreadPoolWrap.getThreadPool().executeTask(new ShowClass(popupModel));
+                    }else {
+                        mTrainExpandableAdapter.refresh(breathResultShow);
+                        for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
+                            mExpandableListView.expandGroup(i);
+                        }
+                    }
+
+                }else {
+
+                    if (!layoutContent.isShown()){
+                        history_recordContent.setVisibility(View.GONE);
+                        layoutContent.setVisibility(View.VISIBLE);
+                    }
+
                 }
+
                 history_recordContent.onRefreshComplete();
             }
 
@@ -321,11 +344,33 @@ public class HisTabActivity extends BaseActivity {
                                  }
                                  breathResultShow.addAll(breathHisDataShows);
                                  tempBreathHisShow = breathResultShow ;
-                                 mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow);
-                                 mExpandableListView.setAdapter(mTrainExpandableAdapter);
-                                 for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
-                                     mExpandableListView.expandGroup(i);
+
+                                 if (breathResultShow!=null && !breathResultShow.isEmpty()){
+                                     if (!history_recordContent.isShown()){
+                                         layoutContent.setVisibility(View.GONE);
+                                         history_recordContent.setVisibility(View.VISIBLE);
+
+                                     }
+
+                                     if (popupModel!=null && !popupModel.getBreath_type().equals("-1")){
+                                         ThreadPoolWrap.getThreadPool().executeTask(new ShowClass(popupModel));
+                                     }else {
+                                         mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow);
+                                         mExpandableListView.setAdapter(mTrainExpandableAdapter);
+                                         for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
+                                             mExpandableListView.expandGroup(i);
+                                         }
+                                     }
+                                 }else {
+
+                                     if (!layoutContent.isShown()){
+                                         history_recordContent.setVisibility(View.GONE);
+                                         layoutContent.setVisibility(View.VISIBLE);
+                                     }
+
+
                                  }
+
                                  history_recordContent.onRefreshComplete();
                              }
 
@@ -513,6 +558,7 @@ public class HisTabActivity extends BaseActivity {
                 viewHolder = new ViewHolder();
                 viewHolder.imgSelect = (ImageView) convertView.findViewById(R.id.imgSelect);
                 viewHolder.tvItemName = (TextView) convertView.findViewById(R.id.tvItemName);
+                viewHolder.view1 = (View)convertView.findViewById(R.id.view1) ;
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -530,6 +576,9 @@ public class HisTabActivity extends BaseActivity {
                     viewHolder.tvItemName.setTextColor(getResources().getColor(R.color.common_color_9A9A9A));
                 }
             }
+            if (position==(hisPopupModels.size()-1)){
+                viewHolder.view1.setVisibility(View.GONE);
+            }
 
 
             return convertView;
@@ -540,6 +589,7 @@ public class HisTabActivity extends BaseActivity {
 
         TextView tvItemName;
         ImageView imgSelect;
+        View view1 ;
     }
 
 

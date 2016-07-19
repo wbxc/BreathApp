@@ -105,14 +105,13 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
     TextView tvTrainResult ;   // 训练结果
     @Bind(R.id.tvHisContent)
     TextView tvHisContent ;
-
     private BreathHisLog breathHisLog ;
-
     private String str_startTime ;
     private String str_train_days ;
     private String str_train_result ;
     private String str_train_times ;
     private String str_train_aver_times ;
+
 
     @Bind(R.id.tv1) TextView tv1 ;
     @Bind(R.id.tv2) TextView tv2 ;
@@ -120,6 +119,7 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
     @Bind(R.id.tv4) TextView tv4 ;
     @Bind(R.id.tv5) TextView tv5 ;
     @Bind(R.id.tvAverValue) TextView tvAverValue ;
+
 
 
 
@@ -149,6 +149,7 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
         levelPrensterCurrentRa.setRating(Float.valueOf(breathHisLog.getCurrentPersistentLevel()));
         tvAverValue.setText(breathHisLog.getTrainAverValue());
         tvDifficultyShow.setText("本难度系数最近"+breathHisLog.getTrainSuccessTimes()+"次训练分数");
+        tvTrainResult.setText(breathHisLog.getTrainResult());
         String value = breathHisLog.getTrainStageValue() ;
         String[] arrayStr = value.split(",") ;
 
