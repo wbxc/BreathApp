@@ -1,6 +1,5 @@
 package com.hhd.breath.app.db;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
 /**
  * Created by Administrator on 2015/12/16.

@@ -1,6 +1,7 @@
 package com.hhd.breath.app.main.ui;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -36,6 +37,7 @@ import retrofit2.Response;
 
 /**
  * 获取用户详情
+ * 个人资料页
  */
 public class UserDetailsActivity extends BaseActivity {
 
@@ -47,8 +49,6 @@ public class UserDetailsActivity extends BaseActivity {
     TextView tvSex;
     @Bind(R.id.text_birthday)
     TextView tvBirthday;
-    @Bind(R.id.medical_flag)
-    TextView tvMedicalFlag;
     @Bind(R.id.layout_exit_user)
     Button btnExitUser;
     @Bind(R.id.topText)
@@ -61,6 +61,9 @@ public class UserDetailsActivity extends BaseActivity {
     TextView tvRight;
     @Bind(R.id.img_user_Avatar)
     CircularImage imgUserAvatar;
+    @Bind(R.id.medical_flag)
+    TextView medical_flag ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +105,12 @@ public class UserDetailsActivity extends BaseActivity {
                         tvBirthday.setText(longTimeToTime(breathDataUser.getUser_birthday()));
                         tvSex.setText(breathDataUser.getUser_sex().equals("0")?"男":"女");
                         ImageLoader.getInstance().displayImage(breathDataUser.getUser_image(),imgUserAvatar);
+
+                        if (CaseBookService.getInstance(UserDetailsActivity.this).isHasMedical(ShareUtils.getUserId(UserDetailsActivity.this))){
+                            medical_flag.setText("有");
+                        }else {
+                            medical_flag.setText("无");
+                        }
                         break;
                     default:
                         BreathApplication.toast(UserDetailsActivity.this, getString(R.string.string_detail_user_error));

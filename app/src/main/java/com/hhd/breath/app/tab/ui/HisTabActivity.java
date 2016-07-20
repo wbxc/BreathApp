@@ -74,24 +74,24 @@ public class HisTabActivity extends BaseActivity {
     private String user_id;
     private List<BreathHisDataShow> breathHisDataShows;
     private List<BreathHisDataShow> breathResultShow;
-    private RelativeLayout layoutTop ;
+    private RelativeLayout layoutTop;
     private PopupWindow popupWindow = null;
     private ListView popupListView = null;
     private PopupAdapter popupAdapter;
     private List<HisPopupModel> hisPopupModels;
-    private List<BreathHisDataShow> tempBreathHisShow ;
-    private HisPopupModel popupModel = null ;
+    private List<BreathHisDataShow> tempBreathHisShow;
+    private HisPopupModel popupModel = null;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_his_tab);
-        hisPopupModels = new ArrayList<HisPopupModel>() ;
+        hisPopupModels = new ArrayList<HisPopupModel>();
         user_id = ShareUtils.getUserId(HisTabActivity.this);
         breathHisDataShows = new ArrayList<BreathHisDataShow>();
         breathResultShow = new ArrayList<BreathHisDataShow>();
-        tempBreathHisShow = new ArrayList<BreathHisDataShow>() ;
+        tempBreathHisShow = new ArrayList<BreathHisDataShow>();
 
         initData();
         initView();
@@ -101,20 +101,20 @@ public class HisTabActivity extends BaseActivity {
 
     private void initData() {
 
-        HisPopupModel hisPopupModel1 = new HisPopupModel() ;
+        HisPopupModel hisPopupModel1 = new HisPopupModel();
         hisPopupModel1.setFlag("0");
         hisPopupModel1.setName("全部训练");
         hisPopupModel1.setBreath_type("-1");
-        hisPopupModels.add(hisPopupModel1) ;
+        hisPopupModels.add(hisPopupModel1);
 
-        List<TrainPlan> trainPlanList = TrainPlanService.getInstance(HisTabActivity.this).getTrainPlans(ShareUtils.getUserId(HisTabActivity.this)) ;
+        List<TrainPlan> trainPlanList = TrainPlanService.getInstance(HisTabActivity.this).getTrainPlans(ShareUtils.getUserId(HisTabActivity.this));
 
-        for (int i=0 ; i<trainPlanList.size() ; i++){
-            HisPopupModel hisPopupModel = new HisPopupModel() ;
+        for (int i = 0; i < trainPlanList.size(); i++) {
+            HisPopupModel hisPopupModel = new HisPopupModel();
             hisPopupModel.setFlag("0");
             hisPopupModel.setName(trainPlanList.get(i).getName());
             hisPopupModel.setBreath_type(trainPlanList.get(i).getTrainType());
-            hisPopupModels.add(hisPopupModel) ;
+            hisPopupModels.add(hisPopupModel);
         }
 
 
@@ -127,7 +127,7 @@ public class HisTabActivity extends BaseActivity {
         hisTopTextView = (DrawableCenterTextView) findViewById(R.id.topText);
         history_recordContent = (PullToRefreshExpandableListView) findViewById(R.id.history_recordContent);
         layoutContent = (RelativeLayout) findViewById(R.id.layout_content);
-        layoutTop = (RelativeLayout)findViewById(R.id.top) ;
+        layoutTop = (RelativeLayout) findViewById(R.id.top);
         hisTopTextView.setText("全部训练");
     }
 
@@ -247,26 +247,26 @@ public class HisTabActivity extends BaseActivity {
                     }
                 }
 
-                tempBreathHisShow = breathResultShow ;
+                tempBreathHisShow = breathResultShow;
 
-                if (breathResultShow!=null && !breathResultShow.isEmpty()){
-                    if (!history_recordContent.isShown()){
+                if (breathResultShow != null && !breathResultShow.isEmpty()) {
+                    if (!history_recordContent.isShown()) {
                         layoutContent.setVisibility(View.GONE);
                         history_recordContent.setVisibility(View.VISIBLE);
                     }
-                    if (popupModel!=null && !popupModel.getBreath_type().equals("-1")){
+                    if (popupModel != null && !popupModel.getBreath_type().equals("-1")) {
                         ThreadPoolWrap.getThreadPool().executeTask(new ShowClass(popupModel));
-                    }else {
-                        breathResultShow = tempBreathHisShow ;
+                    } else {
+                        breathResultShow = tempBreathHisShow;
                         mTrainExpandableAdapter.refresh(breathResultShow);
                         for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
                             mExpandableListView.expandGroup(i);
                         }
                     }
 
-                }else {
+                } else {
 
-                    if (!layoutContent.isShown()){
+                    if (!layoutContent.isShown()) {
                         history_recordContent.setVisibility(View.GONE);
                         layoutContent.setVisibility(View.VISIBLE);
                     }
@@ -299,37 +299,31 @@ public class HisTabActivity extends BaseActivity {
                              @Override
                              public void onResponse(Call<BreathTempData> call, Response<BreathTempData> response) {
                                  List<BreathHistoricalData> breathHistoricalDatas = response.body().getData();
-
-                                 TrainHisService.getInstance(HisTabActivity.this).addList(breathHistoricalDatas);
-
+                                 // TrainHisService.getInstance(HisTabActivity.this).addList(breathHistoricalDatas);
                                  if (!breathHistoricalDatas.isEmpty()) {
-
                                      for (int i = 0; i < breathHistoricalDatas.size(); i++) {
-
                                          if (breathHistoricalDatas.get(i).getTrain_time().length() == 10) {
                                              String measure_time = ConvertDateUtil.timestampToTime(breathHistoricalDatas.get(i).getTrain_time()).substring(0, 10);
                                              if (breathHisDataShows.isEmpty() || breathHisDataShows.size() == 0) {
                                                  BreathHisDataShow breathHisDataShow = new BreathHisDataShow();
                                                  breathHisDataShow.setMeasure_time(measure_time);
-                                                 //breathHisDataShow.getBreathHistoricalDatas().add(breathHistoricalDatas.get(i)) ;
                                                  breathHisDataShows.add(breathHisDataShow);
                                              } else {
                                                  int breathSize = breathHisDataShows.size();
-
+                                                 boolean flag = false;
                                                  for (int j = 0; j < breathSize; j++) {
-                                                     if (breathHisDataShows.get(j).getMeasure_time().equals(measure_time)) {
-                                                         //breathHisDataShows.get(j).getBreathHistoricalDatas().add(breathHistoricalDatas.get(i)) ;
-                                                     } else {
-                                                         BreathHisDataShow breathHisDataShow = new BreathHisDataShow();
-                                                         breathHisDataShow.setMeasure_time(measure_time);
-                                                         breathHisDataShows.add(breathHisDataShow);
-                                                         breathSize++;
-                                                     }
+                                                     if (breathHisDataShows.get(j).getMeasure_time().equals(measure_time))
+                                                         flag = true;
+                                                 }
+                                                 if (!flag) {
+                                                     BreathHisDataShow breathHisDataShow = new BreathHisDataShow();
+                                                     breathHisDataShow.setMeasure_time(measure_time);
+                                                     breathHisDataShows.add(breathHisDataShow);
+                                                     breathSize++;
                                                  }
                                              }
                                          }
                                      }
-
                                      for (int i1 = 0; i1 < breathHistoricalDatas.size(); i1++) {
 
                                          if (breathHistoricalDatas.get(i1).getTrain_time().length() == 10) {
@@ -344,27 +338,26 @@ public class HisTabActivity extends BaseActivity {
                                      }
                                  }
                                  breathResultShow.addAll(breathHisDataShows);
-                                 tempBreathHisShow = breathResultShow ;
 
-                                 if (breathResultShow!=null && !breathResultShow.isEmpty()){
-                                     if (!history_recordContent.isShown()){
+                                 tempBreathHisShow = breathResultShow;
+
+                                 if (breathResultShow != null && !breathResultShow.isEmpty()) {
+                                     if (!history_recordContent.isShown()) {
                                          layoutContent.setVisibility(View.GONE);
                                          history_recordContent.setVisibility(View.VISIBLE);
                                      }
-
-                                     if (popupModel!=null && !popupModel.getBreath_type().equals("-1")){
+                                     if (popupModel != null && !popupModel.getBreath_type().equals("-1")) {
                                          ThreadPoolWrap.getThreadPool().executeTask(new ShowClass(popupModel));
-                                     }else {
-                                         breathResultShow = tempBreathHisShow ;
+                                     } else {
                                          mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow);
                                          mExpandableListView.setAdapter(mTrainExpandableAdapter);
                                          for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
                                              mExpandableListView.expandGroup(i);
                                          }
                                      }
-                                 }else {
+                                 } else {
 
-                                     if (!layoutContent.isShown()){
+                                     if (!layoutContent.isShown()) {
                                          history_recordContent.setVisibility(View.GONE);
                                          layoutContent.setVisibility(View.VISIBLE);
                                      }
@@ -405,8 +398,6 @@ public class HisTabActivity extends BaseActivity {
     }
 
 
-
-
     private void showPopupWindow() {
         if (popupWindow == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -415,18 +406,18 @@ public class HisTabActivity extends BaseActivity {
             popupAdapter = new PopupAdapter(HisTabActivity.this, hisPopupModels);
             popupListView.setAdapter(popupAdapter);
             //UiUtils.dip2px(HisTabActivity.this,213)
-            popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT,true);
+            popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
         }
 
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
 
-        WindowManager windowManager = (WindowManager)getSystemService(Context.WINDOW_SERVICE) ;
+        WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 
-        int posx = windowManager.getDefaultDisplay().getWidth()/2 - popupWindow.getWidth()/2 ;
-        backgroundAlpha(0.7f) ;
-        popupWindow.showAsDropDown(layoutTop,posx,-40);
+        int posx = windowManager.getDefaultDisplay().getWidth() / 2 - popupWindow.getWidth() / 2;
+        backgroundAlpha(0.7f);
+        popupWindow.showAsDropDown(layoutTop, posx, -40);
 
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -439,28 +430,27 @@ public class HisTabActivity extends BaseActivity {
         });
 
 
-
         popupListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if (popupWindow!=null && popupWindow.isShowing()){
+                if (popupWindow != null && popupWindow.isShowing()) {
 
-                    for (int i=0 ; i<hisPopupModels.size() ; i++){
+                    for (int i = 0; i < hisPopupModels.size(); i++) {
                         hisPopupModels.get(i).setFlag("0");
                     }
                     hisPopupModels.get(position).setFlag("1");
                     popupAdapter.notifyDataSetChanged();
                     hisTopTextView.setText(hisPopupModels.get(position).getName());
 
-                    popupModel = hisPopupModels.get(position) ;
+                    popupModel = hisPopupModels.get(position);
 
-                    if (!popupModel.getBreath_type().equals("-1")){
+                    if (!popupModel.getBreath_type().equals("-1")) {
                         ThreadPoolWrap.getThreadPool().executeTask(new ShowClass(popupModel));
-                    }else {
-                        breathResultShow = tempBreathHisShow ;
-                        if (breathResultShow!=null && !breathResultShow.isEmpty()){
-                            if (!history_recordContent.isShown()){
+                    } else {
+                        breathResultShow = tempBreathHisShow;
+                        if (breathResultShow != null && !breathResultShow.isEmpty()) {
+                            if (!history_recordContent.isShown()) {
                                 layoutContent.setVisibility(View.GONE);
                                 history_recordContent.setVisibility(View.VISIBLE);
                             }
@@ -470,9 +460,9 @@ public class HisTabActivity extends BaseActivity {
                             for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
                                 mExpandableListView.expandGroup(i);
                             }
-                        }else {
+                        } else {
 
-                            if (!layoutContent.isShown()){
+                            if (!layoutContent.isShown()) {
                                 history_recordContent.setVisibility(View.GONE);
                                 layoutContent.setVisibility(View.VISIBLE);
                             }
@@ -485,9 +475,9 @@ public class HisTabActivity extends BaseActivity {
         });
     }
 
-    protected class ShowClass implements Runnable{
+    protected class ShowClass implements Runnable {
 
-        private HisPopupModel hisPopupModel ;
+        private HisPopupModel hisPopupModel;
 
         public ShowClass(HisPopupModel hisPopupModel) {
             this.hisPopupModel = hisPopupModel;
@@ -496,21 +486,19 @@ public class HisTabActivity extends BaseActivity {
         @Override
         public void run() {
 
-            breathResultShow = tempBreathHisShow  ;
-            List<BreathHisDataShow> runBreathHisDataShows = new ArrayList<BreathHisDataShow>() ;
+            breathResultShow = tempBreathHisShow;
+            List<BreathHisDataShow> runBreathHisDataShows = new ArrayList<BreathHisDataShow>();
 
-            for (int i = 0 ; i< breathResultShow.size() ; i++){
-
-
-                List<BreathHistoricalData> breathHistoricalDatas = breathResultShow.get(i).getBreathHistoricalDatas() ;
-                List<BreathHistoricalData> tempBreathHistoricalDatas1 = new ArrayList<BreathHistoricalData>() ;
-                for (int j=0 ; j<breathHistoricalDatas.size() ; j++){
-                    if (breathHistoricalDatas.get(j).getBreath_type().equals(hisPopupModel.getBreath_type())){
-                        tempBreathHistoricalDatas1.add(breathHistoricalDatas.get(j)) ;
+            for (int i = 0; i < breathResultShow.size(); i++) {
+                List<BreathHistoricalData> breathHistoricalDatas = breathResultShow.get(i).getBreathHistoricalDatas();
+                List<BreathHistoricalData> tempBreathHistoricalDatas1 = new ArrayList<BreathHistoricalData>();
+                for (int j = 0; j < breathHistoricalDatas.size(); j++) {
+                    if (breathHistoricalDatas.get(j).getBreath_type().equals(hisPopupModel.getBreath_type())) {
+                        tempBreathHistoricalDatas1.add(breathHistoricalDatas.get(j));
                     }
                 }
-                if (tempBreathHistoricalDatas1!=null && !tempBreathHistoricalDatas1.isEmpty() && tempBreathHistoricalDatas1.size()!=0){
-                    BreathHisDataShow breathHisDataShow = new BreathHisDataShow() ;
+                if (tempBreathHistoricalDatas1 != null && !tempBreathHistoricalDatas1.isEmpty() && tempBreathHistoricalDatas1.size() != 0) {
+                    BreathHisDataShow breathHisDataShow = new BreathHisDataShow();
                     breathHisDataShow.setMeasure_time(breathResultShow.get(i).getMeasure_time());
                     breathHisDataShow.setBreathHistoricalDatas(tempBreathHistoricalDatas1);
                     runBreathHisDataShows.add(breathHisDataShow);
@@ -518,27 +506,26 @@ public class HisTabActivity extends BaseActivity {
 
             }
 
-            breathResultShow = runBreathHisDataShows ;
+            breathResultShow = runBreathHisDataShows;
 
             HisTabActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
 
-                    if (breathResultShow!=null && !breathResultShow.isEmpty()){
+                    if (breathResultShow != null && !breathResultShow.isEmpty()) {
 
-                        if (!history_recordContent.isShown()){
+                        if (!history_recordContent.isShown()) {
                             layoutContent.setVisibility(View.GONE);
                             history_recordContent.setVisibility(View.VISIBLE);
                         }
-
                         mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow);
                         mExpandableListView.setAdapter(mTrainExpandableAdapter);
                         for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
                             mExpandableListView.expandGroup(i);
                         }
 
-                    }else {
-                        if (!layoutContent.isShown()){
+                    } else {
+                        if (!layoutContent.isShown()) {
                             history_recordContent.setVisibility(View.GONE);
                             layoutContent.setVisibility(View.VISIBLE);
                         }
@@ -553,7 +540,7 @@ public class HisTabActivity extends BaseActivity {
 
     public void backgroundAlpha(float bgAlpha) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
-         lp.alpha = bgAlpha; //0.0-1.0
+        lp.alpha = bgAlpha; //0.0-1.0
         HisTabActivity.this.getWindow().setAttributes(lp);
     }
 
@@ -569,9 +556,9 @@ public class HisTabActivity extends BaseActivity {
         }
 
 
-        public void setPopupHisModels(List<HisPopupModel> pupHisModels){
+        public void setPopupHisModels(List<HisPopupModel> pupHisModels) {
 
-            this.hisPopupModels = pupHisModels ;
+            this.hisPopupModels = pupHisModels;
             notifyDataSetChanged();
         }
 
@@ -600,7 +587,7 @@ public class HisTabActivity extends BaseActivity {
                 viewHolder = new ViewHolder();
                 viewHolder.imgSelect = (ImageView) convertView.findViewById(R.id.imgSelect);
                 viewHolder.tvItemName = (TextView) convertView.findViewById(R.id.tvItemName);
-                viewHolder.view1 = (View)convertView.findViewById(R.id.view1) ;
+                viewHolder.view1 = (View) convertView.findViewById(R.id.view1);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -618,9 +605,9 @@ public class HisTabActivity extends BaseActivity {
                     viewHolder.tvItemName.setTextColor(getResources().getColor(R.color.common_color_9A9A9A));
                 }
             }
-            if (position==(hisPopupModels.size()-1)){
+            if (position == (hisPopupModels.size() - 1)) {
                 viewHolder.view1.setVisibility(View.GONE);
-            }else {
+            } else {
                 viewHolder.view1.setVisibility(View.VISIBLE);
             }
 
@@ -633,7 +620,7 @@ public class HisTabActivity extends BaseActivity {
 
         TextView tvItemName;
         ImageView imgSelect;
-        View view1 ;
+        View view1;
     }
 
 

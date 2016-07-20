@@ -1,5 +1,6 @@
 package com.hhd.breath.app.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +12,7 @@ import com.hhd.breath.app.model.MedicalHis;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Administrator on 2016/2/16.
@@ -46,31 +48,18 @@ public class CaseBookService {
         return instance ;
     }
 
+    /**
+     * 获取所有的曲线
+     * @param user_id
+     * @return
+     */
+    public List<MedicalHis> getMedicalHis(String user_id){
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public List<MedicalHis> getMedicalHis(){
-
-        String sql = "select * from "+DBManger.TABLE_MEDICAL_HIS ;
+        String sql = "select * from "+DBManger.TABLE_MEDICAL_HIS+" where "+DBManger.MEDICAL_HIS_USER_ID+" = ?" ;
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase() ;
         Cursor cursor = null ;
-
         try {
-            cursor = db.rawQuery(sql,null) ;
+            cursor = db.rawQuery(sql,new String[]{user_id}) ;
             if (cursor!=null){
                 List<MedicalHis> medicalHises = new ArrayList<MedicalHis>() ;
                 while (cursor.moveToNext()){
@@ -78,6 +67,7 @@ public class CaseBookService {
                     medicalHis.setType(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DBManger.MEDICAL_HIS_TYPE))));
                     medicalHis.setName(cursor.getString(cursor.getColumnIndex(DBManger.MEDICAL_HIS_NAME)));
                     medicalHis.setId(cursor.getString(cursor.getColumnIndex(DBManger.MEDICAL_HIS_ID)));
+                    medicalHis.setUserId(cursor.getString(cursor.getColumnIndex(DBManger.MEDICAL_HIS_USER_ID)));
                     medicalHises.add(medicalHis) ;
                 }
                 return medicalHises ;
@@ -97,17 +87,36 @@ public class CaseBookService {
         return null;
     }
 
+    /**
+     * 判断 MEDICAL_HIS 是否有数据
+     * @param user_id
+     * @return
+     */
+    public boolean isHasMedicals(String user_id){
+        String sql = "select * from "+DBManger.TABLE_MEDICAL_HIS+" where "+DBManger.MEDICAL_HIS_USER_ID+" = ?" ;
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase() ;
+        Cursor cursor =null;
+        try {
+            cursor = db.rawQuery(sql,new String[]{user_id}) ;
+            if (cursor!=null&&cursor.getCount()>0){
+                return  true ;
+            }
+        }catch (Exception e){
 
-
-
-
-
-
-
-
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+                cursor = null ;
+            }
+            if (db!=null){
+                db.close();
+                db = null;
+            }
+        }
+        return false ;
+    }
 
     /**
-     *
      * @param medical_id
      * @param medical_type
      * @return true更新成功  false更新失败
@@ -140,55 +149,64 @@ public class CaseBookService {
         return false ;
     }
 
-    public void insert(MedicalHis medicalHis){
+    /**
+     * 更新
+     * @param medicalHises
+     */
+    public void  updateMedicalHis(List<MedicalHis> medicalHises){
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase() ;
-        //SQLiteStatement statement = db.compileStatement(inserSql) ;
-
 
         try {
             db.beginTransaction();
-            db.insert(DBManger.TABLE_MEDICAL_HIS, null, medicalHis.getContentValues(medicalHis)) ;
+            for (MedicalHis medicalHis : medicalHises){
+                ContentValues contentValues = new ContentValues() ;
+                contentValues.put(DBManger.MEDICAL_HIS_TYPE,String.valueOf(medicalHis.getType()));
+                db.update(DBManger.TABLE_MEDICAL_HIS,contentValues,DBManger.MEDICAL_HIS_ID+" = ? and "+DBManger.MEDICAL_HIS_USER_ID+" = ?",new String[]{medicalHis.getId(),medicalHis.getUserId()}) ;
+            }
             db.setTransactionSuccessful();
 
         }catch (Exception e){
-            Log.e("Exception_Exception",e.getMessage()) ;
+
+
         }finally {
-            //statement.close();
+
             db.endTransaction();
             if (db!=null){
                 db.close();
-                db=null;
+                db = null;
             }
         }
-
     }
 
+
+    /**
+     * 批量插入
+     * @param medicalHises
+     * @return
+     */
     public boolean inserts(List<MedicalHis> medicalHises){
 
 
-        String inserSql = "insert into "+DBManger.TABLE_MEDICAL_HIS+
-                         "("+DBManger.MEDICAL_HIS_ID+", "+DBManger.MEDICAL_HIS_NAME+" ,"+DBManger.MEDICAL_HIS_TYPE+") VALUES(?,?,?)" ;
+        String inserSql = "insert into "+DBManger.TABLE_MEDICAL_HIS+ "("+DBManger.MEDICAL_HIS_USER_ID+","+DBManger.MEDICAL_HIS_ID+", "+DBManger.MEDICAL_HIS_NAME+" ,"+DBManger.MEDICAL_HIS_TYPE+") VALUES(?,?,?,?)" ;
 
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase() ;
         SQLiteStatement statement = db.compileStatement(inserSql) ;
 
-
         try {
             db.beginTransaction();
-
             for (MedicalHis medicalHis : medicalHises){
-
-                statement.bindString(1,medicalHis.getId());
-                statement.bindString(2,medicalHis.getName());
-                statement.bindString(3,String.valueOf(medicalHis.getType()));
+                statement.bindString(1,medicalHis.getUserId());
+                statement.bindString(2,medicalHis.getId());
+                statement.bindString(3,medicalHis.getName());
+                statement.bindString(4,String.valueOf(medicalHis.getType()));
                 statement.executeInsert() ;
             }
             db.setTransactionSuccessful();
-
             return true ;
 
         }catch (Exception e){
 
+            Log.e("medicalHises",e.getMessage()) ;
         }finally {
             statement.close();
             db.endTransaction();
@@ -197,28 +215,24 @@ public class CaseBookService {
                 db=null;
             }
         }
-
         return false ;
     }
 
-    public boolean isNoHasData(){
-
-        String sql = "select * from "+DBManger.TABLE_MEDICAL_HIS ;
-
+    /**
+     * 判断是否有呼吸病史
+     * @param userId
+     * @return
+     */
+    public boolean isHasMedical(String userId){
+        String sql = "select * from "+DBManger.TABLE_MEDICAL_HIS +" where "+DBManger.MEDICAL_HIS_USER_ID+" = ? and "+DBManger.MEDICAL_HIS_TYPE+" = 1" ;
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase() ;
-
         Cursor cursor = null;
-
         try {
-            cursor = db.rawQuery(sql,null) ;
-            if (cursor!=null){
-                if (!cursor.isAfterLast()){
-                    return false ;
-                }
-
+            cursor = db.rawQuery(sql,new String[]{userId}) ;
+            if (cursor!=null && cursor.getCount()>0){
                 return true ;
             }else {
-                return  true ;
+                return  false ;
             }
 
         }catch (Exception e){

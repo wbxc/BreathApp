@@ -15,7 +15,15 @@ public class MedicalHis {
      * type 1表示选中 0表示没有选中
      */
     private int type ;
+    private String userId ;
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public int getType() {
         return type;
@@ -43,10 +51,21 @@ public class MedicalHis {
 
     public ContentValues getContentValues(MedicalHis medicalHis){
         ContentValues m = new ContentValues() ;
+        m.put(DBManger.MEDICAL_HIS_USER_ID,medicalHis.getUserId());
         m.put(DBManger.MEDICAL_HIS_ID,medicalHis.getId());
         m.put(DBManger.MEDICAL_HIS_NAME,medicalHis.getName());
         m.put(DBManger.MEDICAL_HIS_TYPE,String.valueOf(medicalHis.getType()));
 
         return m ;
+    }
+
+    @Override
+    public String toString() {
+        return "MedicalHis{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", type=" + type +
+                ", userId='" + userId + '\'' +
+                '}';
     }
 }

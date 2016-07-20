@@ -301,7 +301,7 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
 
                     for (int j = breathDetailReports.size() ; j<5 ; j++){
 
-                        sb.append("暂无")  ;
+                        sb.append("-")  ;
 
                         if (j!=4){
                             sb.append(",") ;
@@ -419,6 +419,7 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                     levelPrensterCurrentRa.setRating(Float.valueOf(breathHisLog.getCurrentPersistentLevel()));
                     tvAverValue.setText(breathHisLog.getTrainAverValue());
                     tvDifficultyShow.setText("本难度系数最近"+trainPlan.getTimes()+"次训练分数");
+                    tvTrainResult.setText(breathHisLog.getTrainResult());
                     String value = breathHisLog.getTrainStageValue() ;
                     String[] arrayStr = value.split(",") ;
 

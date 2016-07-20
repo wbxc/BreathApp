@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 import com.hhd.breath.app.BaseActivity;
 import com.hhd.breath.app.BreathApplication;
 import com.hhd.breath.app.R;
+import com.hhd.breath.app.adapter.GradViewAdapter;
 import com.hhd.breath.app.db.CaseBookService;
 import com.hhd.breath.app.imp.PerfectInterface;
 import com.hhd.breath.app.model.MedicalHis;
@@ -85,7 +87,6 @@ public class PerUserInfoActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout mContent ;
     private  int selectMedical = 0 ;
     private CircularImage imgUserAvatar ;
-    private CaseBookService caseBookService ;
     private String urlAvatar="" ;
     private String updateTime  ;
     private PopupWindow selectPopuWindow;
@@ -96,9 +97,7 @@ public class PerUserInfoActivity extends BaseActivity implements View.OnClickLis
     private static final String PHOTO_FILE_NAME = "temp_photo.jpg";
     private File tempFile;
     private Bitmap bitmap;
-
     private String user_disease ;
-
     @Bind(R.id.img_user_Avatar)
     CircularImage imageCircular ;
 
@@ -115,19 +114,9 @@ public class PerUserInfoActivity extends BaseActivity implements View.OnClickLis
             mFile.delete() ;
         }
         updateTime = updateTime(ShareUtils.getUserBirthday(PerUserInfoActivity.this)) ;
-        caseBookService = CaseBookService.getInstance(PerUserInfoActivity.this) ;
-        ThreadPoolWrap.getThreadPool().executeTask(mRunnable);
+
     }
 
-
-    private Runnable mRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (caseBookService.isNoHasData()){
-                caseBookService.inserts(medicalHises) ;
-            }
-        }
-    } ;
 
     @Override
     protected void onResume() {
@@ -139,43 +128,21 @@ public class PerUserInfoActivity extends BaseActivity implements View.OnClickLis
     List<String> sexStrings = new ArrayList<String>() ;
 
     private  void initData(){
-
+        medicalHises = new ArrayList<MedicalHis>() ;
+        medicalHises = CaseBookService.getInstance(PerUserInfoActivity.this).getMedicalHis(ShareUtils.getUserId(PerUserInfoActivity.this)) ;
         SysDataModel nan = new SysDataModel() ;
         nan.setId(String.valueOf(0));
         nan.setName("男");
         nan.setValue("0");
         sysDataModels.add(nan) ;
-
         SysDataModel nv = new SysDataModel() ;
         nv.setId(String.valueOf(1));
         nv.setValue("1");
         nv.setName("女");
         sysDataModels.add(nv) ;
-
         for (int i=0 ; i<sysDataModels.size(); i++){
             sexStrings.add(sysDataModels.get(i).getName()) ;
         }
-        medicalHises = new ArrayList<MedicalHis>() ;
-        MedicalHis medicalHis = new MedicalHis() ;
-        medicalHis.setId(String.valueOf(0));
-        medicalHis.setName("哮喘");
-        medicalHis.setType(0);
-        medicalHises.add(medicalHis) ;
-
-
-        MedicalHis medicalHis1 = new MedicalHis() ;
-        medicalHis1.setId(String.valueOf(1));
-        medicalHis1.setName("慢阻肺");
-        medicalHis1.setType(0);
-        medicalHises.add(medicalHis1) ;
-
-
-
-        MedicalHis medicalHis2 = new MedicalHis() ;
-        medicalHis2.setId(String.valueOf(2));
-        medicalHis2.setName("支气管炎");
-        medicalHis2.setType(0);
-        medicalHises.add(medicalHis2) ;
     }
     @Override
     protected void initView() {
@@ -250,7 +217,6 @@ public class PerUserInfoActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ThreadPoolWrap.getThreadPool().removeTask(mRunnable);
     }
 
     private Dialog mSexDialog = null ;
@@ -276,76 +242,8 @@ public class PerUserInfoActivity extends BaseActivity implements View.OnClickLis
         }
     } ;
 
-    class GradViewAdapter extends BaseAdapter {
 
-        private Context mContext ;
-        private List<MedicalHis> exportTimeTypes ;
 
-        public GradViewAdapter(Context mContext ,List<MedicalHis> exportTimeTypes) {
-            // TODO Auto-generated constructor stub
-            this.exportTimeTypes = exportTimeTypes ;
-            this.mContext = mContext ;
-        }
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            if (exportTimeTypes!=null) {
-                return exportTimeTypes.size() ;
-            }
-            return 0;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            // TODO Auto-generated method stub
-            return exportTimeTypes.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        public void refresh(List<MedicalHis> medicalHises){
-
-            this.exportTimeTypes = medicalHises ;
-            notifyDataSetChanged();
-
-        }
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            GradViewHolder mGradView ;
-            if (convertView==null) {
-                mGradView = new GradViewHolder() ;
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_gradview_item, null) ;
-                mGradView.textMedicalName = (TextView)convertView.findViewById(R.id.medical_name) ;
-                mGradView.content_bg = (RelativeLayout)convertView.findViewById(R.id.content_bg) ;
-                convertView.setTag(mGradView);
-            }else {
-                mGradView = (GradViewHolder) convertView.getTag() ;
-            }
-            if (position>=0) {
-                if (exportTimeTypes.get(position).getType()>0) {
-                    mGradView.textMedicalName.setTextColor(mContext.getResources().getColor(R.color.common_top_color));
-                    mGradView.content_bg.setBackgroundResource(R.drawable.select_blue_circle);
-                }else {
-                    mGradView.textMedicalName.setTextColor(mContext.getResources().getColor(R.color.common_color_9A9A9A));
-                    mGradView.content_bg.setBackgroundResource(R.drawable.select_gray_circle);
-                }
-                mGradView.textMedicalName.setText(exportTimeTypes.get(position).getName());
-            }
-
-            return convertView;
-        }
-
-    }
-    class GradViewHolder{
-        TextView textMedicalName ;
-
-        RelativeLayout content_bg ;
-    }
 
 
     private void showPopuwindow() {
@@ -409,11 +307,10 @@ public class PerUserInfoActivity extends BaseActivity implements View.OnClickLis
 
                 if (isNetworkConnected(PerUserInfoActivity.this)){
                     showProgressDialog("信息保存中");
+                    CaseBookService.getInstance(PerUserInfoActivity.this).updateMedicalHis(medicalHises);
+
                     String user_id = ShareUtils.getUserId(PerUserInfoActivity.this) ;
                     String full_name = mEditTextName.getText().toString().trim() ;
-
-
-
 
                     ManagerRequest.getInstance().modifyUserInfo(user_id, urlAvatar, full_name, updateTime, String.valueOf(sexIndex), user_disease, new ManagerRequest.IDataCallBack() {
                         @Override
@@ -570,9 +467,11 @@ public class PerUserInfoActivity extends BaseActivity implements View.OnClickLis
     }
 
 
-
-
-
+    /**
+     * 生日转变成为时间戳
+     * @param time
+     * @return
+     */
     private String updateTime(String time){
 
         if (isNotEmpty(time)){

@@ -30,6 +30,7 @@ import com.hhd.breath.app.andengine.BreathAndEngine;
 import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.service.GlobalUsbService;
 import com.hhd.breath.app.utils.ShareUtils;
+import com.hhd.breath.app.utils.StringUtils;
 import com.hhd.breath.app.wchusbdriver.Global340Driver;
 
 import java.lang.ref.WeakReference;
@@ -63,24 +64,13 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
     private String trainCode;
     private TextView mTextTrainName;
     private TextView mBreathExplain;
-    private PendingIntent mPendingIntent;
     private Context context;
-    private Dialog countdown = null;
-    private TextView mTvCountDown;
-    private Timer mCountDownTimer;
-    private TimerTask mCountDownTask;
-    private int mCountSum = 5;
-    private int mSendCount = 0;
     private boolean isHasPermission = false ;
     private byte[] readBuffer;
     private byte[] writeBuffer;
     private boolean READ_ENABLE_340 = false;
     private int actualNumBytes = 0;
     private Object ThreadLock = new Object();
-    private boolean isReceiveData = false;
-    //private TransmitDataDriver transmitDataDriver = null;
-    private boolean isFlag = false ;
-    //private ReadThreadData readThreadData = null;
     private BreathTrainHandler mHandler = null;
     private Dialog errorDialog = null;
 
@@ -133,8 +123,6 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         trainPlan = (TrainPlan) getIntent().getExtras().getSerializable("train_plan") ;
         int sum = Integer.parseInt(trainPlan.getInspirerTime()) +Integer.parseInt(trainPlan.getPersistentLevel()) ;
         timeLong = sum * Integer.parseInt(trainPlan.getGroupNumber());
-
-
         readBuffer = new byte[512];
         writeBuffer = new byte[512];
     }
@@ -254,71 +242,11 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         Intent intent = new Intent() ;
         Bundle bundle = new Bundle() ;
         bundle.putSerializable("train_plan",trainPlan);
-       // BreathApplication.toast(BreathTrainActivity.this,trainPlan.toString());
         intent.putExtras(bundle) ;
         intent.setClass(BreathTrainActivity.this, BreathAndEngine.class) ;
         startActivity(intent);
         BreathTrainActivity.this.finish();
     }
-
-
-
-    private void startTimeCountDown() {
-        if (mCountDownTimer == null) {
-            mCountDownTimer = new Timer();
-        }
-        if (mCountDownTask == null) {
-            mCountDownTask = new TimerTask() {
-                @Override
-                public void run() {
-                    mHandler.sendEmptyMessage(1);
-                }
-            };
-        }
-        mCountDownTimer.schedule(mCountDownTask, 0, 1000);
-    }
-
-
-    private void stopTimeCountDown() {
-        if (mCountDownTimer != null) {
-            mCountDownTimer.cancel();
-            mCountDownTimer = null;
-        }
-        if (mCountDownTask != null) {
-            mCountDownTask.cancel();
-            mCountDownTask = null;
-        }
-    }
-
-
-    private void showCountDown() {
-        mCountSum = 5;
-        if (countdown != null) {
-            countdown.show();
-        } else {
-            countdown = new Dialog(BreathTrainActivity.this, R.style.common_dialog);
-            View mView = LayoutInflater.from(BreathTrainActivity.this).inflate(R.layout.dialog_count_down, null);
-            mTvCountDown = (TextView) mView.findViewById(R.id.tv_countdown);
-            mTvCountDown.setText("4");
-            countdown.setContentView(mView);
-            countdown.setCanceledOnTouchOutside(false);
-            countdown.setCancelable(false);
-            countdown.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                @Override
-                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                    if (keyCode == KeyEvent.KEYCODE_SEARCH) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            });
-
-            countdown.show();
-        }
-        startTimeCountDown();
-    }
-
 
     private static class BreathTrainHandler extends Handler{
 
@@ -332,63 +260,83 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case 22:
-                    activity.function22();
-                    break;
-                case 23:
-                    activity.function23();
-                    break;
                 case 15:
                     activity.function15();
                     break;
                 case 16:
                     activity.function16();
                     break;
+                case 24:
+                    activity.function24();
+                    break;
             }
         }
     }
 
 
-    private void function22(){
+
+    private void function24(){
+        if (Global340Driver.getInstance(BreathTrainActivity.this).checkUsbStatus() == 1){
+            stopTask();
+            Global340Driver.getInstance(BreathTrainActivity.this).initDriver() ;
+            Global340Driver.getInstance(BreathTrainActivity.this).initUart() ;
+            Global340Driver.getInstance(BreathTrainActivity.this).setEnableRead(true); ;
+            initUsbDevice();
+        }
+    }
+    private void initUsbDevice(){
+
+        Global340Driver.getInstance(BreathTrainActivity.this).setEnableRead(true);
         try {
-            String result = new String(readBuffer, 0, actualNumBytes);
-            actualNumBytes = 0;
-            ShareUtils.setSerialNumber(BreathTrainActivity.this, result);
-            isFlag = true  ;
-        } catch (Exception e) {
+            boolean flag = Global340Driver.getInstance(BreathTrainActivity.this).send("1");
+            if (flag) {
+                showProgressDialog(BreathTrainActivity.this,"") ;
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        String result = Global340Driver.getInstance(BreathTrainActivity.this).readSerial() ;
+                        hideProgress();
+                        ShareUtils.setSerialNumber(BreathTrainActivity.this,result);
+
+                        error_connect.setVisibility(View.GONE);
+                        start_connect.setVisibility(View.VISIBLE);
+
+                    }
+                }, 500);
+            } else {
+                BreathApplication.toast(BreathTrainActivity.this, "设备获取序列号失败");
+            }
+        }catch (Exception e){
+            BreathApplication.toast(BreathTrainActivity.this, "设备获取序列号失败");
         }
-        //readThreadData.setReadThread(false);
     }
 
-    private void function23(){
 
-        //readThreadData.setReadThread(false);
-        if (actualNumBytes != 0x00) {
-            String result = new String(readBuffer, 0, actualNumBytes);
-            actualNumBytes = 0;
-        }
-        if (isFlag){
-            isFlag = false ;
-            actualNumBytes = 0 ;
-            showCountDown();
-        }
-    }
 
     /**
      * USB插入
+     * 判断usb是否是所需的USB
      */
     private void function15(){
-       /* if (transmitDataDriver == null)
-            transmitDataDriver = TransmitDataDriver.getInstance(BreathTrainActivity.this) ;
+        switch (Global340Driver.getInstance(BreathTrainActivity.this).checkUsbStatus()){
+            case 2:
+                Global340Driver.getInstance(BreathTrainActivity.this).getPermission();
+                startTask();
+                break;
+            case 1:
+                if (!StringUtils.isNotEmpty(ShareUtils.getSerialNumber(BreathTrainActivity.this))){
+                    Global340Driver.getInstance(BreathTrainActivity.this).initDriver() ;
+                    Global340Driver.getInstance(BreathTrainActivity.this).initUart() ;
+                }else {
+                    Global340Driver.getInstance(BreathTrainActivity.this).initDriver() ;
+                }
+                break;
+            case 0:
+                break;
+        }
 
-        if (transmitDataDriver.checkUsbStatus() ==2){
-            error_connect.setVisibility(View.GONE);
-            start_connect.setVisibility(View.VISIBLE);
-            if (errorDialog != null && errorDialog.isShowing()) {
-                errorDialog.dismiss();
-            }
-            transmitDataDriver.getPermission();
-        }*/
+
     }
 
     /**
@@ -416,7 +364,6 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
                 GlobalUsbService.isOpenBreath = false ;
                 ShareUtils.setSerialNumber(BreathTrainActivity.this, "");
                 Toast.makeText(BreathTrainActivity.this, "设备被拔出", Toast.LENGTH_SHORT).show();
-                //ThreadPoolWrap.getThreadPool().removeTask(readThreadData);
                 mHandler.sendEmptyMessage(16) ;
             }
         }
@@ -425,6 +372,10 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
     private Timer mTimer = null ;
     private TimerTask mTimerTask = null;
 
+    /**
+     * 开启定时器
+     * 检测USB是否获取权限
+     */
     private void startTask(){
 
         if (mTimer == null){
@@ -435,13 +386,11 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
             mTimerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    mHandler.sendEmptyMessage(4) ;
+                    mHandler.sendEmptyMessage(24) ;
                 }
             } ;
         }
-
         mTimer.schedule(mTimerTask, 0, 100);
-
     }
 
     private void stopTask(){
@@ -481,12 +430,8 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         super.onDestroy();
         unregisterReceiver(mUsbBroadCaster);
         startService(new Intent(BreathTrainActivity.this,GlobalUsbService.class)) ;
-        mHandler.removeMessages(22);
         mHandler.removeMessages(23);
         mHandler.removeMessages(15);
         mHandler.removeMessages(16);
-
-        //ThreadPoolWrap.getThreadPool().removeTask(readThreadData);
     }
-
 }

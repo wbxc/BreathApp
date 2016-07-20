@@ -21,7 +21,9 @@ import com.hhd.breath.app.BaseDialog;
 import com.hhd.breath.app.BreathApplication;
 import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
+import com.hhd.breath.app.db.CaseBookService;
 import com.hhd.breath.app.db.TrainPlanService;
+import com.hhd.breath.app.model.MedicalHis;
 import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.service.GlobalUsbService;
 import com.hhd.breath.app.tab.ui.BreathCheck;
@@ -49,10 +51,11 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
     protected byte[] readBuffer = new byte[512];
     protected int actualNumBytes = 0;
     private boolean isFlag = false ;
-   // private TransmitDataDriver transmitDataDriver = null;
     private long firstTime = 0;
     private MyHandler mHandler = null;
     private BaseDialog mCommonDialog = null;
+    private List<MedicalHis> medicalHises ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +64,8 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
         mTabWidget = (TabWidget) findViewById(android.R.id.tabs);
         mTabHost.setOnTabChangedListener(this);
         mHandler  = new MyHandler(this) ;
+        medicalHises = new ArrayList<MedicalHis>() ;
+
         CommonValues.BREATH_IS_ACTIVE = true;
         if (isNotEmpty(ShareUtils.getSerialNumber(MainTabHomeActivity.this))){
             GlobalUsbService.isOpenBreath = true ;
@@ -79,7 +84,34 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
         }
         UmengUpdateAgent.update(this) ;
         initEvent();
+        initMedicalHis();
+    }
+    private void initMedicalHis(){
+        medicalHises = new ArrayList<MedicalHis>() ;
+        MedicalHis medicalHis = new MedicalHis() ;
+        medicalHis.setId(String.valueOf(0));
+        medicalHis.setName("哮喘");
+        medicalHis.setType(0);
+        medicalHis.setUserId(ShareUtils.getUserId(MainTabHomeActivity.this));
+        medicalHises.add(medicalHis) ;
 
+        MedicalHis medicalHis1 = new MedicalHis() ;
+        medicalHis1.setId(String.valueOf(1));
+        medicalHis1.setName("慢阻肺");
+        medicalHis1.setType(0);
+        medicalHis1.setUserId(ShareUtils.getUserId(MainTabHomeActivity.this));
+        medicalHises.add(medicalHis1) ;
+
+        MedicalHis medicalHis2 = new MedicalHis() ;
+        medicalHis2.setId(String.valueOf(2));
+        medicalHis2.setName("支气管炎");
+        medicalHis2.setType(0);
+        medicalHis2.setUserId(ShareUtils.getUserId(MainTabHomeActivity.this));
+        medicalHises.add(medicalHis2) ;
+
+        if (!CaseBookService.getInstance(MainTabHomeActivity.this).isHasMedicals(ShareUtils.getUserId(MainTabHomeActivity.this))){
+            CaseBookService.getInstance(MainTabHomeActivity.this).inserts(medicalHises) ;
+        }
     }
 
     private void initEvent(){

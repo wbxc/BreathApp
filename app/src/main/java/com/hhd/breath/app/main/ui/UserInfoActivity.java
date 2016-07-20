@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import com.hhd.breath.app.BaseActivity;
 import com.hhd.breath.app.BreathApplication;
 import com.hhd.breath.app.R;
+import com.hhd.breath.app.adapter.GradViewAdapter;
 import com.hhd.breath.app.db.CaseBookService;
 import com.hhd.breath.app.imp.PerfectInterface;
 import com.hhd.breath.app.model.BreathDataUser;
@@ -66,6 +68,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
+/**
+ * 编辑用户界面
+ * 修改用户信息
+ */
 public class UserInfoActivity extends BaseActivity implements View.OnClickListener {
 
     private TextView textTopText ;
@@ -85,7 +92,6 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private Dialog sexDialog = null ;
     private LinearLayout layoutContent ;
     private NoScrollGridView mNoScrollGridView ;
-    private List<MedicalHis> medicalHises ;
     private TextView medical_flag ;
     private Button layoutExitUser ;
     List<SysDataModel> sysDataModels = new ArrayList<SysDataModel>() ;
@@ -105,6 +111,9 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private Bitmap bitmap;
     private int mSelectIndex = 0 ;
     private String mSexResult = "" ;
+    private List<MedicalHis> medicalHises;
+    private GradViewAdapter mGradViewAdapter ;
+
 
 
     @Override
@@ -142,9 +151,13 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                         mTextAccount.setText(breathUser.getUser_name());
                         mTextBirthday.setText(longTimeToTime(breathUser.getUser_birthday()));
                         mTextSex.setText(breathUser.getUser_sex().equals("0")?"男":"女");
+                        if (CaseBookService.getInstance(UserInfoActivity.this).isHasMedical(ShareUtils.getUserId(UserInfoActivity.this))){
+                            medical_flag.setText("有");
+                        }else {
+                            medical_flag.setText("无");
+                        }
                         break;
                     default:
-
                         break;
                 }
             }
@@ -166,6 +179,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
 
     private  void initData(){
+        medicalHises = new ArrayList<MedicalHis>() ;
+        medicalHises = CaseBookService.getInstance(UserInfoActivity.this).getMedicalHis(ShareUtils.getUserId(UserInfoActivity.this)) ;
         SysDataModel nan = new SysDataModel() ;
         nan.setId(String.valueOf(0));
         nan.setName("男");
@@ -182,6 +197,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     }
 
 
+    private int selectMedical = 0 ;
+    private String user_disease ="0" ;
     @Override
     protected void initView() {
 
@@ -200,6 +217,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         layoutContent = (LinearLayout)findViewById(R.id.content) ;
         medical_flag = (TextView)findViewById(R.id.medical_flag) ;
         layoutExitUser = (Button)findViewById(R.id.layout_exit_user) ;
+        mNoScrollGridView = (NoScrollGridView)findViewById(R.id.gridview) ;
     }
 
     @Override
@@ -214,9 +232,54 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         mLayoutUserName.setOnClickListener(this);
         layoutExitUser.setOnClickListener(this);
         mLayoutUserName.setOnClickListener(this);
+        mLayoutBrMedicalRecord.setOnClickListener(this);
+
         if (StringUtils.isNotEmpty(ShareUtils.getUserPhone(UserInfoActivity.this))){
             mTextAccount.setText(ShareUtils.getUserPhone(UserInfoActivity.this));
         }
+
+        mGradViewAdapter = new GradViewAdapter(UserInfoActivity.this,medicalHises) ;
+        mNoScrollGridView.setAdapter(mGradViewAdapter);
+        mNoScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                temp = position ;
+                if (position<medicalHises.size()) {
+
+
+                    if (medicalHises.get(position).getType() > 0) {
+                        medicalHises.get(position).setType(0);
+                    } else {
+                        medicalHises.get(position).setType(1);
+                    }
+                }
+                UserInfoActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        selectMedical = 0 ;
+                        mGradViewAdapter.refresh(medicalHises);
+
+                        for (int i=0 ; i< medicalHises.size() ; i++){
+                            if (medicalHises.get(i).getType()>0){
+                                user_disease = String.valueOf(medicalHises.get(i).getId()) ;
+                                selectMedical = 1 ;
+                            }
+                        }
+
+                        if (selectMedical>0)
+                            medical_flag.setText("有");
+                        else
+                            medical_flag.setText("无");
+                    }
+                });
+
+            }
+        });
+
+
+
+
     }
 
     @Override
@@ -268,18 +331,11 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
     private void commitUserInfo(){
 
-
-/*        if (mTextSex.getText().toString().trim()!=null ){
-            if (mTextSex.getText().toString().trim().equals("男")){
-                sex = "0"  ;
-            }else {
-                sex = "1" ;
-            }
-
-        }*/
         showProgressDialog(getString(R.string.string_user_commit));
+        CaseBookService.getInstance(UserInfoActivity.this).updateMedicalHis(medicalHises);
+
         ManagerRequest.getInstance().modifyUserInfo(ShareUtils.getUserId(UserInfoActivity.this), urlAvatar,
-                mTextName.getText().toString().trim(), dataBirthday, sex, "", new ManagerRequest.IDataCallBack() {
+                mTextName.getText().toString().trim(), dataBirthday, sex, user_disease, new ManagerRequest.IDataCallBack() {
                     @Override
                     public void onNetError(String msg) {
                         BreathApplication.toast(UserInfoActivity.this, getString(R.string.string_user_commit_error));
