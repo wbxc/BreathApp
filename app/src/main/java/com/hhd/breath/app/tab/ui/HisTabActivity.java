@@ -100,27 +100,12 @@ public class HisTabActivity extends BaseActivity {
     }
 
     private void initData() {
-
-        HisPopupModel hisPopupModel1 = new HisPopupModel();
-        hisPopupModel1.setFlag("0");
-        hisPopupModel1.setName("全部训练");
-        hisPopupModel1.setBreath_type("-1");
-        hisPopupModels.add(hisPopupModel1);
-
-        List<TrainPlan> trainPlanList = TrainPlanService.getInstance(HisTabActivity.this).getTrainPlans(ShareUtils.getUserId(HisTabActivity.this));
-
-        for (int i = 0; i < trainPlanList.size(); i++) {
-            HisPopupModel hisPopupModel = new HisPopupModel();
-            hisPopupModel.setFlag("0");
-            hisPopupModel.setName(trainPlanList.get(i).getName());
-            hisPopupModel.setBreath_type(trainPlanList.get(i).getTrainType());
-            hisPopupModels.add(hisPopupModel);
-        }
-
-
         mShowRecordDayDatas = new ArrayList<BreathHisDataShow>();
         mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, mShowRecordDayDatas);
     }
+
+
+
 
     @Override
     protected void initView() {
@@ -395,6 +380,24 @@ public class HisTabActivity extends BaseActivity {
             CommonValues.check_his_report = false;
 
         }
+        HisPopupModel hisPopupModel1 = new HisPopupModel();
+        hisPopupModel1.setFlag("1");
+        hisPopupModel1.setName("全部训练");
+        hisPopupModel1.setBreath_type("-1");
+        hisPopupModels.clear();
+
+        hisPopupModels.add(hisPopupModel1);
+
+        List<TrainPlan> trainPlanList = TrainPlanService.getInstance(HisTabActivity.this).getTrainPlans(ShareUtils.getUserId(HisTabActivity.this));
+
+        for (int i = 0; i < trainPlanList.size(); i++) {
+            HisPopupModel hisPopupModel = new HisPopupModel();
+            hisPopupModel.setFlag("0");
+            hisPopupModel.setName(trainPlanList.get(i).getName());
+            hisPopupModel.setBreath_type(trainPlanList.get(i).getTrainType());
+            hisPopupModels.add(hisPopupModel);
+        }
+
     }
 
 
@@ -402,11 +405,24 @@ public class HisTabActivity extends BaseActivity {
         if (popupWindow == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = layoutInflater.inflate(R.layout.layout_his_popu, null);
+            RelativeLayout layoutContent = (RelativeLayout) view.findViewById(R.id.layoutContent) ;
+
+            layoutContent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    popupWindow.dismiss();
+                }
+            });
+
+
             popupListView = (ListView) view.findViewById(R.id.listViewPopu);
             popupAdapter = new PopupAdapter(HisTabActivity.this, hisPopupModels);
             popupListView.setAdapter(popupAdapter);
             //UiUtils.dip2px(HisTabActivity.this,213)
             popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        }else {
+            popupAdapter.setPopupHisModels(hisPopupModels);
         }
 
         popupWindow.setFocusable(true);

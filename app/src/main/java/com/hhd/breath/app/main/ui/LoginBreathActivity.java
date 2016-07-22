@@ -161,6 +161,8 @@ public class LoginBreathActivity extends BaseActivity {
                                 Toast.makeText(LoginBreathActivity.this, getResources().getString(R.string.string_user_login_error), Toast.LENGTH_SHORT).show();
                             }
                         });
+                    }else {
+                        BreathApplication.toast(LoginBreathActivity.this,getResources().getString(R.string.string_phone_type_error));
                     }
                 } else {
                     Toast.makeText(LoginBreathActivity.this, getResources().getString(R.string.string_login_error), Toast.LENGTH_SHORT).show();

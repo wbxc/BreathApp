@@ -27,6 +27,7 @@
             android:layout_alignParentRight="true"
             android:layout_width="@dimen/common_dian50"
             android:id="@+id/layoutMeDetails"
+            android:background="@drawable/select_back_re_bg"
             android:layout_height="match_parent">
             <ImageView
                 android:layout_width="wrap_content"

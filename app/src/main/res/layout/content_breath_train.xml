@@ -39,7 +39,7 @@
                         android:layout_centerVertical="true"
                         android:layout_width="wrap_content"
                         android:text="缩唇呼吸训练"
-                        android:textColor="@color/common_color_343434"
+                        android:textColor="@color/common_top_color"
                         android:textSize="22sp"
                         android:id="@+id/train_name"
                         android:layout_marginLeft="15dip"
@@ -71,6 +71,7 @@
                                 android:id="@+id/tvTimeLongLeft"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginLeft="3dip"
                                 android:layout_centerVertical="true"
                                 android:text="训练\n时长"
                                 android:textColor="@color/white"
@@ -82,6 +83,7 @@
                                 android:layout_centerVertical="true"
                                 android:layout_toRightOf="@+id/tvTimeLongLeft"
                                 android:gravity="center"
+
                                 android:id="@+id/time_long"
                                 android:text="01:30"
                                 android:textColor="@color/common_top_color"
@@ -103,6 +105,7 @@
                                 android:layout_centerVertical="true"
                                 android:text="呼吸\n组数"
                                 android:textColor="@color/white"
+                                android:layout_marginLeft="3dip"
                                 android:textSize="@dimen/common_text_14sp"/>
 
 
@@ -114,6 +117,7 @@
                                 android:gravity="center"
                                 android:text="300"
                                 android:id="@+id/zushuo"
+
                                 android:textColor="@color/color_nobreath_bg"
                                 android:textSize="@dimen/common_text_20sp"/>
 
@@ -139,98 +143,50 @@
                             android:textColor="@color/white"
                             android:textSize="@dimen/common_text_14sp"/>
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="@dimen/common_dian20"
+                            android:layout_marginLeft="@dimen/common_dian25"
                             android:layout_toRightOf="@+id/tvDifficulty"
+                            android:id="@+id/layoutLevelContent"
                             android:orientation="vertical">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <TextView
-                                    android:id="@+id/tvControlLeft"
-                                    android:layout_width="@dimen/common_dian50"
-                                    android:layout_height="wrap_content"
-                                    android:text="控制度:"
-                                    android:layout_centerVertical="true"
-                                    android:textSize="@dimen/common_text_14sp"/>
-
-                                <RatingBar
-                                    android:id="@+id/levelControlRa"
-                                    style="@style/level_report_star_Bar"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginLeft="@dimen/common_dian5"
-                                    android:layout_toRightOf="@+id/tvControlLeft"
-                                    android:isIndicator="true"
-                                    android:numStars="3"
-                                    android:rating="0"
-                                    />
-
-                            </RelativeLayout>
-
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/common_dian5">
-
-                                <TextView
-                                    android:id="@+id/tvStengthLeft"
-                                    android:layout_width="@dimen/common_dian50"
-                                    android:layout_height="wrap_content"
-                                    android:text="强  弱:"
-                                    android:layout_centerVertical="true"
-                                    android:textSize="@dimen/common_text_14sp"/>
-
-                                <RatingBar
-                                    android:id="@+id/levelStrengthRa"
-                                    style="@style/level_report_moon_Bar"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginLeft="@dimen/common_dian5"
-                                    android:layout_toRightOf="@+id/tvStengthLeft"
-                                    android:isIndicator="true"
-                                    android:numStars="3"
-                                    android:rating="0"
-                                    />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
+                                android:id="@+id/level"
+                                android:textColor="@color/common_top_color"
+                                android:textSize="16sp"
+                                android:text="Level"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_below="@+id/level"
+                                android:id="@+id/tvLevelFlag"
+                                android:textColor="@color/common_top_color"
+                                android:textSize="20sp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/common_dian5">
+                                android:text="高级"/>
 
-                                <TextView
-                                    android:id="@+id/tvPresnsterLeft"
-                                    android:layout_width="@dimen/common_dian50"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:text="持久力:"
-                                    android:textSize="@dimen/common_text_14sp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1"
+                                android:textColor="@color/common_top_color"
+                                android:textSize="38sp"
+                                android:layout_marginLeft="@dimen/common_dian10"
+                                android:layout_toRightOf="@+id/tvLevelFlag"
+                                android:id="@+id/tvLevelValue"/>
 
-                                <RatingBar
-                                    android:id="@+id/levelPersistentRa"
-                                    style="@style/level_report_sun_Bar"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_marginLeft="@dimen/common_dian5"
-                                    android:layout_toRightOf="@+id/tvPresnsterLeft"
-                                    android:isIndicator="true"
-                                    android:numStars="3"
-                                    android:rating="0"/>
-                            </RelativeLayout>
-                        </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:textColor="@color/common_top_color"
+                                android:textSize="12sp"
+                                android:id="@+id/tvLookIntroductions"
+                                android:layout_below="@+id/tvLevelFlag"
+                                android:layout_marginTop="@dimen/common_dian5"
+                                android:layout_height="wrap_content"
+                                android:text="查看难度说明 >"/>
+                        </RelativeLayout>
                     </RelativeLayout>
                 </LinearLayout>
             </RelativeLayout>

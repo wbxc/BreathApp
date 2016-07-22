@@ -77,6 +77,10 @@ public class BreathRegisterFirst extends BaseActivity implements View.OnClickLis
         String okPassword = edtOkPassword.getText().toString().trim() ;
 
         if (isNotEmpty(phone)){
+            if (!isNumberPhone(phone)){
+                BreathApplication.toast(BreathRegisterFirst.this,getResources().getString(R.string.string_phone_type_error));
+                return;
+            }
             if (isNotEmpty(password)){
                 if (okPassword!=null && okPassword.equals(password)){
 

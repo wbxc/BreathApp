@@ -398,6 +398,10 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
             case R.id.layout_right:
                 Intent intent1 = new Intent() ;
                 intent1.setClass(TrainPlanAdd.this,CreateTrainInstruction.class) ;
+                Bundle bundle = new Bundle() ;
+                bundle.putString("str_top_text","训练模式说明");
+                bundle.putString("request_url","http://101.201.39.122/ftpuser01/app/shuoming.html");
+                intent1.putExtras(bundle) ;
                 startActivity(intent1);
                 break;
 

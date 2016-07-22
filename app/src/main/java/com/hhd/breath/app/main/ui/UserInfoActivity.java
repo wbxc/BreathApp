@@ -48,6 +48,7 @@ import com.hhd.breath.app.widget.CircularImage;
 import com.hhd.breath.app.widget.DatePickerPopWindow;
 import com.hhd.breath.app.widget.NoScrollGridView;
 import com.hhd.breath.app.widget.WheelView;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
@@ -113,6 +114,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     private String mSexResult = "" ;
     private List<MedicalHis> medicalHises;
     private GradViewAdapter mGradViewAdapter ;
+    private DisplayImageOptions.Builder builder ;
 
 
 
@@ -120,6 +122,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
+        builder = new DisplayImageOptions.Builder() ;
+        builder.showImageForEmptyUri(R.mipmap.main_moren).showImageOnFail(R.mipmap.main_moren) ;
         initData();
         initView();
         initEvent();
@@ -146,7 +150,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                     case 200:
                         BreathDataUser breathUser = response.body().getData();
                         urlAvatar = breathUser.getUser_image();
-                        imageLoader.displayImage(breathUser.getUser_image(), imgUserInfo);
+                        imageLoader.displayImage(breathUser.getUser_image(), imgUserInfo,builder.build());
                         mTextName.setText(breathUser.getUser_fullname());
                         mTextAccount.setText(breathUser.getUser_name());
                         mTextBirthday.setText(longTimeToTime(breathUser.getUser_birthday()));
@@ -171,10 +175,8 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onBackPressed() {
+        setResult(10);
         super.onBackPressed();
-        Intent intent = new Intent() ;
-        intent.setClass(UserInfoActivity.this, UserDetailsActivity.class) ;
-        startActivity(intent);
     }
 
 
@@ -292,9 +294,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.back_re:
-                Intent intent = new Intent() ;
-                intent.setClass(UserInfoActivity.this,UserDetailsActivity.class) ;
-                startActivity(intent);
+                setResult(10);
                 UserInfoActivity.this.finish();
                 break;
             case R.id.layout_birthday:

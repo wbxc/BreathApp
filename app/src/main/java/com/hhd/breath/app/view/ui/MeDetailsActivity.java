@@ -20,6 +20,7 @@ import com.hhd.breath.app.main.ui.UserDetailsActivity;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.utils.StringUtils;
 import com.hhd.breath.app.widget.CircularImage;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.fb.FeedbackAgent;
 import com.umeng.message.PushAgent;
@@ -44,12 +45,15 @@ public class MeDetailsActivity extends BaseActivity implements View.OnClickListe
     @Bind(R.id.me_systemsSetting) RelativeLayout systemSetting ;
     @Bind(R.id.back_re) RelativeLayout layoutBack ;
 
+    private DisplayImageOptions.Builder builder ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_me_tab);
         ButterKnife.bind(this);
+        builder = new DisplayImageOptions.Builder() ;
+        builder.showImageForEmptyUri(R.mipmap.main_moren).showImageOnFail(R.mipmap.main_moren) ;
         initView();
         initEvent();
         setUpUmengFeedback();
@@ -59,13 +63,7 @@ public class MeDetailsActivity extends BaseActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         mTopTextView.setText("我");
-        File mFile = new File(Environment.getExternalStorageDirectory().toString() + "/hyTriage/touxiang.jpg") ;
-        if (mFile.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().toString() + "/hyTriage/touxiang.jpg");
-            imgUserAvatar.setImageBitmap(bm);
-        }else {
-            ImageLoader.getInstance().displayImage(ShareUtils.getUserImage(MeDetailsActivity.this),imgUserAvatar);
-        }
+        ImageLoader.getInstance().displayImage(ShareUtils.getUserImage(MeDetailsActivity.this),imgUserAvatar,builder.build());
     }
 
     @Override

@@ -11,16 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
-import com.hhd.breath.app.db.TrainPlanService;
 import com.hhd.breath.app.main.ui.BreathReportActivity;
 import com.hhd.breath.app.model.BreathEngine;
 import com.hhd.breath.app.model.BreathTrainingResult;
 import com.hhd.breath.app.model.TrainPlan;
-import com.hhd.breath.app.model.TrainPlanLog;
 import com.hhd.breath.app.service.UploadDataService;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.wchusbdriver.Global340Driver;
@@ -55,12 +52,10 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     private static final int STATE_DEAD = 4;
     private int GAME_STATE = 0;
     private int PREPARE_GAME_STATE = 0;
-
     private float mCurrentWorldPosition;  // 世界坐标
     private ResourceManager mResourceManager;
     private SceneManager mSceneManager;
     private Scene mScene;
-    //sprites
     private ParallaxBackground mBackground;
     private ArrayList<PipePair> pipePairs = new ArrayList<PipePair>();
     private int mPipeSpawnCount;
@@ -82,10 +77,10 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     private int scoreResult = 0;
     private MyHandler mHandler = null;
     private float globalValue = 0f;
-    private boolean isShow = true;
-    private int shanSum = 0;
     private Dialog trainEndDialog = null;
     private TrainPlan trainPlan;
+    private TimerHandler gameTimer = null;
+
 
     @Override
     protected void onCreate(Bundle pSavedInstanceState) {
@@ -109,6 +104,7 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
             breathEngines.add(breathEngine);
         }
         floats = new ArrayList<Float>();
+        Global340Driver.getInstance(BreathAndEngine.this).setEnableRead(true);
     }
 
 
@@ -116,8 +112,6 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     protected synchronized void onResume() {
         super.onResume();
     }
-
-
     private static class MyHandler extends Handler {
         private WeakReference<BreathAndEngine> reference;
         private BreathAndEngine breathAndEngine;
@@ -157,10 +151,11 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                     BreathAndEngine.this.finish();
                 }
             });
-            btnTrainEnd.setOnClickListener(new View.OnClickListener() {
+
+
+            btnTrainEnd.setOnClickListener(new View.OnClickListener() {    //跳转到查看训练报告界面
                 @Override
                 public void onClick(View v) {
-                    //TrainPlanService.getInstance(BreathAndEngine.this).addTrainLog(trainPlanLog);
                     Intent intent = new Intent();
                     intent.setClass(BreathAndEngine.this, BreathReportActivity.class);
                     //训练建议
@@ -183,15 +178,17 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     }
 
 
+    /**
+     * @return BreathTrainingResult 训练结果
+     */
     private BreathTrainingResult uploadService() {
-
         BreathTrainingResult breathTrainingResult = new BreathTrainingResult();
         breathTrainingResult.setUser_id(ShareUtils.getUserId(BreathAndEngine.this));
         breathTrainingResult.setTrain_group(groupNumbers + "");
         breathTrainingResult.setBreath_type(trainPlan.getTrainType());
         breathTrainingResult.setBreath_name(trainPlan.getName());
         breathTrainingResult.setTrain_last(totalTime1 + "");
-        breathTrainingResult.setTrain_result("12");  // 训练结果
+        breathTrainingResult.setTrain_result("");  // 训练结果
         breathTrainingResult.setDifficulty((scoreResult > 100 ? 0 : (100 - scoreResult)) + "");
         breathTrainingResult.setTrain_time(trainTime + "");
         breathTrainingResult.setSuggestion("");
@@ -217,9 +214,10 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                 return;
             } else {
                 breathEngines.get(mCurrentEngine).setPlayFlag(true);
-                isNoStop = false;
+
             }
         }
+
 
         if (!breathEngines.get(mCurrentEngine).isStopFlag()) {
             if (breathEngines.get(mCurrentEngine).getStopInt() > 0) {
@@ -231,11 +229,10 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                 return;
             } else {
                 breathEngines.get(mCurrentEngine).setStopFlag(true);
-
                 if (mCurrentEngine < (groupNumbers - 1)) {
                     mCurrentEngine++;
                     mSceneManager.displayCurrentGroups(groupNumbers - mCurrentEngine);
-                    isNoStop = true;
+                    isNoStop = true;;
                     mSceneManager.displayCurrentTimes(totalTime);
                     return;
                 } else {
@@ -243,8 +240,12 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                     mSceneManager.displayCurrentGroups(0);
                     mHandler.sendEmptyMessageDelayed(10, 500);
                 }
+
             }
         }
+
+
+
     }
 
 
@@ -266,7 +267,7 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                 }
             };
         }
-        mTimer.schedule(mTimerTask, 1000, 1000);
+        mTimer.schedule(mTimerTask, 0, 1000);
     }
 
 
@@ -284,7 +285,7 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
 
     @Override
     protected void onDestroy() {
-        Global340Driver.getInstance(BreathAndEngine.this).setEnableRead(false);
+        Global340Driver.getInstance(BreathAndEngine.this).setEnableRead(true);
         super.onDestroy();
         mHandler.removeMessages(10);
         stopTimeAccount();
@@ -337,49 +338,6 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     }
 
 
-    private void showBirdPosition() {
-        if (globalValue < 2) {
-            if (birdPosition >= CommonValues.SKY_BIRD_ALLOW) {
-                birdPosition = (int) CommonValues.SKY_BIRD_ALLOW;
-                shanSum = 0;
-                newY = mSceneManager.mBird.move(birdPosition);
-                return;
-            } else if (shanSum < 4) {
-                if (isShow) {
-                    try {
-                        Thread.sleep(50);
-                    } catch (Exception e) {
-                    }
-                    isShow = mSceneManager.mBird.disappearBird();
-                    return;
-                } else {
-                    shanSum++;
-                    try {
-                        Thread.sleep(50);
-                    } catch (Exception e) {
-                    }
-                    isShow = mSceneManager.mBird.showBird();
-                    birdPosition = 250;
-                    newY = mSceneManager.mBird.move(birdPosition);
-                    return;
-                }
-            } else {
-                birdPosition = birdPosition + 3;
-                mSceneManager.mBird.move(birdPosition);
-            }
-        } else if (globalValue < 3) {
-            if (!isShow)
-                isShow = mSceneManager.mBird.showBird();
-            newY = mSceneManager.mBird.move(birdPosition);
-        } else {
-            birdPosition = (int) CommonValues.SKY_BIRD_ALLOW - (globalValue * CommonValues.BIRD_DISTANCE_SPEED);
-            if (!isShow)
-                isShow = mSceneManager.mBird.showBird();
-            newY = mSceneManager.mBird.move(birdPosition);
-        }
-    }
-
-
     private void displayBirdPosition() {
         if (globalValue == 0) {
             newY = mSceneManager.mBird.move(CommonValues.SKY_BIRD_ALLOW);
@@ -394,6 +352,9 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
             return;
         }
     }
+
+    private boolean isBreathShowIngFlag = false ;
+    private boolean isInhelaShowIngFlag = false ;
 
     @Override
     public EngineOptions onCreateEngineOptions() {
@@ -430,6 +391,23 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
             }
 
             private void play(boolean flag) {
+                if (flag){  //呼气
+                    if (!isBreathShowIngFlag){
+                         isBreathShowIngFlag = true ;
+                        mSceneManager.inhaleSprite.setVisible(false);
+                        mSceneManager.breathSprite.setVisible(true);
+                    }
+                    isInhelaShowIngFlag = false ;
+                }else {  //吸气
+                    if (!isInhelaShowIngFlag){
+                        isInhelaShowIngFlag = false ;
+                        mSceneManager.breathSprite.setVisible(false);
+                        mSceneManager.inhaleSprite.setVisible(true);
+                    }
+                    isBreathShowIngFlag = false ;
+
+                }
+
                 mPipeSpawnCount++;
                 if (flag) {
                     if (mPipeSpawnCount > PIPE_SPAWN_INTERVAL) {
@@ -471,24 +449,25 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         options.getAudioOptions().setNeedsSound(true);
         return options;
     }
-    boolean is = false ;
 
+    private void prepareGame() {
+        mScene.detachChild(mSceneManager.initSprite);
+    }
+
+
+    boolean is = false;
     private boolean startFlag = true;
-
-    // private boolean shanFlag = false ;
 
     private void gameOver() {
         GAME_STATE = STATE_DYING;
         mResourceManager.mDieSound.play();
         mSceneManager.mBird.getSprite().stopAnimation();
-
     }
 
     private boolean showFlag = false;
     long tempTime = 0;
 
     private void showText(final String message) {
-
         if (!showFlag) {
             tempTime = System.currentTimeMillis();
             mHandler.post(new Runnable() {
@@ -512,7 +491,6 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         }
     }
 
-    private TimerHandler gameTimer = null;
 
     private void dead() {
         gameTimer = new TimerHandler(1.6f, false, new ITimerCallback() {
@@ -580,12 +558,12 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                 if (touchEvent.isActionDown()) {
                     switch (PREPARE_GAME_STATE) {
                         case 0:
-                            Global340Driver.getInstance(BreathAndEngine.this).setEnableRead(true);
                             mScene.detachChild(mSceneManager.mInstructionsSprite);
                             PREPARE_GAME_STATE = 1;
                             GAME_STATE = PREPARE_GAME_STATE;
                             isNoStop = true;
                             mSceneManager.displayCurrentGroups(groupNumbers);
+                            prepareGame();
                             break;
                     }
                 }
@@ -593,6 +571,7 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
             }
         });
         mSceneManager.displayCurrentGroups(groupNumbers);
+
         return mScene;
     }
 

@@ -231,7 +231,6 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
                     mainTabHomeActivity.hideProgressDialog();
                     String result = Global340Driver.getInstance(mainTabHomeActivity).readSerial();
                     ShareUtils.setSerialNumber(mainTabHomeActivity, result);
-                    BreathApplication.toastTest(mainTabHomeActivity, result + ">>>");
                     break;
 
             }

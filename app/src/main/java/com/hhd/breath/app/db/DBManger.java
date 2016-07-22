@@ -124,20 +124,9 @@ public class DBManger {
                     MEDICAL_HIS_NAME+" VARCHAR ,"+
                     MEDICAL_HIS_TYPE+"  VARCHAR )" ;
 
-
-
-
-
-
-
-
-
-
-
-
+    
     public static String TABLE_HEALTH_DATA = "health_data" ;
     public static String HEALTH_DATA_TIME = "data_time" ;
-    public static String HEALTH_DATA_ID = "data_id";
     public static String HEALTH_DATA_USER_ID = "data_user_id" ;
     public static String HEALTH_DATA_MAX_RATE = "data_max_rate" ;
     public static String HEALTH_DATA_SECOND_VALUE = "data_second_value" ;

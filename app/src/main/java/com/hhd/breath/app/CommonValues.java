@@ -110,7 +110,7 @@ public class CommonValues {
     /**
      * 视野环境创建的宽度和高度
      */
-    public static float CAMERA_WIDTH = 485 ; //485  545
+    public static float CAMERA_WIDTH = 485 ; //485  545 485
     public static float CAMERA_HEIGHT = 900 ; //800 ;
 
 

@@ -340,10 +340,13 @@ public class HealthCheck extends SimpleBaseGameActivity {
 
             SimpleDateFormat spf = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss") ;
             String strTime = spf.format(new Date(System.currentTimeMillis())) ;
-            //strTime = strTime.substring(5,10) ;
-            strTime = strTime.substring(11,16) ;
-
+            strTime = strTime.substring(5,10) ;
+            //strTime = strTime.substring(11,16) ;
             healthData.setTime(strTime);
+            //HealthDataService.getInstance(HealthCheck.this).add(healthData) ;
+
+
+
             if (HealthDataService.getInstance(HealthCheck.this).add(healthData) ){
                handler.sendEmptyMessage(31) ;
             }else {

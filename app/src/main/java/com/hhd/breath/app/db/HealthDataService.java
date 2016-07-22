@@ -1,5 +1,6 @@
 package com.hhd.breath.app.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -31,6 +32,11 @@ public class HealthDataService {
     }
 
 
+    /**
+     * 检测评估
+     * @param healthData
+     * @return
+     */
     public boolean add(HealthData healthData){
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase() ;
         boolean flag = false ;
@@ -38,17 +44,15 @@ public class HealthDataService {
             db.beginTransaction();
             if (!isExists(db,healthData.getUserId(),healthData.getTime())){
                 db.insert(DBManger.TABLE_HEALTH_DATA, null, healthData.convert(healthData)) ;
-                flag = true ;
             }else {
                 update(db,healthData);
-                flag = true ;
             }
+            flag = true ;
             db.setTransactionSuccessful();
         }catch (Exception e){
-
         }finally {
+            db.endTransaction();
             if (db!=null){
-                db.endTransaction();
                 db.close();
                 db =null ;
             }
@@ -56,16 +60,17 @@ public class HealthDataService {
         return flag ;
     }
 
-    public void update(SQLiteDatabase db,HealthData healthData){
-
-/*        UPDATE table_name
-        SET column1 = value1, column2 = value2...., columnN = valueN
-        WHERE [condition];*/
-
-        String sql = "update "+DBManger.TABLE_HEALTH_DATA +
-                " set "+DBManger.HEALTH_DATA_COMP_VALUE+" =  ?,"+DBManger.HEALTH_DATA_SECOND_VALUE+" = ? ,"+DBManger.HEALTH_DATA_MAX_RATE+" = ?  " +
-                "where "+DBManger.HEALTH_DATA_USER_ID+" = ? and "+DBManger.HEALTH_DATA_TIME+" = ?" ;
-       db.execSQL(sql,new String[]{healthData.getCompValue(),healthData.getSecondValue(),healthData.getMaxRate(),healthData.getUserId(),healthData.getTime()});
+    /**
+     * 评估数据的更新
+     * @param db
+     * @param healthData
+     */
+    private void update(SQLiteDatabase db,HealthData healthData){
+        ContentValues contentValues = new ContentValues() ;
+        contentValues.put(DBManger.HEALTH_DATA_COMP_VALUE,healthData.getCompValue());
+        contentValues.put(DBManger.HEALTH_DATA_SECOND_VALUE,healthData.getSecondValue());
+        contentValues.put(DBManger.HEALTH_DATA_MAX_RATE,healthData.getMaxRate());
+        db.update(DBManger.TABLE_HEALTH_DATA,contentValues,DBManger.HEALTH_DATA_USER_ID+" = ? and "+DBManger.HEALTH_DATA_TIME+" = ?",new String[]{healthData.getUserId(),healthData.getTime()}) ;
     }
 
 
@@ -80,16 +85,18 @@ public class HealthDataService {
             healthDatas = new ArrayList<HealthData>() ;
             db = dbOpenHelper.getReadableDatabase() ;
             cursor = db.rawQuery(sql, new String[]{userId}) ;
-            cursor.moveToFirst() ;
-            while (cursor.moveToNext()){
-                HealthData healthData = new HealthData() ;
-                healthData.setUserId(cursor.getString(cursor.getColumnIndex(DBManger.HEALTH_DATA_USER_ID)));
-                healthData.setTime(cursor.getString(cursor.getColumnIndex(DBManger.HEALTH_DATA_TIME)));
-                healthData.setMaxRate(cursor.getString(cursor.getColumnIndex(DBManger.HEALTH_DATA_MAX_RATE)));
-                healthData.setCompValue(cursor.getString(cursor.getColumnIndex(DBManger.HEALTH_DATA_COMP_VALUE)));
-                healthData.setSecondValue(cursor.getString(cursor.getColumnIndex(DBManger.HEALTH_DATA_SECOND_VALUE)));
-                healthDatas.add(healthData) ;
+            if (cursor!=null){
+                while (cursor.moveToNext()){
+                    HealthData healthData = new HealthData() ;
+                    healthData.setUserId(cursor.getString(cursor.getColumnIndex(DBManger.HEALTH_DATA_USER_ID)));
+                    healthData.setTime(cursor.getString(cursor.getColumnIndex(DBManger.HEALTH_DATA_TIME)));
+                    healthData.setMaxRate(cursor.getString(cursor.getColumnIndex(DBManger.HEALTH_DATA_MAX_RATE)));
+                    healthData.setCompValue(cursor.getString(cursor.getColumnIndex(DBManger.HEALTH_DATA_COMP_VALUE)));
+                    healthData.setSecondValue(cursor.getString(cursor.getColumnIndex(DBManger.HEALTH_DATA_SECOND_VALUE)));
+                    healthDatas.add(healthData) ;
+                }
             }
+
 
         }catch (Exception e){
 
@@ -127,7 +134,6 @@ public class HealthDataService {
             }
         }catch (Exception e){
 
-            Log.e("HealthData","11"+e.getMessage()) ;
         }finally {
             if (cursor!=null){
                 cursor.close();

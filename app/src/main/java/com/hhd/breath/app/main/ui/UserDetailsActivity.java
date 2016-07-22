@@ -1,13 +1,11 @@
 package com.hhd.breath.app.main.ui;
 
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +22,7 @@ import com.hhd.breath.app.model.BreathSuccessUser;
 import com.hhd.breath.app.net.ManagerRequest;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.widget.CircularImage;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
@@ -64,6 +63,7 @@ public class UserDetailsActivity extends BaseActivity {
     @Bind(R.id.medical_flag)
     TextView medical_flag ;
 
+    DisplayImageOptions.Builder builder ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,10 @@ public class UserDetailsActivity extends BaseActivity {
         ButterKnife.bind(this);
         initView();
         initEvent();
+        builder = new DisplayImageOptions.Builder() ;
+        builder.showImageOnFail(R.mipmap.main_moren) ;
+        builder.showImageForEmptyUri(R.mipmap.main_moren) ;
+
         if (isNetworkConnected(UserDetailsActivity.this)) {
             showProgressDialog("获取个人信息");
             userDetail();
@@ -104,7 +108,7 @@ public class UserDetailsActivity extends BaseActivity {
                         tvName.setText(breathDataUser.getUser_fullname());
                         tvBirthday.setText(longTimeToTime(breathDataUser.getUser_birthday()));
                         tvSex.setText(breathDataUser.getUser_sex().equals("0")?"男":"女");
-                        ImageLoader.getInstance().displayImage(breathDataUser.getUser_image(),imgUserAvatar);
+                        ImageLoader.getInstance().displayImage(breathDataUser.getUser_image(),imgUserAvatar,builder.build());
 
                         if (CaseBookService.getInstance(UserDetailsActivity.this).isHasMedical(ShareUtils.getUserId(UserDetailsActivity.this))){
                             medical_flag.setText("有");
@@ -201,9 +205,21 @@ public class UserDetailsActivity extends BaseActivity {
 
                 Intent intent = new Intent();
                 intent.setClass(UserDetailsActivity.this, UserInfoActivity.class);
-                startActivity(intent);
-                UserDetailsActivity.this.finish();
+                startActivityForResult(intent,10);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode){
+            case 10:
+                if (isNetworkConnected(UserDetailsActivity.this)) {
+                    showProgressDialog("获取个人信息");
+                    userDetail();
+                }
+                break;
+        }
     }
 }

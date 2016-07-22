@@ -15,6 +15,7 @@ import com.hhd.breath.app.BaseActivity;
 import com.hhd.breath.app.BreathApplication;
 import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
+import com.hhd.breath.app.andengine.BreathAndEngine;
 import com.hhd.breath.app.db.TrainPlanService;
 import com.hhd.breath.app.main.ui.BreathTrainActivity;
 import com.hhd.breath.app.model.TrainPlan;
@@ -97,6 +98,7 @@ public class BreathTrainPlan extends BaseActivity {
         trainPlans.clear();
         trainPlans = TrainPlanService.getInstance(BreathTrainPlan.this).getTrainPlans(ShareUtils.getUserId(BreathTrainPlan.this)) ;
         trainPlans.add(new TrainPlan()) ;
+
     }
 
     @Override
@@ -127,11 +129,17 @@ public class BreathTrainPlan extends BaseActivity {
                     CommonValues.TOP_PAIR_HEIGHT = CommonValues.CENTER_HEIGHT - CommonValues.CONTROLLER_VALUE - CommonValues.PAIR_WIDTH_CENTER_HEIGHT;
                     ShareUtils.setBrathTime(BreathTrainPlan.this, Integer.parseInt(trainPlans.get(position).getPersistentLevel()));
 
-                    if (Global340Driver.getInstance(BreathTrainPlan.this).checkUsbStatus() == 1) {
+                    Bundle bundle = new Bundle() ;
+                    bundle.putSerializable("train_plan",trainPlans.get(position));
+                    Intent intent = new Intent() ;
+                    intent.setClass(BreathTrainPlan.this, BreathAndEngine.class) ;
+                    intent.putExtras(bundle) ;
+                    startActivity(intent);
+                   /* if (Global340Driver.getInstance(BreathTrainPlan.this).checkUsbStatus() == 1) {
                         BreathTrainActivity.actionStart(BreathTrainPlan.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102), true,trainPlans.get(position));
                     } else {
                         BreathTrainActivity.actionStart(BreathTrainPlan.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102), false,trainPlans.get(position));
-                    }
+                    }*/
                 }
             }
         });
@@ -145,7 +153,8 @@ public class BreathTrainPlan extends BaseActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //initData();
+                        initData();
+                        trainPlanSwipeAdapter.setTrainPlans(trainPlans);
                         layoutSwipe.setRefreshing(false);
                     }
                 }, 500);

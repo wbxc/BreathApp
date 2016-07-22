@@ -163,9 +163,33 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
 
 
-        TrainPlan trainPlan = TrainPlanService.getInstance(getContext()).findTrainPlan(ShareUtils.getUserId(getContext()),"0") ;
-        Log.e("trainPlanLog",""+trainPlan.toString()) ;
+ /*       TrainPlan trainPlan = TrainPlanService.getInstance(getContext()).findTrainPlan(ShareUtils.getUserId(getContext()),"0") ;
 
+
+        TrainPlanService.getInstance(getContext()).countSumTime("100",trainPlan);
+
+
+        TrainPlan trainPlan1 = TrainPlanService.getInstance(getContext()).findTrainPlan(ShareUtils.getUserId(getContext()),"0") ;*/
+
+        List<HealthData> healthDatas = HealthDataService.getInstance(getContext()).findHealths(ShareUtils.getUserId(getContext())) ;
+        Log.e("trainPlanLog",""+healthDatas.size()+">>>.") ;
+
+        HealthData healthData = new HealthData() ;
+        healthData.setUserId(ShareUtils.getUserId(getContext()));
+        healthData.setMaxRate("1900");
+        healthData.setSecondValue("90");
+        healthData.setCompValue("2000");
+
+        SimpleDateFormat spf = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss") ;
+        String strTime = spf.format(new Date(System.currentTimeMillis())) ;
+        strTime = strTime.substring(5,10) ;
+        healthData.setTime(strTime);
+
+
+
+        boolean falg = HealthDataService.getInstance(getContext()).add(healthData) ;
+
+        Log.e("trainPlanLog",""+falg+">>>.") ;
 
        /* List<BreathDetailReport> breathDetailReports = TrainHisService.getInstance(getContext()).findFiveBreathDetailReports("0",ShareUtils.getUserId(getContext())) ;
 

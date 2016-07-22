@@ -70,31 +70,19 @@ public class TrainPlanService {
     }
 
     public void updateTrainPlan(TrainPlan trainPlan) {
-
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
         try {
-
+            db.beginTransaction();
             ContentValues contentValues = new ContentValues() ;
-            contentValues.put(DBManger.TRAIN_PLAN_CUM_TIME,trainPlan.getCumulativeTime());
             contentValues.put(DBManger.TRAIN_PLAN_CONTROL_CURRENT_LEVEL,trainPlan.getCurrentControl());
             contentValues.put(DBManger.TRAIN_PLAN_CONTROL_LEVEL,trainPlan.getControlLevel());
-
             contentValues.put(DBManger.TRAIN_PLAN_STRENGTH_CURRENT_LEVEL,trainPlan.getCurrentStrength());
             contentValues.put(DBManger.TRAIN_PLAN_STRENGTH_LEVEL,trainPlan.getStrengthLevel());
-
             contentValues.put(DBManger.TRAIN_PLAN_PERSISTENT_CURRENT_LEVEL,trainPlan.getCurrentPersistent());
             contentValues.put(DBManger.TRAIN_PLAN_PERSISTENT_LEVEL,trainPlan.getPersistentLevel()) ;
-
-
-
-            db.beginTransaction();
-            db.update(DBManger.TABLE_TRAIN_PLAN,contentValues,DBManger.TRAIN_PLAN_TYPE+" = ? and "+DBManger.TRAIN_PLAN_NAME+" = ?",new String[]{trainPlan.getTrainType(),trainPlan.getName()});
-
+            db.update(DBManger.TABLE_TRAIN_PLAN,contentValues,DBManger.TRAIN_PLAN_USER_ID+" = ? and "+DBManger.TRAIN_PLAN_NAME+" = ?",new String[]{trainPlan.getUserId(),trainPlan.getName()});
             db.setTransactionSuccessful();
-
         } catch (Exception e) {
-
-
         } finally {
             db.endTransaction();
             if (db != null) {
@@ -102,6 +90,37 @@ public class TrainPlanService {
                 db = null;
             }
         }
+    }
+
+
+    /**
+     * 累计训练时间
+     * @param timeLast
+     * @param trainPlan
+     */
+    public void countSumTime(String timeLast , TrainPlan trainPlan){
+
+        SQLiteDatabase db = dbOpenHelper.getWritableDatabase() ;
+
+        try {
+
+            db.beginTransaction();
+            int sum = Integer.parseInt(trainPlan.getCumulativeTime())+Integer.parseInt(timeLast) ;
+            ContentValues contentValues = new ContentValues() ;
+            contentValues.put(DBManger.TRAIN_PLAN_CUM_TIME,String.valueOf(sum));
+            db.update(DBManger.TABLE_TRAIN_PLAN,contentValues,DBManger.TRAIN_PLAN_NAME+" = ?  and "+DBManger.TRAIN_PLAN_USER_ID+" = ?",new String[]{trainPlan.getName(),trainPlan.getUserId()}) ;
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+
+
+        }finally {
+            db.endTransaction();
+            if (db!=null){
+                db.close();
+                db = null;
+            }
+        }
+
     }
 
 
@@ -128,7 +147,6 @@ public class TrainPlanService {
         Cursor cursor = db.rawQuery(sql, new String[]{name, userId});
         if (!cursor.isAfterLast())
             flag = true;
-
         if (cursor != null) {
             cursor.close();
             cursor = null;
@@ -322,14 +340,14 @@ public class TrainPlanService {
      * @param trainPlanLog
      */
     public void addTrainLog(TrainPlanLog trainPlanLog){
-
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase() ;
-
         try {
             db.beginTransaction();
-            if (!isTrainPlanLogExists(db,trainPlanLog)){
+            if (!isTrainPlanLogExists(db,trainPlanLog)){   // 初始化操作
+                trainPlanLog.setTrainTimes(1);
+                trainPlanLog.setDays(1);
                 db.insert(DBManger.TABLE_TRAIN_PLAN_LOG,null,trainPlanLog.toContentValues(trainPlanLog)) ;
-            }else {
+            }else {   // 更新操作
                 addTrainTimes(db,trainPlanLog);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh") ;
                 String dateFlag = sdf.format(new Date(System.currentTimeMillis())) ;
@@ -340,10 +358,7 @@ public class TrainPlanService {
             }
             db.setTransactionSuccessful();
         }catch (Exception e){
-
-            Utils.write("shujuku"+e.getMessage());
         }finally {
-
             db.endTransaction();
             if (db!=null){
                 db.close();
@@ -361,8 +376,8 @@ public class TrainPlanService {
     private boolean isTrainPlanLogExists(SQLiteDatabase db , TrainPlanLog trainPlanLog){
         Cursor cursor = null;
         try {
-            String sql = "select * from  "+DBManger.TABLE_TRAIN_PLAN_LOG +" where "+DBManger.TRAIN_PLAN_LOG_NAME+" = ? and "+DBManger.TRAIN_PLAN_LOG_TRAIN_TYPE+" = ?" ;
-            cursor = db.rawQuery(sql,new String[]{trainPlanLog.getName(),trainPlanLog.getTrainType()}) ;
+            String sql = "select * from  "+DBManger.TABLE_TRAIN_PLAN_LOG +" where "+DBManger.TRAIN_PLAN_LOG_NAME+" = ? and "+DBManger.TRAIN_PLAN_LOG_USER_ID+" = ?" ;
+            cursor = db.rawQuery(sql,new String[]{trainPlanLog.getName(),trainPlanLog.getUserId()}) ;
             if (!cursor.isAfterLast()){
                 return true ;
             }

@@ -32,15 +32,17 @@ public class CreateTrainInstruction extends BaseActivity {
     WebView instructionContent ;
 
     //http://101.201.39.122/ftpuser01/app/shuoming.html
+    private String requestUrl = "" ;
+    private String strTopText="" ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_train_instruction);
         ButterKnife.bind(this);
-
+        requestUrl = getIntent().getExtras().getString("request_url") ;
+        strTopText = getIntent().getExtras().getString("str_top_text") ;
         initEvent();
-
 
     }
 
@@ -49,7 +51,7 @@ public class CreateTrainInstruction extends BaseActivity {
     protected void initEvent() {
         super.initEvent();
 
-        topText.setText("训练模式说明");
+        topText.setText(strTopText);
 
         WebSettings mWebSettings = instructionContent.getSettings();
         mWebSettings.setJavaScriptEnabled(true);
@@ -95,7 +97,7 @@ public class CreateTrainInstruction extends BaseActivity {
                 return super.shouldOverrideUrlLoading(view, url);
             }
         });
-        instructionContent.loadUrl("http://101.201.39.122/ftpuser01/app/shuoming.html");
+        instructionContent.loadUrl(requestUrl);
 
 
         layoutBack.setOnClickListener(new View.OnClickListener() {

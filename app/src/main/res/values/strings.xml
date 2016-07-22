@@ -29,6 +29,7 @@
     <string name="string_login">登录</string>
     <string name="string_login_out">退出登录</string>
     <string name="string_login_error">登录名或密码不能为空</string>
+    <string name="string_reset_pass_success">密码重置成功</string>
     <string name="string_pass_no_same">两次密码不一致</string>
     <string name="string_perfect_userinfo">完善资料</string>
     <string name="string_please_xiqi">请吸气</string>
@@ -50,11 +51,12 @@
     <string name="string_user_commit_success">用户修改成功</string>
     <string name="string_user_commit_error">用户修改失败</string>
     <string name="string_user_login_error">登录失败,请检查账户和网络</string>
-
-
+    <string name="string_phone_type_error">请输入正确的手机号</string>
     <string name="string_xiqi_info">对准呼吸器,缓缓吸气 \n</string>
     <string name="string_huqi_info">对准呼吸器,缓慢呼气</string>
     <string name="string_error_connection">呼吸器链接错误,请重新训练</string>
+
+    <string name="string_look_introductions">等级说明</string>
 
 
     <string name="hui_triage_info">汇呼吸是北京汇创宜医疗科技有限公司专为COPD慢性呼吸疾病、哮喘患者打造的一款便携式智能呼吸功能训练设备，仅与智能手机连接便能随时随地的进行呼吸训练，还能与自己的医生远程互动参与一对一制定的训练课程。</string>

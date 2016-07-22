@@ -93,20 +93,14 @@ public class TrainHisService  {
      * @param data
      */
     public boolean addBreathDetialReport(BreathDetailReport data){
-
         boolean flag = false ;
-
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase() ;
-
         try {
-
             db.beginTransaction();
             db.insert(DBManger.TABLE_TRAIN_HIS,null,data.toContentValues(data)) ;
             db.setTransactionSuccessful();
             flag = true ;
-
         }catch (Exception e){
-
             flag = false ;
         }finally {
             db.endTransaction();
@@ -115,9 +109,7 @@ public class TrainHisService  {
                 db = null ;
             }
         }
-
         return flag ;
-
     }
 
 

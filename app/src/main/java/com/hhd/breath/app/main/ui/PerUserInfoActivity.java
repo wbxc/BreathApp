@@ -44,6 +44,7 @@ import com.hhd.breath.app.widget.CircularImage;
 import com.hhd.breath.app.widget.DatePickerPopWindow;
 import com.hhd.breath.app.widget.NoScrollGridView;
 import com.hhd.breath.app.widget.WheelView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
@@ -508,6 +509,7 @@ public class PerUserInfoActivity extends BaseActivity implements View.OnClickLis
                                   JSONObject jsonData = jsonMessage.getJSONObject(NetConfig.DATA) ;
                                   urlAvatar = jsonData.getString("new_head_url") ;
                                   ShareUtils.setUserId(PerUserInfoActivity.this, jsonData.getString("user_id"));
+                                  ImageLoader.getInstance().displayImage(urlAvatar,imageCircular);
                                   PerUserInfoActivity.this.runOnUiThread(new Runnable() {
                                       @Override
                                       public void run() {
@@ -528,7 +530,6 @@ public class PerUserInfoActivity extends BaseActivity implements View.OnClickLis
                           }
                       }
                   }catch (Exception e){
-
 
                   }
                 }

@@ -31,6 +31,7 @@ import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.service.GlobalUsbService;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.utils.StringUtils;
+import com.hhd.breath.app.view.ui.CreateTrainInstruction;
 import com.hhd.breath.app.wchusbdriver.Global340Driver;
 
 import java.lang.ref.WeakReference;
@@ -73,14 +74,18 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
     private Object ThreadLock = new Object();
     private BreathTrainHandler mHandler = null;
     private Dialog errorDialog = null;
-
-    @Bind(R.id.levelControlRa)
-    RatingBar  levelControlRa ;
-    @Bind(R.id.levelStrengthRa)
-    RatingBar levelStrengthRa ;
-    @Bind(R.id.levelPersistentRa)
-    RatingBar levelPresnsterthRa ;
     private TrainPlan trainPlan ;
+    @Bind(R.id.tvLevelFlag)
+    TextView tvLevelFlag ;
+    @Bind(R.id.tvLevelValue)
+    TextView tvLevelValue ;
+    @Bind(R.id.layoutLevelContent)
+    RelativeLayout layoutLevelContent ;
+
+
+
+
+
 
 
 
@@ -147,17 +152,14 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         backRe.setOnClickListener(this);
         start_connect.setOnClickListener(this);
         error_connect.setOnClickListener(this);
+        layoutLevelContent.setOnClickListener(this);
         trainTimeLong.setText(getTimeLong(timeLong));
         trainGroupNumber.setText(trainPlan.getGroupNumber());
         mBreathExplain.setText(CommonValues.LEVEL_ONE_DS);
         imgConnectionTrainQi.setOnClickListener(this);
-
-
-        levelControlRa.setRating(Float.valueOf(trainPlan.getCurrentControl()));
-        levelStrengthRa.setRating(Float.valueOf(trainPlan.getCurrentStrength()));
-        levelPresnsterthRa.setRating(Float.valueOf(trainPlan.getCurrentPersistent()));
         mTextTrainName.setText(trainPlan.getName());
-
+        int level = Integer.parseInt(trainPlan.getCurrentControl())+(Integer.parseInt(trainPlan.getCurrentStrength())-1)*3+(Integer.parseInt(trainPlan.getCurrentPersistent())-1)*6 ;
+        tvLevelValue.setText(String.valueOf(level));
     }
 
 
@@ -233,6 +235,15 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.img_connect_train_qi:
                 showDialog();
+                break;
+            case R.id.layoutLevelContent:
+                Intent intent = new Intent() ;
+                intent.setClass(BreathTrainActivity.this, CreateTrainInstruction.class) ;
+                Bundle bundle = new Bundle() ;
+                bundle.putString("str_top_text",getResources().getString(R.string.string_look_introductions));
+                bundle.putString("request_url","http://www.baidu.com");
+                intent.putExtras(bundle) ;
+                startActivity(intent);
                 break;
         }
     }

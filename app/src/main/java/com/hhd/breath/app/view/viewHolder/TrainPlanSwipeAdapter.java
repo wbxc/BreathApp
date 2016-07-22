@@ -77,7 +77,7 @@ public class TrainPlanSwipeAdapter extends RecyclerView.Adapter<TrainPlanSwipeAd
             if (trainPlan.getTrainType().equals("0")){
                 holder.tvTrainName.setText(trainPlan.getName());
                 holder.tvCreateTime.setVisibility(View.GONE);
-                holder.tvCumulativeTime.setText("累计训练时间:"+(trainPlan.getCumulativeTime().equals("0")?"00:00:00":sumTimeToStr(trainPlan.getCumulativeTime())));   // 累计时间
+                holder.tvCumulativeTime.setText("累计训练:"+(trainPlan.getCumulativeTime().equals("0")?"00:00:00":sumTimeToStr(trainPlan.getCumulativeTime())));   // 累计时间
                 holder.imgFlag.setImageResource(R.mipmap.icon_init_plan);
             }else {
                 holder.tvTrainName.setText(trainPlan.getName());
@@ -87,9 +87,7 @@ public class TrainPlanSwipeAdapter extends RecyclerView.Adapter<TrainPlanSwipeAd
             }
 
         }
-
         holder.itemView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.layout_swipe_click));
-        //holder.itemView.setBackground();
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

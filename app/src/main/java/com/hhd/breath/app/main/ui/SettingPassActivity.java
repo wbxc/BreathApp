@@ -83,6 +83,7 @@ public class SettingPassActivity extends BaseActivity {
                                     Intent intent = new Intent() ;
                                     intent.setClass(SettingPassActivity.this,LoginBreathActivity.class) ;
                                     startActivity(intent);
+                                    BreathApplication.toast(SettingPassActivity.this,getResources().getString(R.string.string_reset_pass_success));
                                     SettingPassActivity.this.finish();
                                 }
 

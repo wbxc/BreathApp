@@ -92,9 +92,6 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
     private TrainPlanLog trainPlanLog   ;
     private BreathHisLog breathHisLog ;
     private String record_id = "" ;
-
-
-
     private RelativeLayout layoutBack;
     private TextView tvTop;
     private TextView tvScore;
@@ -159,18 +156,12 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
         api = WXAPIFactory.createWXAPI(this, "wx92ff63ca90677197");
         mRecordDayData = (BreathTrainingResult) getIntent().getExtras().getSerializable("breathTrainingData");
         trainPlan = (TrainPlan)getIntent().getExtras().getSerializable("train_plan") ;
-        String trainType = getIntent().getExtras().getString("train_type") ;
-       // trainPlan = TrainPlanService.getInstance(BreathReportActivity.this).findTrainPlan(ShareUtils.getUserId(BreathReportActivity.this),trainType) ;
         timeLast = mRecordDayData.getTrain_last() ;
-
-
         initView();
         initEvent();
         mStatusHeight = Utils.getStatusHeight(this) ;
-
         filepath =CommonValues.PATH_ZIP+mRecordDayData.getUser_id()+"/"+mRecordDayData.getFname();
         file_zip_path = CommonValues.PATH_ZIP+mRecordDayData.getUser_id()+"/"+mRecordDayData.getFname()+"_zip" ;
-
         UploadRecordData.getInstance().setOnUploadProcessListener(new UploadRecordData.OnUploadProcessListener() {
             @Override
             public void onUploadDone(int responseCode, final String message) {
@@ -183,29 +174,20 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                         String id = "" ;
                         try {
                             JSONObject mesJsonObject = new JSONObject(message) ;
-
-                            Utils.write(mesJsonObject.toString());     /////第一个
-
                             if (mesJsonObject.has("code") && mesJsonObject.getString("code").equals("200")){
                                 JSONObject dataJsonObject = mesJsonObject.getJSONObject("data") ;
                                 id = dataJsonObject.getString("id") ;  // 获取到的是
-
                             }
                         }catch (Exception e){
-
-                            Utils.write(e.getMessage());
-
                         }
                         trainPlanLog.setUserId(ShareUtils.getUserId(BreathReportActivity.this));
                         trainPlanLog.setName(trainPlan.getName());
                         trainPlanLog.setTrainType(trainPlan.getTrainType());
-                        trainPlanLog.setTrainTimes(1);
-                        trainPlanLog.setDays(1);
                         trainPlanLog.setTrainStartTime(String.valueOf(System.currentTimeMillis()));
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh") ;
                         trainPlanLog.setTrainDayFlag(simpleDateFormat.format(new Date(System.currentTimeMillis())));
-                        TrainPlanService.getInstance(BreathReportActivity.this).addTrainLog(trainPlanLog);  //本地记录此种模式
-                        Utils.write("数据插入成功");
+                        TrainPlanService.getInstance(BreathReportActivity.this).addTrainLog(trainPlanLog);  //本地记录 记录一次
+                        TrainPlanService.getInstance(BreathReportActivity.this).countSumTime(timeLast,trainPlan); // 训练计划 时间累计
                         Message msg = Message.obtain() ;
                         msg.what = 40 ;
                         msg.obj = id ;
@@ -365,11 +347,6 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                             }
                             break;
                     }
-                    String cumulativeTime = trainPlan.getCumulativeTime() ;
-                    int cumulativeTimeInt = Integer.parseInt(cumulativeTime)+Integer.parseInt(timeLast) ;
-                    trainPlan.setCumulativeTime(String.valueOf(cumulativeTimeInt));
-
-
                     TrainPlanService.getInstance(BreathReportActivity.this).updateTrainPlan(trainPlan) ;
                     // 时间的累加
                 }
@@ -392,10 +369,7 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
             }else {
                 breathHisLog.setTrainResult("继续努力!!");
             }
-
-            //Utils.write(breathHisLog.toString());
             TrainHisService.getInstance(BreathReportActivity.this).addBreathHisLog(breathHisLog);
-
             handler.post(new Runnable() {
                 @Override
                 public void run() {
