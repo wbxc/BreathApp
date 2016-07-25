@@ -87,6 +87,7 @@
     <string name="string_create_myself_train">创建自定义训练</string>
     <string name="string_create_train">创建</string>
     <string name="string_create_train_name">创建训练名称</string>
-
+    <string name="string_train_inhale_tip">吸气时,最大限度地向\n外扩腹,胸部保持不动</string>
+    <string name="string_train_breath_tip">呼气时,最大限度地向\n内收腹,胸部保持不动</string>
 
 </resources>

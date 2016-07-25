@@ -92,7 +92,7 @@ public class CommonValues {
     public static final int NETTYPE_CMNET = 0x03;
     public static final int  SERIAL_COUNT = 6 ; //    serial number
 
-    public static String PATH_ZIP = Environment.getExternalStorageDirectory().toString()+"/Android/data/breath/" ;
+    public static String PATH_ZIP = Environment.getExternalStorageDirectory().toString()+"/Breath/data/breath/" ;
     //public static boolean isOpenBreath = false ;
 
     public static float SKY_HEIGHT = 602f ;

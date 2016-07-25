@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.model.BreathTrainingResult;
+import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.net.NetConfig;
 import com.hhd.breath.app.net.ThreadPoolWrap;
 import com.hhd.breath.app.net.UploadRecordData;
@@ -42,6 +43,7 @@ import java.util.UUID;
 
 public class UploadDataService extends Service {
     BreathTrainingResult breathTrainingResult =null ;
+    TrainPlan trainPlan ;
     private String receiver_success = "com.hhd.breath.upload_success" ;
     private String receiver_fail = "com.hhd.breath.upload.fail" ;
 
@@ -75,6 +77,7 @@ public class UploadDataService extends Service {
     public void onStart(final Intent intent, int startId) {
         super.onStart(intent, startId);
         breathTrainingResult= (BreathTrainingResult) intent.getExtras().getSerializable("breath_result") ;
+        trainPlan = (TrainPlan) intent.getExtras().getSerializable("train_plan") ;
         filepath =CommonValues.PATH_ZIP+breathTrainingResult.getUser_id()+"/"+breathTrainingResult.getFname();
         file_zip_path = CommonValues.PATH_ZIP+breathTrainingResult.getUser_id()+"/"+breathTrainingResult.getFname()+"_zip" ;
 

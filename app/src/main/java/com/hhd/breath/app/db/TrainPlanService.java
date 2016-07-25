@@ -332,9 +332,6 @@ public class TrainPlanService {
     }
 
 
-
-
-
     /**
      * 增加训练类型的日志
      * @param trainPlanLog
@@ -349,7 +346,7 @@ public class TrainPlanService {
                 db.insert(DBManger.TABLE_TRAIN_PLAN_LOG,null,trainPlanLog.toContentValues(trainPlanLog)) ;
             }else {   // 更新操作
                 addTrainTimes(db,trainPlanLog);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh") ;
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd") ;
                 String dateFlag = sdf.format(new Date(System.currentTimeMillis())) ;
                 if (!trainPlanLog.getTrainDayFlag().equals(dateFlag)){
                     trainPlanLog.setTrainDayFlag(dateFlag);
@@ -378,7 +375,7 @@ public class TrainPlanService {
         try {
             String sql = "select * from  "+DBManger.TABLE_TRAIN_PLAN_LOG +" where "+DBManger.TRAIN_PLAN_LOG_NAME+" = ? and "+DBManger.TRAIN_PLAN_LOG_USER_ID+" = ?" ;
             cursor = db.rawQuery(sql,new String[]{trainPlanLog.getName(),trainPlanLog.getUserId()}) ;
-            if (!cursor.isAfterLast()){
+            if (cursor!=null && cursor.getCount()>0){
                 return true ;
             }
         }catch (Exception e){

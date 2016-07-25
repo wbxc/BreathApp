@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -59,7 +60,7 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     private ParallaxBackground mBackground;
     private ArrayList<PipePair> pipePairs = new ArrayList<PipePair>();
     private int mPipeSpawnCount;
-    private static final int PIPE_SPAWN_INTERVAL = 80;
+    private static final int PIPE_SPAWN_INTERVAL = 80;  // 柱子之间的间隔 像素点
     private List<BreathEngine> breathEngines = new ArrayList<BreathEngine>();
     private Timer mTimer = null;
     private TimerTask mTimerTask = null;
@@ -80,6 +81,8 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     private Dialog trainEndDialog = null;
     private TrainPlan trainPlan;
     private TimerHandler gameTimer = null;
+    private String levelValue = "" ;
+    private String levelResult = "" ;
 
 
     @Override
@@ -90,6 +93,16 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         mPauseTime = ShareUtils.getIntervalTime(BreathAndEngine.this);
         mHandler = new MyHandler(this);
         trainPlan = (TrainPlan) getIntent().getExtras().getSerializable("train_plan");
+        int level = Integer.parseInt(trainPlan.getCurrentControl())+(Integer.parseInt(trainPlan.getCurrentStrength())-1)*3+(Integer.parseInt(trainPlan.getCurrentPersistent())-1)*6 ;
+        levelValue = String.valueOf(level) ;
+        if (level<=9){
+            levelResult = "初级" ;
+        }else if (level>9 && level<=18){
+            levelResult="中级" ;
+        }else {
+            levelResult="高级"  ;
+        }
+
         groupNumbers = Integer.parseInt(trainPlan.getGroupNumber());
         mBreathTime = Integer.parseInt(trainPlan.getPersistentLevel());   ///持久力  表现为呼气时间
         mPauseTime = Integer.parseInt(trainPlan.getInspirerTime());
@@ -107,10 +120,166 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         Global340Driver.getInstance(BreathAndEngine.this).setEnableRead(true);
     }
 
+    // 导入资源
+    @Override
+    protected void onCreateResources() {
+        mResourceManager = new ResourceManager(this);
+        mResourceManager.createResources(2);
+    }
+
+    private boolean isBreathShowIngFlag = false ;
+    private boolean isInhelaShowIngFlag = false ;
+
+    @Override
+    public EngineOptions onCreateEngineOptions() {
+
+        //根据给出的高度900  计算出应显示的屏幕的宽度
+        CommonValues.CAMERA_WIDTH = ScreenSizeHelper.calculateScreenWidth(this, CommonValues.CAMERA_HEIGHT);
+        mCamera = new Camera(0, 0, CommonValues.CAMERA_WIDTH, CommonValues.CAMERA_HEIGHT) {
+            @Override
+            public void onUpdate(float pSecondsElapsed) {
+                switch (GAME_STATE) {
+                    case STATE_READY:
+                        ready();
+                        break;
+                    case STATE_PLAYING:
+                        //场景平移
+                        mCurrentWorldPosition -= SCROLL_SPEED;
+                        receiveData();  // globalValue
+                        play(isNoStop);
+                        displayBirdPosition();
+                        break;
+                    case STATE_DYING:
+                        dead();
+                        break;
+                }
+                super.onUpdate(pSecondsElapsed);
+            }
+
+            // 准备阶段
+            private void ready() {
+                mCurrentWorldPosition -= SCROLL_SPEED;
+                if (!mResourceManager.mMusic.isPlaying()) {
+                    mResourceManager.mMusic.play();
+                }
+            }
+
+            private void play(boolean flag) {
+                if (flag){  //呼气
+                    if (!isBreathShowIngFlag){
+                        isBreathShowIngFlag = true ;
+                        mSceneManager.inhaleSprite.setVisible(false);
+                        mSceneManager.breathSprite.setVisible(true);
+                    }
+                    isInhelaShowIngFlag = false ;
+                }else {  //吸气
+                    if (!isInhelaShowIngFlag){
+                        isInhelaShowIngFlag = false ;
+                        mSceneManager.breathSprite.setVisible(false);
+                        mSceneManager.inhaleSprite.setVisible(true);
+                    }
+                    isBreathShowIngFlag = false ;
+
+                }
+                mPipeSpawnCount++;
+                if (!flag) {
+                    if (mPipeSpawnCount > PIPE_SPAWN_INTERVAL) {
+                        mPipeSpawnCount = 0;
+                        spawnNewPipe();
+                    }
+                }
+                for (int i = 0; i < pipePairs.size(); i++) {
+                    if (startFlag) {
+                        startTimeAccount();
+                        trainTime = System.currentTimeMillis() / 1000;
+                        startFlag = false;
+                    }
+                    PipePair pipe = pipePairs.get(i);
+                    if (pipe.isOnScreen()) {
+                        pipe.move(SCROLL_SPEED);
+                        floats.add(globalValue);
+                        switch (pipe.collidesWidth(mSceneManager.mBird.getSprite())) {
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                                showText("");
+                                break;
+                            case 0:
+                                break;
+                        }
+                    } else {
+                        pipe.destroy();
+                        pipePairs.remove(pipe);
+                    }
+                }
+            }
+        };
+        EngineOptions options = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(CommonValues.CAMERA_WIDTH, CommonValues.CAMERA_HEIGHT), mCamera);
+        options.getAudioOptions().setNeedsMusic(true);
+        options.getAudioOptions().setNeedsSound(true);
+        return options;
+    }
+
+    // 创建场景
+    @Override
+    protected Scene onCreateScene() {
+        mBackground = new ParallaxBackground(82 / 255f, 190 / 255f, 206 / 255f) {
+
+            float prevX = 0;
+            float parallaxValueOffset = 0;
+
+            @Override
+            public void onUpdate(float pSecondsElapsed) {
+                switch (GAME_STATE) {
+                    case STATE_READY:
+                    case STATE_PLAYING:
+                        final float cameraCurrentX = mCurrentWorldPosition;
+                        if (prevX != cameraCurrentX) {
+                            parallaxValueOffset += cameraCurrentX - prevX;
+                            this.setParallaxValue(parallaxValueOffset);
+
+                            prevX = cameraCurrentX;
+                        }
+                        GAME_STATE = STATE_PLAYING;
+                        break;
+                }
+                super.onUpdate(pSecondsElapsed);
+            }
+        };
+
+        mSceneManager = new SceneManager(this, mResourceManager, mBackground);
+        mScene = mSceneManager.createScene(totalTime,levelValue,levelResult);
+        mScene.setOnSceneTouchListener(new IOnSceneTouchListener() {
+            @Override
+            public boolean onSceneTouchEvent(Scene scene, TouchEvent touchEvent) {
+
+                if (touchEvent.isActionDown()) {
+                    switch (PREPARE_GAME_STATE) {
+                        case 0:
+                            mScene.detachChild(mSceneManager.mInstructionsSprite);
+                            PREPARE_GAME_STATE = 1;
+                            GAME_STATE = PREPARE_GAME_STATE;
+                            //isNoStop = true;
+                            prepareGame();
+                            mSceneManager.displayCurrentText(getResources().getString(R.string.string_train_inhale_tip)) ;
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
+        mSceneManager.displayCurrentGroups(groupNumbers);
+        //mSceneManager.displayLevel(levelValue,levelResult);
+        return mScene;
+    }
+
+
 
     @Override
     protected synchronized void onResume() {
         super.onResume();
+
     }
     private static class MyHandler extends Handler {
         private WeakReference<BreathAndEngine> reference;
@@ -203,22 +372,6 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
 
     //控制游戏的开始,暂停的操作
     private void controlGamePlay() {
-
-        if (!breathEngines.get(mCurrentEngine).isPlayFlag()) {
-            if (breathEngines.get(mCurrentEngine).getPlayInt() > 0) {
-                isNoStop = true;
-                int play = breathEngines.get(mCurrentEngine).getPlayInt() - 1;
-                breathEngines.get(mCurrentEngine).setPlayInt(play);
-                totalTime--;
-                mSceneManager.displayCurrentTimes(totalTime);
-                return;
-            } else {
-                breathEngines.get(mCurrentEngine).setPlayFlag(true);
-
-            }
-        }
-
-
         if (!breathEngines.get(mCurrentEngine).isStopFlag()) {
             if (breathEngines.get(mCurrentEngine).getStopInt() > 0) {
                 isNoStop = false;
@@ -228,25 +381,45 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                 mSceneManager.displayCurrentTimes(totalTime);
                 return;
             } else {
+                mSceneManager.displayCurrentText(getResources().getString(R.string.string_train_breath_tip)) ;
                 breathEngines.get(mCurrentEngine).setStopFlag(true);
-                if (mCurrentEngine < (groupNumbers - 1)) {
-                    mCurrentEngine++;
-                    mSceneManager.displayCurrentGroups(groupNumbers - mCurrentEngine);
-                    isNoStop = true;;
-                    mSceneManager.displayCurrentTimes(totalTime);
-                    return;
-                } else {
-                    isNoStop = false;
-                    mSceneManager.displayCurrentGroups(0);
-                    mHandler.sendEmptyMessageDelayed(10, 500);
-                }
-
             }
         }
 
 
+        if (!breathEngines.get(mCurrentEngine).isPlayFlag()) {
+            if (breathEngines.get(mCurrentEngine).getPlayInt() > 0) {
+                isNoStop = true;
+                int play = breathEngines.get(mCurrentEngine).getPlayInt() - 1;
+                breathEngines.get(mCurrentEngine).setPlayInt(play);
+
+                if (totalTime!=1){
+                    totalTime--;
+                }
+                mSceneManager.displayCurrentTimes(totalTime);
+                return;
+            } else {
+                breathEngines.get(mCurrentEngine).setPlayFlag(true);
+                if (mCurrentEngine < (groupNumbers - 1)) {
+                    mCurrentEngine++;
+                    mSceneManager.displayCurrentGroups(groupNumbers - mCurrentEngine);
+                    isNoStop = false;;
+                    mSceneManager.displayCurrentTimes(totalTime);
+                    mSceneManager.displayCurrentText(getResources().getString(R.string.string_train_inhale_tip)) ;
+                    return;
+                } else {
+                    isNoStop = true;
+                    mSceneManager.displayCurrentGroups(0);
+                    mSceneManager.displayCurrentTimes(0);
+                    stopTimeAccount() ;
+                    mHandler.sendEmptyMessageDelayed(10, 1000);
+                }
+            }
+        }
+
 
     }
+
 
 
     private void startTimeAccount() {
@@ -342,113 +515,18 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         if (globalValue == 0) {
             newY = mSceneManager.mBird.move(CommonValues.SKY_BIRD_ALLOW);
             return;
-        } else if (globalValue < 3) {
+        }/* else if (globalValue < 3) {
             birdPosition = CommonValues.SKY_BIRD_ALLOW - (CommonValues.BIRD_DISTANCE_SPEED * 1.5f);
             newY = mSceneManager.mBird.move(birdPosition);
             return;
-        } else {
+        } */else {
             birdPosition = CommonValues.SKY_BIRD_ALLOW - (CommonValues.BIRD_DISTANCE_SPEED * globalValue);
             newY = mSceneManager.mBird.move(birdPosition);
             return;
         }
     }
 
-    private boolean isBreathShowIngFlag = false ;
-    private boolean isInhelaShowIngFlag = false ;
 
-    @Override
-    public EngineOptions onCreateEngineOptions() {
-
-        //根据给出的高度900  计算出应显示的屏幕的宽度
-        CommonValues.CAMERA_WIDTH = ScreenSizeHelper.calculateScreenWidth(this, CommonValues.CAMERA_HEIGHT);
-        mCamera = new Camera(0, 0, CommonValues.CAMERA_WIDTH, CommonValues.CAMERA_HEIGHT) {
-            @Override
-            public void onUpdate(float pSecondsElapsed) {
-                switch (GAME_STATE) {
-                    case STATE_READY:
-                        ready();
-                        break;
-                    case STATE_PLAYING:
-                        //场景平移
-                        mCurrentWorldPosition -= SCROLL_SPEED;
-                        receiveData();  // globalValue
-                        play(isNoStop);
-                        displayBirdPosition();
-                        break;
-                    case STATE_DYING:
-                        dead();
-                        break;
-                }
-                super.onUpdate(pSecondsElapsed);
-            }
-
-            // 准备阶段
-            private void ready() {
-                mCurrentWorldPosition -= SCROLL_SPEED;
-                if (!mResourceManager.mMusic.isPlaying()) {
-                    mResourceManager.mMusic.play();
-                }
-            }
-
-            private void play(boolean flag) {
-                if (flag){  //呼气
-                    if (!isBreathShowIngFlag){
-                         isBreathShowIngFlag = true ;
-                        mSceneManager.inhaleSprite.setVisible(false);
-                        mSceneManager.breathSprite.setVisible(true);
-                    }
-                    isInhelaShowIngFlag = false ;
-                }else {  //吸气
-                    if (!isInhelaShowIngFlag){
-                        isInhelaShowIngFlag = false ;
-                        mSceneManager.breathSprite.setVisible(false);
-                        mSceneManager.inhaleSprite.setVisible(true);
-                    }
-                    isBreathShowIngFlag = false ;
-
-                }
-
-                mPipeSpawnCount++;
-                if (flag) {
-                    if (mPipeSpawnCount > PIPE_SPAWN_INTERVAL) {
-                        mPipeSpawnCount = 0;
-                        spawnNewPipe();
-                    }
-                }
-                for (int i = 0; i < pipePairs.size(); i++) {
-                    if (startFlag) {
-                        startTimeAccount();
-                        trainTime = System.currentTimeMillis() / 1000;
-                        startFlag = false;
-                    }
-                    PipePair pipe = pipePairs.get(i);
-                    if (pipe.isOnScreen()) {
-                        pipe.move(SCROLL_SPEED);
-                        floats.add(globalValue);
-                        switch (pipe.collidesWidth(mSceneManager.mBird.getSprite())) {
-                            case 1:
-                            case 2:
-                                showText("碰壁上面");
-                                break;
-                            case 3:
-                            case 4:
-                                showText("碰壁下面");
-                                break;
-                            case 0:
-                                break;
-                        }
-                    } else {
-                        pipe.destroy();
-                        pipePairs.remove(pipe);
-                    }
-                }
-            }
-        };
-        EngineOptions options = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED, new RatioResolutionPolicy(CommonValues.CAMERA_WIDTH, CommonValues.CAMERA_HEIGHT), mCamera);
-        options.getAudioOptions().setNeedsMusic(true);
-        options.getAudioOptions().setNeedsSound(true);
-        return options;
-    }
 
     private void prepareGame() {
         mScene.detachChild(mSceneManager.initSprite);
@@ -515,65 +593,8 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     }
 
 
-    // 导入资源
-    @Override
-    protected void onCreateResources() {
-        mResourceManager = new ResourceManager(this);
-        mResourceManager.createResources(2);
-    }
 
-    // 创建场景
-    @Override
-    protected Scene onCreateScene() {
-        mBackground = new ParallaxBackground(82 / 255f, 190 / 255f, 206 / 255f) {
 
-            float prevX = 0;
-            float parallaxValueOffset = 0;
-
-            @Override
-            public void onUpdate(float pSecondsElapsed) {
-                switch (GAME_STATE) {
-                    case STATE_READY:
-                    case STATE_PLAYING:
-                        final float cameraCurrentX = mCurrentWorldPosition;
-                        if (prevX != cameraCurrentX) {
-                            parallaxValueOffset += cameraCurrentX - prevX;
-                            this.setParallaxValue(parallaxValueOffset);
-
-                            prevX = cameraCurrentX;
-                        }
-                        GAME_STATE = STATE_PLAYING;
-                        break;
-                }
-                super.onUpdate(pSecondsElapsed);
-            }
-        };
-
-        mSceneManager = new SceneManager(this, mResourceManager, mBackground);
-        mScene = mSceneManager.createScene(totalTime);
-        mScene.setOnSceneTouchListener(new IOnSceneTouchListener() {
-            @Override
-            public boolean onSceneTouchEvent(Scene scene, TouchEvent touchEvent) {
-
-                if (touchEvent.isActionDown()) {
-                    switch (PREPARE_GAME_STATE) {
-                        case 0:
-                            mScene.detachChild(mSceneManager.mInstructionsSprite);
-                            PREPARE_GAME_STATE = 1;
-                            GAME_STATE = PREPARE_GAME_STATE;
-                            isNoStop = true;
-                            mSceneManager.displayCurrentGroups(groupNumbers);
-                            prepareGame();
-                            break;
-                    }
-                }
-                return false;
-            }
-        });
-        mSceneManager.displayCurrentGroups(groupNumbers);
-
-        return mScene;
-    }
 
     //
     private void spawnNewPipe() {

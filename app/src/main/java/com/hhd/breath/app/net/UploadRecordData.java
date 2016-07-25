@@ -404,6 +404,9 @@ public class UploadRecordData {
                     sb1.append((char) ss);
                 }
                 result = sb1.toString();
+
+                Log.e("BreathReportActivity","111>>>>>>"+result) ;
+
                 sendMessage(UPLOAD_SUCCESS_CODE, result);
                 return;
             } else {
@@ -412,11 +415,13 @@ public class UploadRecordData {
             }
         } catch (MalformedURLException e) {
             sendMessage(UPLOAD_SERVER_ERROR_CODE, result);
+            Log.e("BreathReportActivity","2222>>>>>>"+e.getMessage()) ;
             e.printStackTrace();
             return;
         } catch (IOException e) {
             sendMessage(UPLOAD_SERVER_ERROR_CODE, result);
             e.printStackTrace();
+            Log.e("BreathReportActivity","111>>>>>>"+e.getMessage()) ;
             return;
         }
     }

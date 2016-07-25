@@ -62,7 +62,7 @@ public class SceneManager {
         this.mResourceManager = mResourceManager;
         this.mParallaxBackground = mParallaxBackground;
     }
-    public Scene createScene(int totalTimes){
+    public Scene createScene(int totalTimes,String levelValue,String levelResult){
         Scene mScene = new Scene() ;
         VertexBufferObjectManager vbo = mContext.getVertexBufferObjectManager() ;
 
@@ -133,7 +133,7 @@ public class SceneManager {
 
 
 
-        displayText = new Text(0,0,mResourceManager.displayFont,"吸气时，最大限度地向\n外扩腹，胸部保持不动",new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager()) ;
+        displayText = new Text(0,0,mResourceManager.displayFont,"对准呼吸器,缓慢吹气\n让小鸟顺利通过障碍物",new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager()) ;
         displayText.setZIndex(3);
        // centerText(displayText);
         displayText.setX(80f);
@@ -141,7 +141,7 @@ public class SceneManager {
         mScene.attachChild(displayText);
 
 
-        displayTime = new Text(0,0,mResourceManager.displayTimeFont,getTimeLong(totalTimes),new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager()) ;
+        displayTime = new Text(0,0,mResourceManager.displayTimeFont,String.valueOf(totalTimes),new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager()) ;
         displayTime.setZIndex(3);
         //leftText(displayTime);
         mScene.attachChild(displayTime);
@@ -199,14 +199,14 @@ public class SceneManager {
         levelText.setX(20f);
         levelText.setY(CommonValues.CAMERA_HEIGHT-115);
 
-        levelFlagText = new Text(0,0,mResourceManager.levelFlagFont,"高级",new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager())  ;
+        levelFlagText = new Text(0,0,mResourceManager.levelFlagFont,levelResult,new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager())  ;
         levelFlagText.setZIndex(3);
         mScene.attachChild(levelFlagText);
         levelFlagText.setX(20f);
         levelFlagText.setY(CommonValues.CAMERA_HEIGHT-90);
 
 
-        levelValueText = new Text(0,0,mResourceManager.levelValueFont,"24",new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager())  ;
+        levelValueText = new Text(0,0,mResourceManager.levelValueFont,levelValue,new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager())  ;
         levelValueText.setZIndex(3);
         mScene.attachChild(levelValueText);
         levelValueText.setX(90f);
@@ -247,8 +247,8 @@ public class SceneManager {
     /**
      * 中间文字显示
      */
-    public void  displayCurrentText(){
-        displayText.setText("");
+    public void  displayCurrentText(String mes){
+        displayText.setText(mes);
 
     }
 
@@ -258,6 +258,13 @@ public class SceneManager {
      */
     public void displayCurrentGroups(int remain){
         displayGroups.setText(""+remain);
+    }
+
+
+    public void displayLevel(String levelValue,String level){
+
+        levelValueText.setText(levelValue);
+        levelFlagText.setText(level);
     }
 
     /**
@@ -303,12 +310,6 @@ public class SceneManager {
 
     private void rightText(Text text){
         text.setX((CommonValues.CAMERA_WIDTH)/6*5 -(text.getWidth()/2));
-    }
-
-
-    public void prepare(){
-
-
     }
 
 

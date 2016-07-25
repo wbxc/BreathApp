@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -136,14 +137,6 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
     @Bind(R.id.tvAverValue) TextView tvAverValue ;
     private String timeLast = "0" ;
 
-
-
-
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,15 +172,21 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                                 id = dataJsonObject.getString("id") ;  // 获取到的是
                             }
                         }catch (Exception e){
+
+                            Log.e("BreathReportActivity","000>>>>"+e.getMessage()) ;
                         }
                         trainPlanLog.setUserId(ShareUtils.getUserId(BreathReportActivity.this));
                         trainPlanLog.setName(trainPlan.getName());
                         trainPlanLog.setTrainType(trainPlan.getTrainType());
                         trainPlanLog.setTrainStartTime(String.valueOf(System.currentTimeMillis()));
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh") ;
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd") ;
                         trainPlanLog.setTrainDayFlag(simpleDateFormat.format(new Date(System.currentTimeMillis())));
                         TrainPlanService.getInstance(BreathReportActivity.this).addTrainLog(trainPlanLog);  //本地记录 记录一次
-                        TrainPlanService.getInstance(BreathReportActivity.this).countSumTime(timeLast,trainPlan); // 训练计划 时间累计
+                        TrainPlanService.getInstance(BreathReportActivity.this).countSumTime(timeLast,trainPlan); // 训练计划 时间累计  //时间累计
+
+
+
+
                         Message msg = Message.obtain() ;
                         msg.what = 40 ;
                         msg.obj = id ;
