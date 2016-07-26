@@ -28,6 +28,9 @@ public class TrainPlan  implements Serializable{
     private String currentStrength;
     private String times ;  //  训练多少次成功后过关
 
+    private String sumTrainTimes ; // 训练的次数
+    private String sumTrainDays ;  // 训练的总天数
+    private String trainDayFlag ;  // 训练的表示
 
 
 
@@ -40,6 +43,30 @@ public class TrainPlan  implements Serializable{
     private String cumulativeTime ;  // 累计时间
     private String trainPlanTypeName ;
 
+
+    public String getSumTrainTimes() {
+        return sumTrainTimes;
+    }
+
+    public void setSumTrainTimes(String sumTrainTimes) {
+        this.sumTrainTimes = sumTrainTimes;
+    }
+
+    public String getSumTrainDays() {
+        return sumTrainDays;
+    }
+
+    public void setSumTrainDays(String sumTrainDays) {
+        this.sumTrainDays = sumTrainDays;
+    }
+
+    public String getTrainDayFlag() {
+        return trainDayFlag;
+    }
+
+    public void setTrainDayFlag(String trainDayFlag) {
+        this.trainDayFlag = trainDayFlag;
+    }
 
     public String getCurrentPersistent() {
         return currentPersistent;
@@ -221,7 +248,9 @@ public class TrainPlan  implements Serializable{
         contentValues.put(DBManger.TRAIN_PLAN_CONTROL_CURRENT_LEVEL,trainPlan.getCurrentControl());
         contentValues.put(DBManger.TRAIN_PLAN_STRENGTH_CURRENT_LEVEL,trainPlan.getCurrentStrength());
         contentValues.put(DBManger.TRAIN_PLAN_PERSISTENT_CURRENT_LEVEL,trainPlan.getCurrentPersistent()) ;
-
+/*        contentValues.put(DBManger.TRAIN_PLAN_SUM_TRAIN_DAYS,trainPlan.getSumTrainDays());
+        contentValues.put(DBManger.TRAIN_PLAN_SUM_TRAIN_TIMES,trainPlan.getSumTrainTimes());
+        contentValues.put(DBManger.TRAIN_PLAN_TRAIN_DAY_FLAG,trainPlan.gettra);*/
         return contentValues ;
     }
 

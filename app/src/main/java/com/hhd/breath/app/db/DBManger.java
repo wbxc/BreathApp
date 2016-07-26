@@ -166,9 +166,14 @@ public class DBManger {
     public static String TABLE_TRAIN_PLAN = "trainPlan" ;
     public static String TRAIN_PLAN_TYPE_NAME = "trainTypeName" ;  // 训练类型名称
 
+    public static String TRAIN_PLAN_SUM_TRAIN_TIMES = "sum_train_times" ;
+    public static String TRAIN_PLAN_SUM_TRAIN_DAYS = "sum_train_days" ;
+    public static String TRAIN_PLAN_TRAIN_DAY_FLAG = "train_day_flag" ;
 
 
-
+    /**
+     * 增加了 天数 和次数的统计
+     */
     public static String  CREATE_TRAIN_PLAN = "CREATE TABLE IF NOT exists "+TABLE_TRAIN_PLAN+" (" +
                 "id integer primary key autoincrement , "+
             TRAIN_PLAN_USER_ID+" VARCHAR,"+
@@ -199,7 +204,6 @@ public class DBManger {
     public static String TRAIN_PLAN_LOG_DAYS = "days" ;
     public static String TRAIN_PLAN_LOG_TRAIN_TIMES = "trainTimes" ;
     public static String TRAIN_PLAN_LOG_START_TIME = "trainStartTime" ;
-
     public static String TRAIN_PLAN_LOG_DAY_FLAG = "train_day_flag" ;
 
     public static String TABLE_TRAIN_PLAN_LOG = "train_plan_log" ;

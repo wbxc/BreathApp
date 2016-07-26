@@ -37,6 +37,11 @@ public class TrainPlanService {
         return instance;
     }
 
+    /**
+     * 创建 训练模式
+     * @param trainPlan
+     * @return
+     */
     public boolean add(TrainPlan trainPlan) {
 
         String sql = "";
@@ -47,18 +52,12 @@ public class TrainPlanService {
             if (!isExits(db, trainPlan.getName(), trainPlan.getUserId())) {
                 db.insert(DBManger.TABLE_TRAIN_PLAN, null, trainPlan.trainPlanToContentValue(trainPlan));
                 flag = true;
-            }/*else {
-                db.update(DBManger.TABLE_TRAIN_PLAN,trainPlan.trainPlanToContentValue(trainPlan),null,null) ;
-            }*/ else {
+            } else {
                 flag = false;
             }
-
             db.setTransactionSuccessful();
-
         } catch (Exception e) {
-
             flag = false;
-
         } finally {
             db.endTransaction();
             if (db != null) {
@@ -80,6 +79,14 @@ public class TrainPlanService {
             contentValues.put(DBManger.TRAIN_PLAN_STRENGTH_LEVEL,trainPlan.getStrengthLevel());
             contentValues.put(DBManger.TRAIN_PLAN_PERSISTENT_CURRENT_LEVEL,trainPlan.getCurrentPersistent());
             contentValues.put(DBManger.TRAIN_PLAN_PERSISTENT_LEVEL,trainPlan.getPersistentLevel()) ;
+            contentValues.put(DBManger.TRAIN_PLAN_SUM_TRAIN_TIMES,trainPlan.getSumTrainTimes()+1);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd") ;
+            String dateFlag = sdf.format(new Date(System.currentTimeMillis())) ;
+            if (!trainPlan.getTrainDayFlag().equals(dateFlag)){
+                trainPlan.setTrainDayFlag(dateFlag);
+                contentValues.put(DBManger.TRAIN_PLAN_SUM_TRAIN_TIMES,trainPlan.getSumTrainTimes()+1);
+            }
             db.update(DBManger.TABLE_TRAIN_PLAN,contentValues,DBManger.TRAIN_PLAN_USER_ID+" = ? and "+DBManger.TRAIN_PLAN_NAME+" = ?",new String[]{trainPlan.getUserId(),trainPlan.getName()});
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -178,28 +185,6 @@ public class TrainPlanService {
             db = null;
         }
         return false;
-    }
-
-    public int delete(String name, String userId) {
-        int flag = 2;
-        SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
-
-        try {
-            db.beginTransaction();
-            String whereSql = DBManger.TRAIN_PLAN_NAME + " = ? and " + DBManger.TRAIN_PLAN_USER_ID + " = ?";
-            flag = db.delete(DBManger.TABLE_TRAIN_PLAN, whereSql, new String[]{name, userId});
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-
-        } finally {
-
-            db.endTransaction();
-            if (db != null) {
-                db.close();
-                db = null;
-            }
-        }
-        return flag;
     }
 
     public TrainPlan find() {
@@ -341,6 +326,9 @@ public class TrainPlanService {
         try {
             db.beginTransaction();
             if (!isTrainPlanLogExists(db,trainPlanLog)){   // 初始化操作
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd") ;
+                trainPlanLog.setTrainDayFlag(simpleDateFormat.format(new Date(System.currentTimeMillis())));
+
                 trainPlanLog.setTrainTimes(1);
                 trainPlanLog.setDays(1);
                 db.insert(DBManger.TABLE_TRAIN_PLAN_LOG,null,trainPlanLog.toContentValues(trainPlanLog)) ;

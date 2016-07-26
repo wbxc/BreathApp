@@ -95,7 +95,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/common_dian39"
                             android:layout_below="@+id/layoutTimeLong"
-                            android:layout_marginTop="@dimen/common_dian15"
+                            android:layout_marginTop="13dip"
                             android:background="@mipmap/icon_report_left">
 
                             <TextView

@@ -13,10 +13,12 @@ import com.hhd.breath.app.R;
 import com.hhd.breath.app.imp.TrainRecordImp;
 import com.hhd.breath.app.model.BreathHisDataShow;
 import com.hhd.breath.app.model.BreathHistoricalData;
+import com.hhd.breath.app.model.HisPopupModel;
 import com.hhd.breath.app.model.RecordUnitData;
 import com.hhd.breath.app.model.RecordDayData;
 import com.hhd.breath.app.utils.ConvertDateUtil;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,14 +31,21 @@ public class TrainExpandableAdapter extends BaseExpandableListAdapter {
     private LayoutInflater mLayoutInflater ;
     private View.OnClickListener mOnclick ;
     private TrainRecordImp mTrainRecordImp ;
+    private HashMap<String,String> mapType = new HashMap<String,String>() ;
 
 
 
 
-    public TrainExpandableAdapter(Context mContext,List<BreathHisDataShow> mTrainRecordDatas){
+    public TrainExpandableAdapter(Context mContext, List<BreathHisDataShow> mTrainRecordDatas, List<HisPopupModel> hisPopupModels){
         this.mContext = mContext ;
         this.mTrainRecordDatas = mTrainRecordDatas ;
         mLayoutInflater = LayoutInflater.from(mContext) ;
+
+        for (int i=0 ; i<hisPopupModels.size() ; i++){
+            mapType.put(hisPopupModels.get(i).getBreath_type(),hisPopupModels.get(i).getName()) ;
+        }
+
+
     }
     public void setmOnclick(View.OnClickListener onclick){
         this.mOnclick = onclick ;
@@ -53,9 +62,14 @@ public class TrainExpandableAdapter extends BaseExpandableListAdapter {
 
 
 
-    public void refresh(List<BreathHisDataShow> mTrainRecordDatas){
+    public void refresh(List<BreathHisDataShow> mTrainRecordDatas,List<HisPopupModel> hisPopupModels){
         this.mTrainRecordDatas = mTrainRecordDatas ;
+        for (int i=0 ; i<hisPopupModels.size() ; i++){
+            mapType.put(hisPopupModels.get(i).getBreath_type(),hisPopupModels.get(i).getName()) ;
+        }
+
         this.notifyDataSetChanged();
+
     }
     // 显示用于分组的视图
     @Override
@@ -134,7 +148,14 @@ public class TrainExpandableAdapter extends BaseExpandableListAdapter {
 
 
             mViewSecond.recordTime.setText(ConvertDateUtil.timestampToTime(mRecordUnitData.getTrain_time()));
-            mViewSecond.recordName.setText("缩唇呼吸训练");
+
+            if (mapType.containsKey(mRecordUnitData.getBreath_type())){
+                mViewSecond.recordName.setText(mapType.get(mRecordUnitData.getBreath_type()));
+            }else {
+                mViewSecond.recordName.setText("缩唇呼吸训练");
+            }
+
+
             mViewSecond.starandRate.setText(mRecordUnitData.getDifficulty());
 
             if (isLastChild){

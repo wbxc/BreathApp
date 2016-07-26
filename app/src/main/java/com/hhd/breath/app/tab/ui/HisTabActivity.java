@@ -101,7 +101,7 @@ public class HisTabActivity extends BaseActivity {
 
     private void initData() {
         mShowRecordDayDatas = new ArrayList<BreathHisDataShow>();
-        mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, mShowRecordDayDatas);
+        mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, mShowRecordDayDatas,hisPopupModels);
     }
 
 
@@ -243,7 +243,7 @@ public class HisTabActivity extends BaseActivity {
                         ThreadPoolWrap.getThreadPool().executeTask(new ShowClass(popupModel));
                     } else {
                         breathResultShow = tempBreathHisShow;
-                        mTrainExpandableAdapter.refresh(breathResultShow);
+                        mTrainExpandableAdapter.refresh(breathResultShow,hisPopupModels);
                         for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
                             mExpandableListView.expandGroup(i);
                         }
@@ -334,7 +334,7 @@ public class HisTabActivity extends BaseActivity {
                                      if (popupModel != null && !popupModel.getBreath_type().equals("-1")) {
                                          ThreadPoolWrap.getThreadPool().executeTask(new ShowClass(popupModel));
                                      } else {
-                                         mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow);
+                                         mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow,hisPopupModels);
                                          mExpandableListView.setAdapter(mTrainExpandableAdapter);
                                          for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
                                              mExpandableListView.expandGroup(i);
@@ -470,7 +470,7 @@ public class HisTabActivity extends BaseActivity {
                                 layoutContent.setVisibility(View.GONE);
                                 history_recordContent.setVisibility(View.VISIBLE);
                             }
-                            mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow);
+                            mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow,hisPopupModels);
                             mExpandableListView.setAdapter(mTrainExpandableAdapter);
 
                             for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
@@ -534,7 +534,7 @@ public class HisTabActivity extends BaseActivity {
                             layoutContent.setVisibility(View.GONE);
                             history_recordContent.setVisibility(View.VISIBLE);
                         }
-                        mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow);
+                        mTrainExpandableAdapter = new TrainExpandableAdapter(HisTabActivity.this, breathResultShow,hisPopupModels);
                         mExpandableListView.setAdapter(mTrainExpandableAdapter);
                         for (int i = 0; i < mTrainExpandableAdapter.getGroupCount(); i++) {
                             mExpandableListView.expandGroup(i);

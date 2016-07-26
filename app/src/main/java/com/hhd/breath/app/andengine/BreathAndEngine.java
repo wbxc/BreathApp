@@ -20,6 +20,7 @@ import com.hhd.breath.app.model.BreathEngine;
 import com.hhd.breath.app.model.BreathTrainingResult;
 import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.service.UploadDataService;
+import com.hhd.breath.app.tab.ui.BreathTrainPlan;
 import com.hhd.breath.app.utils.ShareUtils;
 import com.hhd.breath.app.wchusbdriver.Global340Driver;
 import com.hhd.breath.app.widget.BreathToast;
@@ -83,6 +84,7 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     private TimerHandler gameTimer = null;
     private String levelValue = "" ;
     private String levelResult = "" ;
+    private int musicSwitch  ;
 
 
     @Override
@@ -91,6 +93,7 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         //吸气时间
         mBreathTime = ShareUtils.getBrathTime(BreathAndEngine.this);
         mPauseTime = ShareUtils.getIntervalTime(BreathAndEngine.this);
+        musicSwitch = ShareUtils.getMusicSwitch(BreathAndEngine.this) ;
         mHandler = new MyHandler(this);
         trainPlan = (TrainPlan) getIntent().getExtras().getSerializable("train_plan");
         int level = Integer.parseInt(trainPlan.getCurrentControl())+(Integer.parseInt(trainPlan.getCurrentStrength())-1)*3+(Integer.parseInt(trainPlan.getCurrentPersistent())-1)*6 ;
@@ -118,6 +121,7 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         }
         floats = new ArrayList<Float>();
         Global340Driver.getInstance(BreathAndEngine.this).setEnableRead(true);
+        Log.e("BreathAndEngine","BreathAndEngine"+musicSwitch) ;
     }
 
     // 导入资源
@@ -159,9 +163,18 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
             // 准备阶段
             private void ready() {
                 mCurrentWorldPosition -= SCROLL_SPEED;
-                if (!mResourceManager.mMusic.isPlaying()) {
-                    mResourceManager.mMusic.play();
+
+                if (musicSwitch== 1){  // 打开
+                    if (!mResourceManager.mMusic.isPlaying()) {
+                        mResourceManager.mMusic.play();
+                    }
+                }else {
+
+                    if (mResourceManager.mMusic.isPlaying()){
+                        mResourceManager.mMusic.stop();
+                    }
                 }
+
             }
 
             private void play(boolean flag) {
@@ -260,7 +273,11 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                             mScene.detachChild(mSceneManager.mInstructionsSprite);
                             PREPARE_GAME_STATE = 1;
                             GAME_STATE = PREPARE_GAME_STATE;
-                            //isNoStop = true;
+                            if (musicSwitch== 1){
+                                mResourceManager.mMusic.resume();
+                            }else {
+                                mResourceManager.mMusic.stop();
+                            }
                             prepareGame();
                             mSceneManager.displayCurrentText(getResources().getString(R.string.string_train_inhale_tip)) ;
                             break;
@@ -270,7 +287,6 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
             }
         });
         mSceneManager.displayCurrentGroups(groupNumbers);
-        //mSceneManager.displayLevel(levelValue,levelResult);
         return mScene;
     }
 
@@ -586,7 +602,7 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
      */
     private void restartGame() {
         GAME_STATE = STATE_PLAYING;
-        mResourceManager.mMusic.resume();
+        //mResourceManager.mMusic.resume();
         mSceneManager.mBird.getSprite().animate(25);
         mSceneManager.mBird.getSprite().setZIndex(2);
         mSceneManager.mBird.move(341);

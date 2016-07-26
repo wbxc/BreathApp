@@ -54,6 +54,24 @@ public class ShareUtils {
 
 
 
+    //  间隔时间
+    private static  String  MUSIC_SWITCH = "music_switch" ;
+
+    public static void setMusicSwitch(Context mContext ,int value){
+        SharedPreferences  spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        SharedPreferences.Editor mEditor = spf.edit() ;
+        mEditor.putInt(MUSIC_SWITCH,value) ;
+        mEditor.commit() ;
+    }
+    public static  int getMusicSwitch(Context mContext){
+        SharedPreferences spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        return spf.getInt(MUSIC_SWITCH,1) ;
+    }
+
+
+
+
+
     private static String ACTION_GROUP = "action_group" ;
 
     public static void setActionGroup(Context mContext ,int value){

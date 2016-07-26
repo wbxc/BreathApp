@@ -129,17 +129,17 @@ public class BreathTrainPlan extends BaseActivity {
                     CommonValues.TOP_PAIR_HEIGHT = CommonValues.CENTER_HEIGHT - CommonValues.CONTROLLER_VALUE - CommonValues.PAIR_WIDTH_CENTER_HEIGHT;
                     ShareUtils.setBrathTime(BreathTrainPlan.this, Integer.parseInt(trainPlans.get(position).getPersistentLevel()));
 
-                    Bundle bundle = new Bundle() ;
+ /*                   Bundle bundle = new Bundle() ;
                     bundle.putSerializable("train_plan",trainPlans.get(position));
                     Intent intent = new Intent() ;
                     intent.setClass(BreathTrainPlan.this, BreathAndEngine.class) ;
                     intent.putExtras(bundle) ;
-                    startActivity(intent);
-                   /* if (Global340Driver.getInstance(BreathTrainPlan.this).checkUsbStatus() == 1) {
+                    startActivity(intent);*/
+                    if (Global340Driver.getInstance(BreathTrainPlan.this).checkUsbStatus() == 1) {
                         BreathTrainActivity.actionStart(BreathTrainPlan.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102), true,trainPlans.get(position));
                     } else {
                         BreathTrainActivity.actionStart(BreathTrainPlan.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102), false,trainPlans.get(position));
-                    }*/
+                    }
                 }
             }
         });

@@ -173,20 +173,13 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                             }
                         }catch (Exception e){
 
-                            Log.e("BreathReportActivity","000>>>>"+e.getMessage()) ;
                         }
                         trainPlanLog.setUserId(ShareUtils.getUserId(BreathReportActivity.this));
                         trainPlanLog.setName(trainPlan.getName());
                         trainPlanLog.setTrainType(trainPlan.getTrainType());
                         trainPlanLog.setTrainStartTime(String.valueOf(System.currentTimeMillis()));
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd") ;
-                        trainPlanLog.setTrainDayFlag(simpleDateFormat.format(new Date(System.currentTimeMillis())));
                         TrainPlanService.getInstance(BreathReportActivity.this).addTrainLog(trainPlanLog);  //本地记录 记录一次
                         TrainPlanService.getInstance(BreathReportActivity.this).countSumTime(timeLast,trainPlan); // 训练计划 时间累计  //时间累计
-
-
-
-
                         Message msg = Message.obtain() ;
                         msg.what = 40 ;
                         msg.obj = id ;

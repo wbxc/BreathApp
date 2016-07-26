@@ -1,23 +1,25 @@
 package com.hhd.breath.app.main.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -117,6 +119,13 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+
+        Log.e("onRequest","onRequestPermissionsResult") ;
+    }
 
     private void initData() {
         actionGroupNumber = ShareUtils.getActionGroup(BreathTrainActivity.this);
@@ -241,7 +250,7 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
                 intent.setClass(BreathTrainActivity.this, CreateTrainInstruction.class) ;
                 Bundle bundle = new Bundle() ;
                 bundle.putString("str_top_text",getResources().getString(R.string.string_look_introductions));
-                bundle.putString("request_url","http://www.baidu.com");
+                bundle.putString("request_url","http://101.201.39.122/ftpuser01/app/djsm.html");
                 intent.putExtras(bundle) ;
                 startActivity(intent);
                 break;

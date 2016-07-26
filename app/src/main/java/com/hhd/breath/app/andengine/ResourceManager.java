@@ -117,7 +117,7 @@ public class ResourceManager {
         displayTimeFontText = new StrokeFont(context.getFontManager(),displayTimeTextTexture,typeface,20,true,Color.BLACK,0,Color.BLACK) ;
         displayTimeFontText.load();
 
-        ITexture displayGroupsTexture = new BitmapTextureAtlas(context.getTextureManager(),256,256,TextureOptions.BILINEAR) ;
+        ITexture displayGroupsTexture = new BitmapTextureAtlas(context.getTextureManager(),100,100,TextureOptions.NEAREST) ;
         displayGroupsFont = new StrokeFont(context.getFontManager(),displayGroupsTexture,typeface,45,true,Color.WHITE,1,Color.WHITE) ;
         displayGroupsFont.load();
 
