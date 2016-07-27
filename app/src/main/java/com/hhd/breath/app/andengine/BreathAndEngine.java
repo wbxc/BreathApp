@@ -46,7 +46,7 @@ import java.util.TimerTask;
 public class BreathAndEngine extends SimpleBaseGameActivity {
 
 
-    private static final float SCROLL_SPEED = 2.5f;  //游戏速度
+    private static final float SCROLL_SPEED = 3.8f;  //游戏速度
     private Camera mCamera;
     private static final int STATE_READY = 1;
     private static final int STATE_PLAYING = 2;
@@ -121,7 +121,6 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         }
         floats = new ArrayList<Float>();
         Global340Driver.getInstance(BreathAndEngine.this).setEnableRead(true);
-        Log.e("BreathAndEngine","BreathAndEngine"+musicSwitch) ;
     }
 
     // 导入资源
@@ -138,7 +137,9 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     public EngineOptions onCreateEngineOptions() {
 
         //根据给出的高度900  计算出应显示的屏幕的宽度
-        CommonValues.CAMERA_WIDTH = ScreenSizeHelper.calculateScreenWidth(this, CommonValues.CAMERA_HEIGHT);
+
+        Log.e("CommonValues","CommonValues"+ CommonValues.CAMERA_WIDTH) ;
+
         mCamera = new Camera(0, 0, CommonValues.CAMERA_WIDTH, CommonValues.CAMERA_HEIGHT) {
             @Override
             public void onUpdate(float pSecondsElapsed) {
@@ -237,7 +238,7 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     // 创建场景
     @Override
     protected Scene onCreateScene() {
-        mBackground = new ParallaxBackground(82 / 255f, 190 / 255f, 206 / 255f) {
+        mBackground = new ParallaxBackground(31 / 255f, 186 / 255f, 243 / 255f) {
 
             float prevX = 0;
             float parallaxValueOffset = 0;
@@ -531,11 +532,11 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         if (globalValue == 0) {
             newY = mSceneManager.mBird.move(CommonValues.SKY_BIRD_ALLOW);
             return;
-        }/* else if (globalValue < 3) {
+        } else if (globalValue <= 3) {
             birdPosition = CommonValues.SKY_BIRD_ALLOW - (CommonValues.BIRD_DISTANCE_SPEED * 1.5f);
             newY = mSceneManager.mBird.move(birdPosition);
             return;
-        } */else {
+        } else {
             birdPosition = CommonValues.SKY_BIRD_ALLOW - (CommonValues.BIRD_DISTANCE_SPEED * globalValue);
             newY = mSceneManager.mBird.move(birdPosition);
             return;

@@ -149,12 +149,14 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
         api = WXAPIFactory.createWXAPI(this, "wx92ff63ca90677197");
         mRecordDayData = (BreathTrainingResult) getIntent().getExtras().getSerializable("breathTrainingData");
         trainPlan = (TrainPlan)getIntent().getExtras().getSerializable("train_plan") ;
+        trainPlanLog = TrainPlanService.getInstance(BreathReportActivity.this).findTrainPlanLog(trainPlan.getName(),ShareUtils.getUserId(BreathReportActivity.this)) ;
         timeLast = mRecordDayData.getTrain_last() ;
         initView();
         initEvent();
         mStatusHeight = Utils.getStatusHeight(this) ;
         filepath =CommonValues.PATH_ZIP+mRecordDayData.getUser_id()+"/"+mRecordDayData.getFname();
         file_zip_path = CommonValues.PATH_ZIP+mRecordDayData.getUser_id()+"/"+mRecordDayData.getFname()+"_zip" ;
+        showProgressDialog("");
         UploadRecordData.getInstance().setOnUploadProcessListener(new UploadRecordData.OnUploadProcessListener() {
             @Override
             public void onUploadDone(int responseCode, final String message) {
@@ -174,11 +176,14 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                         }catch (Exception e){
 
                         }
-                        trainPlanLog.setUserId(ShareUtils.getUserId(BreathReportActivity.this));
-                        trainPlanLog.setName(trainPlan.getName());
-                        trainPlanLog.setTrainType(trainPlan.getTrainType());
-                        trainPlanLog.setTrainStartTime(String.valueOf(System.currentTimeMillis()));
+                        if (trainPlanLog==null){
+                            trainPlanLog.setUserId(ShareUtils.getUserId(BreathReportActivity.this));
+                            trainPlanLog.setName(trainPlan.getName());
+                            trainPlanLog.setTrainType(trainPlan.getTrainType());
+                            trainPlanLog.setTrainStartTime(String.valueOf(System.currentTimeMillis()));
+                        }
                         TrainPlanService.getInstance(BreathReportActivity.this).addTrainLog(trainPlanLog);  //本地记录 记录一次
+                        Log.e("BreathReportActivity",trainPlanLog.toString()) ;
                         TrainPlanService.getInstance(BreathReportActivity.this).countSumTime(timeLast,trainPlan); // 训练计划 时间累计  //时间累计
                         Message msg = Message.obtain() ;
                         msg.what = 40 ;
@@ -227,9 +232,12 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                 case 40 :
                     //Toast.makeText(BreathReportActivity.this,"显示40",Toast.LENGTH_SHORT).show();
                     record_id = (String) msg.obj ;
+                    hideProgress();
                     ManagerRequest.getInstance().getRequestNetApi().getBreathDetailReport(record_id).enqueue(new retrofit2.Callback<BreathDetailSuccess>() {
                         @Override
                         public void onResponse(Call<BreathDetailSuccess> call, Response<BreathDetailSuccess> response) {
+
+
 
                             if (response.body().getCode().equals("200")){
 
@@ -240,6 +248,7 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                         }
                         @Override
                         public void onFailure(Call<BreathDetailSuccess> call, Throwable t) {
+
 
                         }
                     });
@@ -252,7 +261,7 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
         @Override
         public void run() {
 
-            TrainPlanLog PlanLog = TrainPlanService.getInstance(BreathReportActivity.this).findTrainPlanLog(trainPlan.getName(),trainPlan.getTrainType()) ;
+            TrainPlanLog PlanLog = TrainPlanService.getInstance(BreathReportActivity.this).findTrainPlanLog(trainPlan.getName(),trainPlan.getUserId()) ;
             List<BreathDetailReport> breathDetailReports = new ArrayList<BreathDetailReport>() ;
             List<BreathDetailReport>  breathDetailReports1 = TrainHisService.getInstance(BreathReportActivity.this).findFiveBreathDetailReports(trainPlan.getTrainType(),ShareUtils.getUserId(BreathReportActivity.this)) ;
             for (int k= 0 ; k <breathDetailReports1.size() ; k++ ){

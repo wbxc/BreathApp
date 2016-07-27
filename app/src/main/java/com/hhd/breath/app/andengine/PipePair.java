@@ -19,7 +19,7 @@ public class PipePair {
 
     protected float PIPE_WIDTH  = CommonValues.CAMERA_WIDTH*0.18f ;
     private float PIPE_HEIGHT = PIPE_WIDTH * 0.46f ;
-    private float height = 602 ;
+    private float height = CommonValues.SKY_HEIGHT ;
 
     // upper pipe
     private static TextureRegion mUpperPipeTexture ;

@@ -45,6 +45,7 @@ public class SceneManager {
 
     protected Sprite inhaleSprite ;
     protected Sprite breathSprite ;
+    private float zi_float = 150f ;
 
 
 
@@ -70,15 +71,17 @@ public class SceneManager {
         mParallaxBackground.attachParallaxEntity(new ParallaxBackground.ParallaxEntity(1,backgroundSprite));
         mScene.setBackground(mParallaxBackground);
         mScene.setBackgroundEnabled(true);
+
+
         //bird
-        float birdStartXOffset = (CommonValues.CAMERA_WIDTH/4) - (Bird.BIRD_WIDTH/2) ;
-        float birdYOffset = (CommonValues.CAMERA_HEIGHT/2)-(Bird.BIRD_HEIGHT/2) ;
+        float birdStartXOffset = (CommonValues.CAMERA_WIDTH/2) - (Bird.BIRD_WIDTH/2) ;
+        float birdYOffset = (CommonValues.CAMERA_HEIGHT/2)-(Bird.BIRD_HEIGHT/2)-130 ;
         mBird = new Bird(birdStartXOffset,birdYOffset,mContext.getVertexBufferObjectManager(),mScene) ;
         //首先加载资源
         //其次将资源加载到场景中
         //200  172
         //250 426
-        mInstructionsSprite = new Sprite(0,0,150,255,mResourceManager.mInstructionsTexture,mContext.getVertexBufferObjectManager()) ;
+        mInstructionsSprite = new Sprite(0,0,332,140,mResourceManager.mInstructionsTexture,mContext.getVertexBufferObjectManager()) ;
         mInstructionsSprite.setZIndex(3);
         mScene.attachChild(mInstructionsSprite);
         centerSprite(mInstructionsSprite) ;
@@ -86,67 +89,92 @@ public class SceneManager {
 
 
 
-        firstLine = new Sprite(0,0,2,80,mResourceManager.mFirstTextureRegion,mContext.getVertexBufferObjectManager()) ;
-        firstLine.setZIndex(3);
-        mScene.attachChild(firstLine);
-        setFirstLine(firstLine);
-        secondLine = new Sprite(0,0,2,80,mResourceManager.mSecondTextureRegion,mContext.getVertexBufferObjectManager()) ;
-        secondLine.setZIndex(3);
-        mScene.attachChild(secondLine);
-        setSecondLine(secondLine);
 
 
 
 
-        tipsSprite = new Sprite(0,0,50,80,mResourceManager.tipsTextureRegion,mContext.getVertexBufferObjectManager()) ;
+
+
+        tipsSprite = new Sprite(0,0,70,112,mResourceManager.tipsTextureRegion,mContext.getVertexBufferObjectManager()) ;
         tipsSprite.setZIndex(3);
         mScene.attachChild(tipsSprite);
-        tipsSprite.setX(20f);
-        tipsSprite.setY(CommonValues.CAMERA_HEIGHT - 250f);
+        tipsSprite.setX(50f);
+        tipsSprite.setY(CommonValues.CAMERA_HEIGHT - 310f);
 
 
-        inhaleSprite = new Sprite(0,0,120,200,mResourceManager.inhaleITextureRegion,mContext.getVertexBufferObjectManager()) ;
-        inhaleSprite.setZIndex(3);
-        mScene.attachChild(inhaleSprite);
-        inhaleSprite.setX(390f);
-        inhaleSprite.setY(CommonValues.CAMERA_HEIGHT - 250f);
-        inhaleSprite.setVisible(false);
+        displayText = new Text(0,0,mResourceManager.displayFont,"对准呼吸器，缓慢吹气\n让小鸟顺利通过障碍物",new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager()) ;
+        displayText.setZIndex(3);
+        // centerText(displayText);
+        displayText.setX(140f);
+        displayText.setY((CommonValues.CAMERA_HEIGHT-290f));
+        mScene.attachChild(displayText);
 
 
 
-        breathSprite = new Sprite(0,0,120,200,mResourceManager.breathITextureRegion,mContext.getVertexBufferObjectManager()) ;
-        breathSprite.setZIndex(3);
-        mScene.attachChild(breathSprite);
-        breathSprite.setX(390f);
-        breathSprite.setY(CommonValues.CAMERA_HEIGHT - 250f);
-        breathSprite.setVisible(false);
 
 
 
 
         // 初始界面的准备图案
-        initSprite = new Sprite(0,0,60,274,mResourceManager.initTextureRegion,mContext.getVertexBufferObjectManager()) ;
+        initSprite = new Sprite(0,0,93,380,mResourceManager.initTextureRegion,mContext.getVertexBufferObjectManager()) ;
         initSprite.setZIndex(3);
         mScene.attachChild(initSprite);
-        initSprite.setX(410f);
-        initSprite.setY(CommonValues.CAMERA_HEIGHT - 274f);
+        initSprite.setX(CommonValues.CAMERA_WIDTH-(150f));
+        initSprite.setY(CommonValues.CAMERA_HEIGHT - 380f);
 
 
 
-        displayText = new Text(0,0,mResourceManager.displayFont,"对准呼吸器,缓慢吹气\n让小鸟顺利通过障碍物",new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager()) ;
-        displayText.setZIndex(3);
-       // centerText(displayText);
-        displayText.setX(80f);
-        displayText.setY((CommonValues.CAMERA_HEIGHT-240));
-        mScene.attachChild(displayText);
 
 
-        displayTime = new Text(0,0,mResourceManager.displayTimeFont,String.valueOf(totalTimes),new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager()) ;
-        displayTime.setZIndex(3);
-        //leftText(displayTime);
-        mScene.attachChild(displayTime);
-        displayTime.setX(170f);
-        displayTime.setY(CommonValues.CAMERA_HEIGHT-115);
+
+        breathSprite = new Sprite(0,0,207,317,mResourceManager.breathITextureRegion,mContext.getVertexBufferObjectManager()) ;
+        breathSprite.setZIndex(3);
+        mScene.attachChild(breathSprite);
+        breathSprite.setX(CommonValues.CAMERA_WIDTH-220f);
+        breathSprite.setY(CommonValues.CAMERA_HEIGHT - 320f);
+        breathSprite.setVisible(false);
+
+        inhaleSprite = new Sprite(0,0,207,317,mResourceManager.inhaleITextureRegion,mContext.getVertexBufferObjectManager()) ;
+        inhaleSprite.setZIndex(3);
+        mScene.attachChild(inhaleSprite);
+        inhaleSprite.setX(CommonValues.CAMERA_WIDTH-220f);
+        inhaleSprite.setY(CommonValues.CAMERA_HEIGHT - 320f);
+        inhaleSprite.setVisible(false);
+
+
+
+        displayDifficultyText = new Text(0,0,mResourceManager.displayDifficultyText,"难度系数",new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager())  ;
+        displayDifficultyText.setZIndex(3);
+        //rightText(displayDifficultyText);
+        displayDifficultyText.setX(50f);
+        displayDifficultyText.setY((CommonValues.CAMERA_HEIGHT-zi_float));
+        mScene.attachChild(displayDifficultyText);
+
+        levelText = new Text(0,0,mResourceManager.levelFont,"Level",new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager())  ;
+        levelText.setZIndex(3);
+        mScene.attachChild(levelText);
+        levelText.setX(50f);
+        levelText.setY(CommonValues.CAMERA_HEIGHT-107);
+
+        levelFlagText = new Text(0,0,mResourceManager.levelFlagFont,levelResult,new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager())  ;
+        levelFlagText.setZIndex(3);
+        mScene.attachChild(levelFlagText);
+        levelFlagText.setX(50f);
+        levelFlagText.setY(CommonValues.CAMERA_HEIGHT-82);
+
+
+        levelValueText = new Text(0,0,mResourceManager.levelValueFont,levelValue,new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager())  ;
+        levelValueText.setZIndex(3);
+        mScene.attachChild(levelValueText);
+        levelValueText.setX(120f);
+        levelValueText.setY(CommonValues.CAMERA_HEIGHT-110);
+
+
+        firstLine = new Sprite(0,0,2,100,mResourceManager.mFirstTextureRegion,mContext.getVertexBufferObjectManager()) ;
+        firstLine.setZIndex(3);
+        mScene.attachChild(firstLine);
+        setFirstLine(firstLine);
+
 
 
 
@@ -155,21 +183,25 @@ public class SceneManager {
         displayTimeText.setZIndex(3);
         //leftText(displayTimeText);
         mScene.attachChild(displayTimeText);
-        displayTimeText.setX(170f);
-        displayTimeText.setY(CommonValues.CAMERA_HEIGHT-145);
+        displayTimeText.setX(230f);
+        displayTimeText.setY(CommonValues.CAMERA_HEIGHT-zi_float);
+
+        displayTime = new Text(0,0,mResourceManager.displayTimeFont,String.valueOf(totalTimes),new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager()) ;
+        displayTime.setZIndex(3);
+        //leftText(displayTime);
+        mScene.attachChild(displayTime);
+        displayTime.setX(230f);
+        displayTime.setY(CommonValues.CAMERA_HEIGHT-110);
+
+        secondLine = new Sprite(0,0,2,100,mResourceManager.mSecondTextureRegion,mContext.getVertexBufferObjectManager()) ;
+        secondLine.setZIndex(3);
+        mScene.attachChild(secondLine);
+        setSecondLine(secondLine);
 
 
 
 
 
-
-
-        displayGroups = new Text(0,(CommonValues.CAMERA_HEIGHT-140),mResourceManager.displayGroupsFont,"30",new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager()) ;
-        displayGroups.setZIndex(3);
-        //centerText(displayGroups);
-        mScene.attachChild(displayGroups);
-        displayGroups.setX(300f);
-        displayGroups.setY(CommonValues.CAMERA_HEIGHT-115);
 
 
 
@@ -178,60 +210,46 @@ public class SceneManager {
 
         //centerText(displayGroupsText);
         mScene.attachChild(displayGroupsText);
-        displayGroupsText.setX(300f);
-        displayGroupsText.setY(CommonValues.CAMERA_HEIGHT-145);
+        displayGroupsText.setX(385f);
+        displayGroupsText.setY(CommonValues.CAMERA_HEIGHT-zi_float);
+
+
+        displayGroups = new Text(0,0,mResourceManager.displayGroupsFont,"30",new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager()) ;
+        displayGroups.setZIndex(3);
+        //centerText(displayGroups);
+        mScene.attachChild(displayGroups);
+        displayGroups.setX(385f);
+        displayGroups.setY(CommonValues.CAMERA_HEIGHT-110f);
 
 
 
-        displayDifficultyText = new Text(0,(CommonValues.CAMERA_HEIGHT-70),mResourceManager.displayDifficultyText,"难度系数",new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager())  ;
-        displayDifficultyText.setZIndex(3);
-        //rightText(displayDifficultyText);
-        displayDifficultyText.setX(20f);
-        displayDifficultyText.setY((CommonValues.CAMERA_HEIGHT-145));
-        mScene.attachChild(displayDifficultyText);
 
 
 
 
-        levelText = new Text(0,0,mResourceManager.levelFont,"Level",new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager())  ;
-        levelText.setZIndex(3);
-        mScene.attachChild(levelText);
-        levelText.setX(20f);
-        levelText.setY(CommonValues.CAMERA_HEIGHT-115);
-
-        levelFlagText = new Text(0,0,mResourceManager.levelFlagFont,levelResult,new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager())  ;
-        levelFlagText.setZIndex(3);
-        mScene.attachChild(levelFlagText);
-        levelFlagText.setX(20f);
-        levelFlagText.setY(CommonValues.CAMERA_HEIGHT-90);
 
 
-        levelValueText = new Text(0,0,mResourceManager.levelValueFont,levelValue,new TextOptions(HorizontalAlign.CENTER),mContext.getVertexBufferObjectManager())  ;
-        levelValueText.setZIndex(3);
-        mScene.attachChild(levelValueText);
-        levelValueText.setX(90f);
-        levelValueText.setY(CommonValues.CAMERA_HEIGHT-115);
 
         return mScene;
     }
     private static void centerSprite(Sprite sprite){
 
         sprite.setX((CommonValues.CAMERA_WIDTH/2) - (sprite.getWidth()/2));
-        sprite.setY((CommonValues.CAMERA_HEIGHT/2) - (sprite.getHeight()/2));
+        sprite.setY((CommonValues.CAMERA_HEIGHT/2) - (sprite.getHeight()/2) -280);
     }
 
     private void setFirstLine(Sprite sprite){
 
         //sprite.setX(((CommonValues.CAMERA_WIDTH)/3)-(sprite.getWidth()/2));
-        sprite.setX(150f) ;
-        sprite.setY((CommonValues.CAMERA_HEIGHT-143));
+        sprite.setX(195f) ;
+        sprite.setY((CommonValues.CAMERA_HEIGHT-zi_float));
 
     }
     private void setSecondLine(Sprite sprite){
 
         //sprite.setX(((CommonValues.CAMERA_WIDTH)/3*2)-(sprite.getWidth()/2));
-        sprite.setX(280f) ;
-        sprite.setY((CommonValues.CAMERA_HEIGHT-143));
+        sprite.setX(358f) ;
+        sprite.setY((CommonValues.CAMERA_HEIGHT-zi_float));
 
     }
 

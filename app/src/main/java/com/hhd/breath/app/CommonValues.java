@@ -95,23 +95,23 @@ public class CommonValues {
     public static String PATH_ZIP = Environment.getExternalStorageDirectory().toString()+"/Breath/data/breath/" ;
     //public static boolean isOpenBreath = false ;
 
-    public static float SKY_HEIGHT = 602f ;
-    public static float SKY_BIRD_ALLOW = 450f ;
+    public static float SKY_HEIGHT =   860;//765;//602f ;
+    public static float SKY_BIRD_ALLOW =  615 ;//450f ;
     public static float SKY_STRENGTH_VALE = 0f ;
     public static float CONTROLLER_VALUE = 0f ;
     public static float TOP_PAIR_HEIGHT  = 0f ;
     public static float BOTTOM_PAIR_HEIGHT = 0f ;
-    public static float PAIR_WIDTH = 82f ;
-    public static float PAIR_WIDTH_CENTER = 88f ;
+    public static float PAIR_WIDTH =  114.8f ;//82f ;
+    public static float PAIR_WIDTH_CENTER =  123f ;//88f ;
     public static float CENTER_HEIGHT = 0f ;
     public static float PAIR_WIDTH_CENTER_HEIGHT = 41f ;
-    public static int BIRD_DISTANCE_SPEED = 4 ;
+    public static int BIRD_DISTANCE_SPEED = 6 ;
 
     /**
      * 视野环境创建的宽度和高度
      */
     public static float CAMERA_WIDTH = 485 ; //485  545 485
-    public static float CAMERA_HEIGHT = 900 ; //800 ;
+    public static float CAMERA_HEIGHT = 1280 ; //800 ;
 
 
     public static String c_l_value = "13" ;

@@ -11,11 +11,14 @@ import org.andengine.audio.sound.SoundFactory;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.StrokeFont;
 import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.Texture;
 import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.TextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.texture.render.RenderTexture;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.color.Color;
 
@@ -59,6 +62,7 @@ public class ResourceManager {
     public ITextureRegion breathITextureRegion ; // 呼气
 
 
+    public static final Color backText = new Color(18/255F, 95/255F, 123/255F, 1.0F);
 
 
 
@@ -74,8 +78,8 @@ public class ResourceManager {
         MusicFactory.setAssetBasePath("sound/");
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("img/");
 
-        //背景
-        mBackgroundBitmapTextureAtlas = new BitmapTextureAtlas(context.getTextureManager(),718,1184, TextureOptions.NEAREST_PREMULTIPLYALPHA) ;
+        //背景718,1184
+        mBackgroundBitmapTextureAtlas = new BitmapTextureAtlas(context.getTextureManager(),768,1280, TextureOptions.NEAREST_PREMULTIPLYALPHA) ;
         //mBackgroundBitmapTextureAtlas = new BitmapTextureAtlas(context.getTextureManager(),683,1280, TextureOptions.NEAREST_PREMULTIPLYALPHA) ;
         //mBackgroundBitmapTextureAtlas = new BitmapTextureAtlas(context.getTextureManager(),1080,1920, TextureOptions.NEAREST_PREMULTIPLYALPHA) ;
         mBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBackgroundBitmapTextureAtlas,context.getAssets(),"background480.png",0,0) ;
@@ -84,7 +88,7 @@ public class ResourceManager {
 
         //开始指令
         //开始的图标
-        BitmapTextureAtlas instructionsTextureAtlas = new BitmapTextureAtlas(context.getTextureManager(),250,426,TextureOptions.BILINEAR) ;
+        BitmapTextureAtlas instructionsTextureAtlas = new BitmapTextureAtlas(context.getTextureManager(),332,140,TextureOptions.BILINEAR) ;
         mInstructionsTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(instructionsTextureAtlas,context,"instructions.png",0,0) ;
         instructionsTextureAtlas.load();
 
@@ -104,31 +108,33 @@ public class ResourceManager {
        // Typeface typeface = Typeface.DEFAULT ;
         Typeface typeface = Typeface.defaultFromStyle(Typeface.NORMAL) ;
         //Typeface typeface = Typeface.createFromAsset(context.getAssets(),"flappy.ttf") ;
-        ITexture texture = new BitmapTextureAtlas(context.getTextureManager(),256,256,TextureOptions.BILINEAR) ;
-        displayFont = new StrokeFont(context.getFontManager(),texture,typeface,30,true, Color.WHITE,1,Color.WHITE) ;
+        ITexture texture = new RenderTexture(context.getTextureManager(),400,256,TextureOptions.BILINEAR) ;
+        //ITexture texture1 = new BitmapTextureAtlas(context.getTextureManager(),256,256,TextureOptions.BILINEAR) ;
+        displayFont = new StrokeFont(context.getFontManager(),texture,typeface,35,true, Color.WHITE,1,Color.WHITE) ;
         displayFont.load();
 
-        ITexture displayTimeTexture = new BitmapTextureAtlas(context.getTextureManager(),256,256,TextureOptions.BILINEAR) ;
-        displayTimeFont = new StrokeFont(context.getFontManager(),displayTimeTexture,typeface,45,true,Color.WHITE,1,Color.WHITE) ;
+        ITexture displayTimeTexture = new RenderTexture(context.getTextureManager(),256,256,TextureOptions.BILINEAR) ;
+        displayTimeFont = new StrokeFont(context.getFontManager(),displayTimeTexture,typeface,60,true,Color.WHITE,1,Color.WHITE) ;
         displayTimeFont.load();
 
         //剩余时长
         ITexture displayTimeTextTexture = new BitmapTextureAtlas(context.getTextureManager(),256,256,TextureOptions.BILINEAR) ;
-        displayTimeFontText = new StrokeFont(context.getFontManager(),displayTimeTextTexture,typeface,20,true,Color.BLACK,0,Color.BLACK) ;
+        displayTimeFontText = new StrokeFont(context.getFontManager(),displayTimeTextTexture,typeface,25,true,backText,0.5f,backText) ;
         displayTimeFontText.load();
 
-        ITexture displayGroupsTexture = new BitmapTextureAtlas(context.getTextureManager(),100,100,TextureOptions.NEAREST) ;
-        displayGroupsFont = new StrokeFont(context.getFontManager(),displayGroupsTexture,typeface,45,true,Color.WHITE,1,Color.WHITE) ;
+        //Texture displayGroupsTexture =  new Texture(256, 256, TextureOptions.DEFAULT);
+        Texture displayGroupsTexture = new RenderTexture(context.getTextureManager(),400,256,TextureOptions.NEAREST) ;
+        displayGroupsFont = new StrokeFont(context.getFontManager(),displayGroupsTexture,typeface,60,true,Color.WHITE,1,Color.WHITE) ;
         displayGroupsFont.load();
 
         //剩余组数
         ITexture displayGroupsTextTexture = new BitmapTextureAtlas(context.getTextureManager(),256,256,TextureOptions.BILINEAR) ;
-        displayGroupsFontText = new StrokeFont(context.getFontManager(),displayGroupsTextTexture,typeface,20,true,Color.BLACK,0,Color.BLACK) ;
+        displayGroupsFontText = new StrokeFont(context.getFontManager(),displayGroupsTextTexture,typeface,25,true,backText,0.5f,backText) ;
         displayGroupsFontText.load();
 
         //难度系数
         ITexture displayDifficultyTextTexture = new BitmapTextureAtlas(context.getTextureManager(),256,256,TextureOptions.BILINEAR) ;
-        displayDifficultyText = new StrokeFont(context.getFontManager(),displayDifficultyTextTexture,typeface,20,true,Color.BLACK,0,Color.BLACK) ;
+        displayDifficultyText = new StrokeFont(context.getFontManager(),displayDifficultyTextTexture,typeface,25,true,backText,0.5f,backText) ;
         displayDifficultyText.load();
 
         ITexture levelITexture = new BitmapTextureAtlas(context.getTextureManager(),256,256,TextureOptions.BILINEAR) ;
@@ -142,13 +148,8 @@ public class ResourceManager {
         levelFlagFont.load();
 
         ITexture levelValueITexture = new BitmapTextureAtlas(context.getTextureManager(),256,256,TextureOptions.BILINEAR) ;
-        levelValueFont = new StrokeFont(context.getFontManager(),levelValueITexture,typeface,45,true,Color.WHITE,1,Color.WHITE) ;
+        levelValueFont = new StrokeFont(context.getFontManager(),levelValueITexture,typeface,60,true,Color.WHITE,1,Color.WHITE) ;
         levelValueFont.load();
-
-
-
-
-
 
         //tips
         BitmapTextureAtlas tipsTextureAtlas = new BitmapTextureAtlas(context.getTextureManager(),103,164,TextureOptions.BILINEAR) ;

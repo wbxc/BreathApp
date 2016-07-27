@@ -24,8 +24,8 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
  */
 public class Bird {
 
-    public static final float BITMAP_WIDTH = 1047f ;
-    public static final float BITMAP_HEIGHT = 903f ;
+    public static final float BITMAP_WIDTH = 1500f;//1047f ;
+    public static final float BITMAP_HEIGHT = 1294 ;//903f ;
 
     public static final float BIRD_WIDTH = 55.8f ;
     public static final float BIRD_HEIGHT = 40f ;
@@ -62,7 +62,7 @@ public class Bird {
         this.mBirdXOffset = mBirdXOffset ;
         this.mBirdYOffset = mBirdYOffset ;
 
-        mSprite = new AnimatedSprite(mBirdXOffset,mBirdYOffset,55.8f,40,mBirdTextureRegion,mVertexBufferObjectManager) ;
+        mSprite = new AnimatedSprite(mBirdXOffset,mBirdYOffset,83f,60,mBirdTextureRegion,mVertexBufferObjectManager) ;
         mSprite.animate(25);
         mSprite.setZIndex(2);
         this.mScene = mScene ;

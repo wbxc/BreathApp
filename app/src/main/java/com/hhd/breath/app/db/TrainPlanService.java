@@ -328,21 +328,18 @@ public class TrainPlanService {
             if (!isTrainPlanLogExists(db,trainPlanLog)){   // 初始化操作
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd") ;
                 trainPlanLog.setTrainDayFlag(simpleDateFormat.format(new Date(System.currentTimeMillis())));
-
                 trainPlanLog.setTrainTimes(1);
                 trainPlanLog.setDays(1);
                 db.insert(DBManger.TABLE_TRAIN_PLAN_LOG,null,trainPlanLog.toContentValues(trainPlanLog)) ;
+                Log.e("trainPlanLog","11111") ;
             }else {   // 更新操作
                 addTrainTimes(db,trainPlanLog);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd") ;
-                String dateFlag = sdf.format(new Date(System.currentTimeMillis())) ;
-                if (!trainPlanLog.getTrainDayFlag().equals(dateFlag)){
-                    trainPlanLog.setTrainDayFlag(dateFlag);
-                    addTrainDays(db,trainPlanLog);
-                }
+
+                Log.e("trainPlanLog","222") ;
             }
             db.setTransactionSuccessful();
         }catch (Exception e){
+            Log.e("trainPlanLog",e.getMessage()) ;
         }finally {
             db.endTransaction();
             if (db!=null){
@@ -398,16 +395,20 @@ public class TrainPlanService {
 
     // 训练次数累计增加一个
     private void addTrainTimes(SQLiteDatabase db,TrainPlanLog trainPlanLog){
-        String updateSql = "update "+DBManger.TABLE_TRAIN_PLAN_LOG+
-                " SET "+DBManger.TRAIN_PLAN_LOG_TRAIN_TIMES +" = '"+(trainPlanLog.getTrainTimes()+1)+"'" +
-                " where "+DBManger.TRAIN_PLAN_LOG_NAME+" ='"+trainPlanLog.getName()+"' and "+DBManger.TRAIN_PLAN_LOG_TRAIN_TYPE+" = '"+trainPlanLog.getTrainType()+"'" ;
-        db.execSQL(updateSql);
+        ContentValues contentValues = new ContentValues() ;
+        contentValues.put(DBManger.TRAIN_PLAN_LOG_TRAIN_TIMES,(trainPlanLog.getTrainTimes()+1));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd") ;
+        String dateFlag = sdf.format(new Date(System.currentTimeMillis())) ;
+        if (!trainPlanLog.getTrainDayFlag().equals(dateFlag)){
+            contentValues.put(DBManger.TRAIN_PLAN_LOG_DAY_FLAG,dateFlag);
+            contentValues.put(DBManger.TRAIN_PLAN_LOG_DAYS,(trainPlanLog.getDays()+1));
+        }
+        db.update(DBManger.TABLE_TRAIN_PLAN_LOG,contentValues,DBManger.TRAIN_PLAN_LOG_NAME+" = ? and "+DBManger.TRAIN_PLAN_LOG_USER_ID+" = ?",new String[]{trainPlanLog.getName(),trainPlanLog.getUserId()}) ;
     }
 
 
     // 天累计
     private void addTrainDays(SQLiteDatabase db,TrainPlanLog trainPlanLog){
-        db.beginTransaction();
         String update = "update "+DBManger.TABLE_TRAIN_PLAN_LOG+
                 " SET "+DBManger.TRAIN_PLAN_LOG_DAYS+" = '"+(trainPlanLog.getDays()+1)+"'"+"," + DBManger.TRAIN_PLAN_LOG_DAY_FLAG+" = '"+trainPlanLog.getTrainDayFlag()+"'"+
                 " where "+DBManger.TRAIN_PLAN_NAME+" = '"+trainPlanLog.getName()+"' and "+DBManger.TRAIN_PLAN_LOG_TRAIN_TYPE+" = '"+trainPlanLog.getTrainType()+"'" ;
@@ -445,18 +446,18 @@ public class TrainPlanService {
     /**
      * 查询trainPlanLog
      * @param name
-     * @param type
+     * @param userId
      * @return
      */
-    public TrainPlanLog findTrainPlanLog(String name , String type){
+    public TrainPlanLog findTrainPlanLog(String name , String userId){
 
-        String sql = "select * from  "+DBManger.TABLE_TRAIN_PLAN_LOG+" where "+DBManger.TRAIN_PLAN_LOG_TRAIN_TYPE+" = ? and "+DBManger.TRAIN_PLAN_LOG_NAME+" = ?" ;
+        String sql = "select * from  "+DBManger.TABLE_TRAIN_PLAN_LOG+" where "+DBManger.TRAIN_PLAN_LOG_USER_ID+" = ? and "+DBManger.TRAIN_PLAN_LOG_NAME+" = ?" ;
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase() ;
         Cursor cursor = null;
         TrainPlanLog trainPlanLog = null ;
 
         try {
-            cursor = db.rawQuery(sql , new String[]{type,name}) ;
+            cursor = db.rawQuery(sql , new String[]{userId,name}) ;
             if (cursor!=null && cursor.moveToNext()){
                 trainPlanLog = new TrainPlanLog() ;
                 trainPlanLog.setName(cursor.getString(cursor.getColumnIndex(DBManger.TRAIN_PLAN_LOG_NAME)));

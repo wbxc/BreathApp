@@ -24,6 +24,7 @@ import com.hhd.breath.app.BreathApplication;
 import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.Manifest;
 import com.hhd.breath.app.R;
+import com.hhd.breath.app.andengine.ScreenSizeHelper;
 import com.hhd.breath.app.db.CaseBookService;
 import com.hhd.breath.app.db.TrainPlanService;
 import com.hhd.breath.app.model.MedicalHis;
@@ -62,6 +63,7 @@ public class MainTabHomeActivity extends TabActivity implements TabHost.OnTabCha
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CommonValues.CAMERA_WIDTH = ScreenSizeHelper.calculateScreenWidth(this, CommonValues.CAMERA_HEIGHT);
         setContentView(R.layout.activity_main_tab_home);
         mTabHost = (TabHost) findViewById(android.R.id.tabhost);
         mTabWidget = (TabWidget) findViewById(android.R.id.tabs);

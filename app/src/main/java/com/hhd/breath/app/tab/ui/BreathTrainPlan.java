@@ -129,7 +129,7 @@ public class BreathTrainPlan extends BaseActivity {
                     CommonValues.TOP_PAIR_HEIGHT = CommonValues.CENTER_HEIGHT - CommonValues.CONTROLLER_VALUE - CommonValues.PAIR_WIDTH_CENTER_HEIGHT;
                     ShareUtils.setBrathTime(BreathTrainPlan.this, Integer.parseInt(trainPlans.get(position).getPersistentLevel()));
 
- /*                   Bundle bundle = new Bundle() ;
+         /*           Bundle bundle = new Bundle() ;
                     bundle.putSerializable("train_plan",trainPlans.get(position));
                     Intent intent = new Intent() ;
                     intent.setClass(BreathTrainPlan.this, BreathAndEngine.class) ;
