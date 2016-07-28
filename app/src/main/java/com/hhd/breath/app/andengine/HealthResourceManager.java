@@ -39,7 +39,7 @@ public class HealthResourceManager {
     }
     public void createResources() {
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("img/");
-        mBackgroundBitmapTextureAtlas = new BitmapTextureAtlas(context.getTextureManager(), 718, 1184, TextureOptions.NEAREST_PREMULTIPLYALPHA);
+        mBackgroundBitmapTextureAtlas = new BitmapTextureAtlas(context.getTextureManager(), 768, 1280, TextureOptions.NEAREST_PREMULTIPLYALPHA);
         mBackgroundTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBackgroundBitmapTextureAtlas, context.getAssets(), "background480.png", 0, 0);
         mBackgroundBitmapTextureAtlas.load();
         HealthBird.onCreateResources(context);
@@ -47,24 +47,24 @@ public class HealthResourceManager {
         Typeface typeface = Typeface.defaultFromStyle(Typeface.NORMAL);
 
         ITexture mDisplayShowTexture = new BitmapTextureAtlas(context.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
-        mDisplayFont = new StrokeFont(context.getFontManager(), mDisplayShowTexture, typeface, 25, true, Color.WHITE, 1, Color.WHITE);
+        mDisplayFont = new StrokeFont(context.getFontManager(), mDisplayShowTexture, typeface, 40, true, Color.WHITE, 0.5f, Color.WHITE);
         mDisplayFont.load();
 
         ITexture mDisplayHeightTexture = new BitmapTextureAtlas(context.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
-        mDisplayHeight = new StrokeFont(context.getFontManager(), mDisplayHeightTexture, typeface, 45, true, Color.WHITE, 1, Color.WHITE);
+        mDisplayHeight = new StrokeFont(context.getFontManager(), mDisplayHeightTexture, typeface, 50, true, Color.WHITE, 0.5f, Color.WHITE);
         mDisplayHeight.load();
 
         ITexture mHeightText = new BitmapTextureAtlas(context.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
-        mDisplayHeightFont = new StrokeFont(context.getFontManager(), mHeightText, typeface, 25, true, Color.WHITE, 1, Color.WHITE);
+        mDisplayHeightFont = new StrokeFont(context.getFontManager(), mHeightText, typeface, 30, true, Color.WHITE, 0.5f, Color.WHITE);
         mDisplayHeightFont.load();
 
 
         ITexture mDisplayDistanceTexture = new BitmapTextureAtlas(context.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
-        mDisplayDistance = new StrokeFont(context.getFontManager(), mDisplayDistanceTexture, typeface, 45, true, Color.WHITE, 1, Color.WHITE);
+        mDisplayDistance = new StrokeFont(context.getFontManager(), mDisplayDistanceTexture, typeface, 50, true, Color.WHITE, 0.5f, Color.WHITE);
         mDisplayDistance.load();
 
         ITexture mDistanceText = new BitmapTextureAtlas(context.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
-        mDisplayDistanceFont = new StrokeFont(context.getFontManager(), mDistanceText, typeface, 25, true, Color.WHITE, 1, Color.WHITE);
+        mDisplayDistanceFont = new StrokeFont(context.getFontManager(), mDistanceText, typeface, 30, true, Color.WHITE, 0.5f, Color.WHITE);
         mDisplayDistanceFont.load();
 
 

@@ -1,5 +1,6 @@
 package com.hhd.breath.app.andengine;
 
+import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.main.ui.HealthCheck;
 
 import org.andengine.entity.scene.Scene;
@@ -50,8 +51,8 @@ public class HealthScreenManger {
         scene.setBackgroundEnabled(true);
 
 
-        float birdStartXOffset = HealthCheck.CAMERA_WIDTH/4 - (HealthBird.BIRD_WIDTH/2) ;
-        float birdYOffset = (HealthCheck.CAMERA_HEIGHT/2) - (HealthBird.BIRD_HEIGHT/2) ;
+        float birdStartXOffset = CommonValues.CAMERA_WIDTH/4 - (HealthBird.BIRD_WIDTH/2) ;
+        float birdYOffset = (CommonValues.CAMERA_HEIGHT/2) - (HealthBird.BIRD_HEIGHT/2) ;
         mBird = new HealthBird(birdStartXOffset,birdYOffset,context.getVertexBufferObjectManager(),scene) ;
         //mBird.move(50,598-HealthBird.BIRD_HEIGHT) ;
 
@@ -63,8 +64,11 @@ public class HealthScreenManger {
 
         mDisplayHeight = new Text(0,0,resourceManager.mDisplayHeight,"  0  ",new TextOptions(HorizontalAlign.CENTER),context.getVertexBufferObjectManager()) ;
         mDisplayHeight.setZIndex(3);
-        scene.attachChild(mDisplayHeight);
+
         leftText(mDisplayHeight);
+        scene.attachChild(mDisplayHeight);
+
+
 
         mDisplayHeightText = new Text(0,0,resourceManager.mDisplayHeightFont,"高度(峰速)",new TextOptions(HorizontalAlign.CENTER),context.getVertexBufferObjectManager()) ;
         mDisplayHeightText.setZIndex(3);
@@ -99,29 +103,31 @@ public class HealthScreenManger {
 
     private void  centerText(Text text){
 
-        text.setX(HealthCheck.CAMERA_WIDTH/2-text.getWidth()/2);
-        text.setY(HealthCheck.CAMERA_HEIGHT -220-text.getHeight()/2);
+        text.setX(CommonValues.CAMERA_WIDTH/2-text.getWidth()/2);
+        text.setY(CommonValues.CAMERA_HEIGHT -280-text.getHeight()/2);
 
     }
 
     private void centerSprite(Sprite sprite){
 
-        sprite.setPosition(HealthCheck.CAMERA_WIDTH/2-(sprite.getWidth()/2),HealthCheck.CAMERA_HEIGHT-160);
+        sprite.setPosition(CommonValues.CAMERA_WIDTH/2-(sprite.getWidth()/2),CommonValues.CAMERA_HEIGHT-160);
 
     }
 
     private void leftText(Text text){
-        text.setPosition(HealthCheck.CAMERA_WIDTH/4-(text.getWidth()/2),HealthCheck.CAMERA_HEIGHT-160);
+        text.setPosition(CommonValues.CAMERA_WIDTH/4-(text.getWidth()/2),CommonValues.CAMERA_HEIGHT-180);
     }
     private void rightText(Text text){
-        text.setPosition(HealthCheck.CAMERA_WIDTH/4*3-(text.getWidth()/2),HealthCheck.CAMERA_HEIGHT-160);
+        text.setPosition(CommonValues.CAMERA_WIDTH/4*3-(text.getWidth()/2),CommonValues.CAMERA_HEIGHT-180);
     }
 
     private void leftText1(Text text){
-        text.setPosition(HealthCheck.CAMERA_WIDTH/4-(text.getWidth()/2),HealthCheck.CAMERA_HEIGHT-100);
+        text.setPosition(CommonValues.CAMERA_WIDTH/4-(text.getWidth()/2),CommonValues.CAMERA_HEIGHT-100);
     }
+
+
     private void rightText2(Text text){
-        text.setPosition(HealthCheck.CAMERA_WIDTH/4*3-(text.getWidth()/2),HealthCheck.CAMERA_HEIGHT-100);
+        text.setPosition(CommonValues.CAMERA_WIDTH/4*3-(text.getWidth()/2),CommonValues.CAMERA_HEIGHT-100);
     }
 
 

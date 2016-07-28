@@ -124,7 +124,6 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
 
-        Log.e("onRequest","onRequestPermissionsResult") ;
     }
 
     private void initData() {
@@ -252,11 +251,15 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
                 bundle.putString("str_top_text",getResources().getString(R.string.string_look_introductions));
                 bundle.putString("request_url","http://101.201.39.122/ftpuser01/app/djsm.html");
                 intent.putExtras(bundle) ;
-                startActivity(intent);
+                startActivityForResult(intent,10);
                 break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     private void startBreathAndEngine(){
         Intent intent = new Intent() ;

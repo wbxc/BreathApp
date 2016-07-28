@@ -137,9 +137,6 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     public EngineOptions onCreateEngineOptions() {
 
         //根据给出的高度900  计算出应显示的屏幕的宽度
-
-        Log.e("CommonValues","CommonValues"+ CommonValues.CAMERA_WIDTH) ;
-
         mCamera = new Camera(0, 0, CommonValues.CAMERA_WIDTH, CommonValues.CAMERA_HEIGHT) {
             @Override
             public void onUpdate(float pSecondsElapsed) {

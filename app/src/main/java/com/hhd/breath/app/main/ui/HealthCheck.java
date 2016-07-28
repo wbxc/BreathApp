@@ -53,8 +53,7 @@ public class HealthCheck extends SimpleBaseGameActivity {
     private HealthScreenManger screenManger ;
     private Scene scene ;
     private Camera camera ;
-    public static final float CAMERA_HEIGHT =  900f ;//800f ;
-    public static float CAMERA_WIDTH = 545f ;//485f ;
+
     private ParallaxBackground mBackground ;
     private boolean READ_ENABLE_340  = false;
     private Object ThreadLock = new Object() ;
@@ -161,7 +160,7 @@ public class HealthCheck extends SimpleBaseGameActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handler = new MyHandler(this) ;
-
+        CommonValues.CAMERA_WIDTH = ScreenSizeHelper.calculateScreenWidth(this,CommonValues.CAMERA_HEIGHT) ;
         GAME_STATE = STATE_PLAYING ;
         integerList.clear();
         isReceiveData = true ;
@@ -226,8 +225,8 @@ public class HealthCheck extends SimpleBaseGameActivity {
 
     @Override
     public EngineOptions onCreateEngineOptions() {
-        CAMERA_WIDTH = ScreenSizeHelper.calculateScreenWidth(this,CAMERA_HEIGHT) ;
-        camera = new Camera(0,0,CAMERA_WIDTH,CAMERA_HEIGHT){   //实时刷新界面
+
+        camera = new Camera(0,0,CommonValues.CAMERA_WIDTH,CommonValues.CAMERA_HEIGHT){   //实时刷新界面
             @Override
             public void onUpdate(float pSecondsElapsed) {
                 super.onUpdate(pSecondsElapsed);
@@ -237,10 +236,10 @@ public class HealthCheck extends SimpleBaseGameActivity {
                     case STATE_PLAYING:
                         if (globalValue>3){
                             mCurrentWorldPosition -= SCROLL_SPEED ;
-                            if (current<(CAMERA_WIDTH/3*2)){
-                                screenManger.getBird().move((float)(current++),598-(globalValue*CommonValues.D_UNIT)) ;
+                            if (current<(CommonValues.CAMERA_WIDTH/3*2)){
+                                screenManger.getBird().move((float)(current++),860-(globalValue*CommonValues.D_UNIT)) ;
                             }else {
-                                screenManger.getBird().move((float)(current),598-(globalValue*CommonValues.D_UNIT)) ;
+                                screenManger.getBird().move((float)(current),860-(globalValue*CommonValues.D_UNIT)) ;
                             }
                             maxRate = String.valueOf((int) (getCurrentValue(maxValue)*CommonValues.M_UNIT)) ;
                             screenManger.getDisplayHeight().setText(maxRate);
@@ -253,10 +252,9 @@ public class HealthCheck extends SimpleBaseGameActivity {
                                 isReceiveData = false ;
                                 Global340Driver.getInstance(HealthCheck.this).setEnableRead(false);
                                 Global340Driver.getInstance(HealthCheck.this).read() ;
-
                                 handler.sendEmptyMessage(30) ;
                             }else {
-                                screenManger.getBird().move((float) (current), 598 - (globalValue*CommonValues.D_UNIT)) ;
+                                screenManger.getBird().move((float) (current), 860 - (globalValue*CommonValues.D_UNIT)) ;
                             }
                         }
                         break;
@@ -266,7 +264,7 @@ public class HealthCheck extends SimpleBaseGameActivity {
             }
         } ;
 
-        EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED,new RatioResolutionPolicy(CAMERA_WIDTH,CAMERA_HEIGHT),camera) ;
+        EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED,new RatioResolutionPolicy(CommonValues.CAMERA_WIDTH,CommonValues.CAMERA_HEIGHT),camera) ;
         engineOptions.getAudioOptions().setNeedsSound(true) ;
         engineOptions.getAudioOptions().setNeedsMusic(true) ;
         return engineOptions;
@@ -361,7 +359,7 @@ public class HealthCheck extends SimpleBaseGameActivity {
     protected Scene onCreateScene() {
 
 
-        mBackground = new ParallaxBackground(82/255f,190f/255f,206f/255f) {
+        mBackground = new ParallaxBackground(31 / 255f, 186 / 255f, 243 / 255f) {
 
             float prevX = 0 ;
             float parallaxValueOffset = 0 ;

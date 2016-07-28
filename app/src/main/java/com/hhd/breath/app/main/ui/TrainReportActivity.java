@@ -36,6 +36,7 @@ import com.hhd.breath.app.utils.StringUtils;
 import com.hhd.breath.app.utils.UiUtils;
 import com.hhd.breath.app.utils.Util;
 import com.hhd.breath.app.utils.Utils;
+import com.hhd.breath.app.view.ui.CreateTrainInstruction;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXFileObject;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
@@ -81,12 +82,6 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
     @Bind(R.id.tvBreathGroups)
     TextView tvBreathGroups ;
 
-    @Bind(R.id.levelControlRa)
-    RatingBar levelControlRa ;
-    @Bind(R.id.levelStrengthRa)
-    RatingBar levelStrengthRa ;
-    @Bind(R.id.levelPersistentRa)
-    RatingBar levelPersistentRa ;
     @Bind(R.id.tvDifficultyShow)
     TextView tvDifficultyShow ; // 难度系数显示
     @Bind(R.id.levelControlInitRa)
@@ -120,48 +115,21 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
     @Bind(R.id.tv5) TextView tv5 ;
     @Bind(R.id.tvAverValue) TextView tvAverValue ;
 
+    @Bind(R.id.layoutLevelContent)
+    RelativeLayout layoutLevelContent ;
+    @Bind(R.id.tvLevelFlag)
+    TextView tvLevelFlag ;
+    @Bind(R.id.tvLevelValue)
+    TextView tvLevelValue ;
+
+    @Bind(R.id.tvTimeLongValue)
+    TextView tvTimeLongValue ;
 
 
 
-    private void showBreathHisLog(){
 
 
-        if (breathHisLog==null){
-            return  ;
-        }
-        str_startTime = breathHisLog.getTrainStartTime() ;
-        str_train_days = breathHisLog.getTrainDays() ;
-        str_train_result = breathHisLog.getTrainResult() ;
-        str_train_times = breathHisLog.getTrainTimes() ;
-        str_train_aver_times = breathHisLog.getTrainAverTimes() ;
-        tvHisContent.setText(Html.fromHtml(reportHisBack(str_startTime,str_train_days,str_train_times,str_train_aver_times,str_train_result)));
-        levelControlRa.setRating(Float.valueOf(breathHisLog.getCurrentControlLevel()));
-        levelStrengthRa.setRating(Float.valueOf(breathHisLog.getCurrentStrengthLevel()));
-        levelPersistentRa.setRating(Float.valueOf(breathHisLog.getCurrentPersistentLevel()));
 
-
-        levelControlInitRa.setRating(Float.valueOf(breathHisLog.getControlLevel()));
-        levelStrengthInitRa.setRating(Float.valueOf(breathHisLog.getStrengthLevel()));
-        levelPrensterInitRa.setRating(Float.valueOf(breathHisLog.getPersistentLevel()));
-
-        levelControlCurrentRa.setRating(Float.valueOf(breathHisLog.getCurrentControlLevel()));
-        levelStrengthCurrentRa.setRating(Float.valueOf(breathHisLog.getCurrentStrengthLevel()));
-        levelPrensterCurrentRa.setRating(Float.valueOf(breathHisLog.getCurrentPersistentLevel()));
-        tvAverValue.setText(breathHisLog.getTrainAverValue());
-        tvDifficultyShow.setText("本难度系数最近"+breathHisLog.getTrainSuccessTimes()+"次训练分数");
-        tvTrainResult.setText(breathHisLog.getTrainResult());
-        String value = breathHisLog.getTrainStageValue() ;
-        String[] arrayStr = value.split(",") ;
-
-        if (arrayStr.length == 5){
-            tv1.setText(arrayStr[0]);
-            tv2.setText(arrayStr[1]);
-            tv3.setText(arrayStr[2]);
-            tv4.setText(arrayStr[3]);
-            tv5.setText(arrayStr[4]);
-        }
-
-    }
 
 
     @Override
@@ -177,16 +145,15 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
         initView();
         initEvent();
         mStatusHeight = Utils.getStatusHeight(this) ;
-
         breathHisLog = TrainHisService.getInstance(TrainReportActivity.this).findBreathHisLog(mRecordDayDataId) ;
-
+        showProgressDialog("");
         ManagerRequest.getInstance().getRequestNetApi().getBreathDetailReport(mRecordDayDataId).enqueue(new Callback<BreathDetailSuccess>() {
             @Override
             public void onResponse(Call<BreathDetailSuccess> call, Response<BreathDetailSuccess> response) {
 
+                hideProgress();
                 if (response.body().getCode().equals("200")){
                     BreathDetailReport breathDetailReport = response.body().getData() ;
-
                     tvScore.setText(breathDetailReport.getDifficulty());
                     tvTrainTime.setText(timeStampToData(breathDetailReport.getTrain_time()));
                     mTrainTime = longTimeToTime(breathDetailReport.getTrain_time()) ;
@@ -195,6 +162,7 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
                     birthday = longTimeToTime(ShareUtils.getUserBirthday(TrainReportActivity.this)) ;
                     phone = ShareUtils.getUserPhone(TrainReportActivity.this) ;
                     tvBreathGroups.setText(breathDetailReport.getTrain_group());
+                    tvTimeLongValue.setText(getTimeLong(Integer.parseInt(breathDetailReport.getTrain_last())));
                     showBreathHisLog() ;
                 }else {
                     Toast.makeText(TrainReportActivity.this,"获取数据失败",Toast.LENGTH_SHORT).show();
@@ -204,6 +172,7 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onFailure(Call<BreathDetailSuccess> call, Throwable t) {
 
+                hideProgress();
             }
         });
     }
@@ -235,6 +204,53 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
         layoutBack.setOnClickListener(this);
         mImgShare.setOnClickListener(this);
         tvTop.setText("训练报告");
+        layoutLevelContent.setOnClickListener(this);
+    }
+
+    private void showBreathHisLog(){
+
+        if (breathHisLog==null){
+            return  ;
+        }
+        str_startTime = breathHisLog.getTrainStartTime() ;
+        str_train_days = breathHisLog.getTrainDays() ;
+        str_train_result = breathHisLog.getTrainResult() ;
+        str_train_times = breathHisLog.getTrainTimes() ;
+        str_train_aver_times = breathHisLog.getTrainAverTimes() ;
+        tvHisContent.setText(Html.fromHtml(reportHisBack(str_startTime,str_train_days,str_train_times,str_train_aver_times,str_train_result)));
+
+        int level = Integer.parseInt(breathHisLog.getCurrentControlLevel())+(Integer.parseInt(breathHisLog.getCurrentStrengthLevel())-1)*3+(Integer.parseInt(breathHisLog.getCurrentPersistentLevel())-1)*6 ;
+        tvLevelValue.setText(String.valueOf(level));
+        if (level<=9){
+            tvLevelFlag.setText("初级");
+        }else if (level<=18){
+            tvLevelFlag.setText("中级");
+        }else {
+            tvLevelFlag.setText("高级");
+        }
+
+
+        levelControlInitRa.setRating(Float.valueOf(breathHisLog.getControlLevel()));
+        levelStrengthInitRa.setRating(Float.valueOf(breathHisLog.getStrengthLevel()));
+        levelPrensterInitRa.setRating(Float.valueOf(breathHisLog.getPersistentLevel()));
+
+        levelControlCurrentRa.setRating(Float.valueOf(breathHisLog.getCurrentControlLevel()));
+        levelStrengthCurrentRa.setRating(Float.valueOf(breathHisLog.getCurrentStrengthLevel()));
+        levelPrensterCurrentRa.setRating(Float.valueOf(breathHisLog.getCurrentPersistentLevel()));
+        tvAverValue.setText(breathHisLog.getTrainAverValue());
+        tvDifficultyShow.setText("本难度系数最近"+breathHisLog.getTrainSuccessTimes()+"次训练分数");
+        tvTrainResult.setText(breathHisLog.getTrainResult());
+        String value = breathHisLog.getTrainStageValue() ;
+        String[] arrayStr = value.split(",") ;
+
+        if (arrayStr.length == 5){
+            tv1.setText(arrayStr[0]);
+            tv2.setText(arrayStr[1]);
+            tv3.setText(arrayStr[2]);
+            tv4.setText(arrayStr[3]);
+            tv5.setText(arrayStr[4]);
+        }
+
     }
 
     @Override
@@ -263,9 +279,22 @@ public class TrainReportActivity extends BaseActivity implements View.OnClickLis
                 getandSaveCurrentImage() ;
                 shareSdk() ;
                 break;
+            case R.id.layoutLevelContent:
+                Intent intent = new Intent() ;
+                intent.setClass(TrainReportActivity.this, CreateTrainInstruction.class) ;
+                Bundle bundle = new Bundle() ;
+                bundle.putString("str_top_text",getResources().getString(R.string.string_look_introductions));
+                bundle.putString("request_url","http://101.201.39.122/ftpuser01/app/djsm.html");
+                intent.putExtras(bundle) ;
+                startActivityForResult(intent,10);
+                break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     private void shareSdk(){
 

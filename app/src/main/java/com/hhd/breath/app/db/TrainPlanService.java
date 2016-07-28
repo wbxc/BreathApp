@@ -79,14 +79,6 @@ public class TrainPlanService {
             contentValues.put(DBManger.TRAIN_PLAN_STRENGTH_LEVEL,trainPlan.getStrengthLevel());
             contentValues.put(DBManger.TRAIN_PLAN_PERSISTENT_CURRENT_LEVEL,trainPlan.getCurrentPersistent());
             contentValues.put(DBManger.TRAIN_PLAN_PERSISTENT_LEVEL,trainPlan.getPersistentLevel()) ;
-            contentValues.put(DBManger.TRAIN_PLAN_SUM_TRAIN_TIMES,trainPlan.getSumTrainTimes()+1);
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd") ;
-            String dateFlag = sdf.format(new Date(System.currentTimeMillis())) ;
-            if (!trainPlan.getTrainDayFlag().equals(dateFlag)){
-                trainPlan.setTrainDayFlag(dateFlag);
-                contentValues.put(DBManger.TRAIN_PLAN_SUM_TRAIN_TIMES,trainPlan.getSumTrainTimes()+1);
-            }
             db.update(DBManger.TABLE_TRAIN_PLAN,contentValues,DBManger.TRAIN_PLAN_USER_ID+" = ? and "+DBManger.TRAIN_PLAN_NAME+" = ?",new String[]{trainPlan.getUserId(),trainPlan.getName()});
             db.setTransactionSuccessful();
         } catch (Exception e) {

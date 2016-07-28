@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -124,22 +125,34 @@ public class BreathTrainPlan extends BaseActivity {
                     }
                     Global340Driver.getInstance(BreathTrainPlan.this).setEnableRead(false); ;
                     CommonValues.SKY_STRENGTH_VALE = Integer.parseInt(trainPlans.get(position).getStrengthLevel()) * 5;
-                    CommonValues.CONTROLLER_VALUE = Integer.parseInt(trainPlans.get(position).getControlLevel()) * 5;
-                    CommonValues.CENTER_HEIGHT = CommonValues.SKY_BIRD_ALLOW - CommonValues.SKY_STRENGTH_VALE;
+                    CommonValues.CONTROLLER_VALUE = Integer.parseInt(trainPlans.get(position).getControlLevel()) * 5 ; //+CommonValues.BIRTH_HEIGHT/2;
+                    CommonValues.CENTER_HEIGHT = CommonValues.SKY_BIRD_ALLOW - CommonValues.SKY_STRENGTH_VALE-(((Integer.parseInt(trainPlans.get(position).getCurrentControl())-13)*5));
                     CommonValues.TOP_PAIR_HEIGHT = CommonValues.CENTER_HEIGHT - CommonValues.CONTROLLER_VALUE - CommonValues.PAIR_WIDTH_CENTER_HEIGHT;
+
+
+
+
+                    CommonValues.S_VALUE_LEVEL = Integer.parseInt(trainPlans.get(position).getStrengthLevel()) * 5+160 ;
+                    CommonValues.S_VALUE = CommonValues.SKY_HEIGHT- CommonValues.S_VALUE_LEVEL;
+                    CommonValues.C_VALUE_LEVEL = Integer.parseInt(trainPlans.get(position).getControlLevel())*5*2 ;
+                    CommonValues.C_VALUE_TOP = CommonValues.SKY_HEIGHT-(CommonValues.S_VALUE_LEVEL +CommonValues.C_VALUE_LEVEL ) ;
                     ShareUtils.setBrathTime(BreathTrainPlan.this, Integer.parseInt(trainPlans.get(position).getPersistentLevel()));
 
-         /*           Bundle bundle = new Bundle() ;
-                    bundle.putSerializable("train_plan",trainPlans.get(position));
+
                     Intent intent = new Intent() ;
-                    intent.setClass(BreathTrainPlan.this, BreathAndEngine.class) ;
+                    Bundle bundle = new Bundle() ;
+                    bundle.putSerializable("train_plan",trainPlans.get(position));
                     intent.putExtras(bundle) ;
-                    startActivity(intent);*/
-                    if (Global340Driver.getInstance(BreathTrainPlan.this).checkUsbStatus() == 1) {
+                    intent.setClass(BreathTrainPlan.this, BreathAndEngine.class) ;
+                    startActivity(intent);
+
+                    Log.e("BreathTrainPlan",""+CommonValues.S_VALUE+">>>"+CommonValues.C_VALUE_TOP) ;
+
+                    /*if (Global340Driver.getInstance(BreathTrainPlan.this).checkUsbStatus() == 1) {
                         BreathTrainActivity.actionStart(BreathTrainPlan.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102), true,trainPlans.get(position));
                     } else {
                         BreathTrainActivity.actionStart(BreathTrainPlan.this, "缩唇呼吸训练", String.valueOf(3), String.valueOf(102), false,trainPlans.get(position));
-                    }
+                    }*/
                 }
             }
         });
@@ -171,6 +184,11 @@ public class BreathTrainPlan extends BaseActivity {
             }
         });
     }
+
+    private void startBreathAndEngine(){
+
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

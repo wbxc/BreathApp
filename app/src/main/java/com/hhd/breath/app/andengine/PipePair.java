@@ -72,30 +72,47 @@ public class PipePair {
         this.mScene = mScene;
 
 
-        mUpperPipeSection = new Sprite(PIPE_Y_OFFSET+3,0, CommonValues.PAIR_WIDTH,CommonValues.TOP_PAIR_HEIGHT,mUpperPipeSectionTexture,mVertexBufferObjectManager) ;
+        mUpperPipeSection = new Sprite(PIPE_Y_OFFSET+3,0,
+                                    CommonValues.PAIR_WIDTH,CommonValues.C_VALUE_TOP-CommonValues.PAIR_WIDTH_CENTER_HEIGHT,
+                                    mUpperPipeSectionTexture,mVertexBufferObjectManager) ;
         mUpperPipeSection.setZIndex(1);
         mScene.attachChild(mUpperPipeSection);
 
-        mUpperPipe = new Sprite(PIPE_Y_OFFSET,CommonValues.TOP_PAIR_HEIGHT,CommonValues.PAIR_WIDTH_CENTER,CommonValues.PAIR_WIDTH_CENTER_HEIGHT,mUpperPipeTexture,mVertexBufferObjectManager) ;
 
+
+        mUpperPipe = new Sprite(PIPE_Y_OFFSET,CommonValues.C_VALUE_TOP-CommonValues.PAIR_WIDTH_CENTER_HEIGHT,
+                                CommonValues.PAIR_WIDTH_CENTER,CommonValues.PAIR_WIDTH_CENTER_HEIGHT,
+                mUpperPipeTexture,mVertexBufferObjectManager) ;
         //81
-
         mUpperPipe.setZIndex(1);
         mScene.attachChild(mUpperPipe);
 
 
-        mLowerPipe = new Sprite(PIPE_Y_OFFSET,centerHeight+CommonValues.CONTROLLER_VALUE,CommonValues.PAIR_WIDTH_CENTER,CommonValues.PAIR_WIDTH_CENTER_HEIGHT,mLowerPipeTexture,mVertexBufferObjectManager) ;
+
+
+
+
+
+        mLowerPipe = new Sprite(PIPE_Y_OFFSET,CommonValues.S_VALUE,CommonValues.PAIR_WIDTH_CENTER,CommonValues.PAIR_WIDTH_CENTER_HEIGHT,mLowerPipeTexture,mVertexBufferObjectManager) ;
         mLowerPipe.setZIndex(1);
         mScene.attachChild(mLowerPipe);
 
         //644
 
-        mLowerPipeSection = new Sprite(PIPE_Y_OFFSET+3,
-                centerHeight+(CommonValues.CONTROLLER_VALUE+CommonValues.PAIR_WIDTH_CENTER_HEIGHT),
+/*        mLowerPipeSection = new Sprite(PIPE_Y_OFFSET+3, centerHeight+(CommonValues.CONTROLLER_VALUE+CommonValues.PAIR_WIDTH_CENTER_HEIGHT),
                 CommonValues.PAIR_WIDTH,
                 (height-(centerHeight+CommonValues.CONTROLLER_VALUE+CommonValues.PAIR_WIDTH_CENTER_HEIGHT)),
                 mLowerPipeSelectionTexture,
+                mVertexBufferObjectManager) ;*/
+
+        mLowerPipeSection = new Sprite(PIPE_Y_OFFSET+3,CommonValues.S_VALUE+CommonValues.PAIR_WIDTH_CENTER_HEIGHT,
+                CommonValues.PAIR_WIDTH,
+                CommonValues.S_VALUE_LEVEL-CommonValues.PAIR_WIDTH_CENTER_HEIGHT,
+                mLowerPipeSelectionTexture,
                 mVertexBufferObjectManager) ;
+
+
+
         mLowerPipeSection.setZIndex(1);
         mScene.attachChild(mLowerPipeSection);
         mScene.sortChildren();

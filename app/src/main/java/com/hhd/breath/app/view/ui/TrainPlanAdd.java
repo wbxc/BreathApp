@@ -15,12 +15,14 @@ import android.widget.TextView;
 
 import com.hhd.breath.app.BaseActivity;
 import com.hhd.breath.app.BreathApplication;
+import com.hhd.breath.app.CommonValues;
 import com.hhd.breath.app.R;
 import com.hhd.breath.app.db.TrainPlanService;
 import com.hhd.breath.app.model.SysDataModel;
 import com.hhd.breath.app.model.TrainPlan;
 import com.hhd.breath.app.net.ThreadPoolWrap;
 import com.hhd.breath.app.utils.ShareUtils;
+import com.hhd.breath.app.widget.CommonProgressBar;
 import com.hhd.breath.app.widget.WheelView;
 
 import java.util.ArrayList;
@@ -150,7 +152,7 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
 
         for (int i=0 ; i<3 ; i++){
             SysDataModel sysDataModel = new SysDataModel() ;
-            sysDataModel.setValue((3+i)+"");
+            sysDataModel.setValue((1+i)+"");
             sysDataModel.setId((i+1)+"");
             switch (i){
                 case 0:
@@ -169,40 +171,40 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
 
         SysDataModel sysDataModel1 = new SysDataModel();
         sysDataModel1.setId(1+"");
-        sysDataModel1.setValue(15+"");
+        sysDataModel1.setValue(CommonValues.s_l_value+"");
         sysDataModel1.setName("初级");
         layoutBreathStrengthModels.add(sysDataModel1) ;
 
         SysDataModel sysDataModel2 = new SysDataModel();
         sysDataModel2.setId(2+"");
-        sysDataModel2.setValue(25+"");
+        sysDataModel2.setValue(CommonValues.s_z_value+"");
         sysDataModel2.setName("中级");
 
         layoutBreathStrengthModels.add(sysDataModel2) ;
 
         SysDataModel sysDataModel3 = new SysDataModel();
         sysDataModel3.setId(3+"");
-        sysDataModel3.setValue(35+"");
+        sysDataModel3.setValue(CommonValues.s_h_value+"");
         sysDataModel3.setName("高级");
         layoutBreathStrengthModels.add(sysDataModel3) ;
 
 
         SysDataModel sysDataModel11 = new SysDataModel();
         sysDataModel11.setId(1+"");
-        sysDataModel11.setValue(13+"");
+        sysDataModel11.setValue(CommonValues.c_l_value+"");
         sysDataModel11.setName("初级");
         layoutBreathControlModels.add(sysDataModel11) ;
 
         SysDataModel sysDataMode22 = new SysDataModel();
         sysDataMode22.setId(2+"");
-        sysDataMode22.setValue(10+"");
+        sysDataMode22.setValue(CommonValues.c_z_value+"");
         sysDataMode22.setName("中级");
 
         layoutBreathControlModels.add(sysDataMode22) ;
 
         SysDataModel sysDataMode33 = new SysDataModel();
         sysDataMode33.setId(3+"");
-        sysDataMode33.setValue(7+"");
+        sysDataMode33.setValue(CommonValues.c_h_value+"");
         sysDataMode33.setName("高级");
         layoutBreathControlModels.add(sysDataMode33) ;
 
@@ -402,11 +404,12 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
                 bundle.putString("str_top_text","训练模式说明");
                 bundle.putString("request_url","http://101.201.39.122/ftpuser01/app/shuoming.html");
                 intent1.putExtras(bundle) ;
-                startActivity(intent1);
+                startActivityForResult(intent1,11);
                 break;
 
         }
     }
+
 
     private Runnable createTrainPlan = new Runnable() {
         @Override

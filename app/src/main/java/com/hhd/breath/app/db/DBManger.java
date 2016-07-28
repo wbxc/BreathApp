@@ -166,9 +166,6 @@ public class DBManger {
     public static String TABLE_TRAIN_PLAN = "trainPlan" ;
     public static String TRAIN_PLAN_TYPE_NAME = "trainTypeName" ;  // 训练类型名称
 
-    public static String TRAIN_PLAN_SUM_TRAIN_TIMES = "sum_train_times" ;
-    public static String TRAIN_PLAN_SUM_TRAIN_DAYS = "sum_train_days" ;
-    public static String TRAIN_PLAN_TRAIN_DAY_FLAG = "train_day_flag" ;
 
 
     /**

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -69,13 +70,12 @@ public class CreateTrainInstruction extends BaseActivity {
         }
 
         instructionContent.setWebChromeClient(new WebChromeClient());
+        showProgressDialog("加载中......");
         instructionContent.setWebViewClient(new WebViewClient() {
-
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                showProgressDialog("加载中......");
             }
 
             @Override
@@ -89,23 +89,29 @@ public class CreateTrainInstruction extends BaseActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 hideProgress();
+
             }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                hideProgress();
                 return super.shouldOverrideUrlLoading(view, url);
             }
+
+
         });
         instructionContent.loadUrl(requestUrl);
-
-
         layoutBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(20);
                 CreateTrainInstruction.this.finish();
             }
         });
+    }
 
+    @Override
+    public void onBackPressed() {
+        setResult(20);
+        super.onBackPressed();
     }
 }

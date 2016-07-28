@@ -2,6 +2,7 @@ package com.hhd.breath.app;
 
 import android.os.Environment;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.hhd.breath.app.model.RecordUnitData;
 
 import java.util.ArrayList;
@@ -106,27 +107,39 @@ public class CommonValues {
     public static float CENTER_HEIGHT = 0f ;
     public static float PAIR_WIDTH_CENTER_HEIGHT = 41f ;
     public static int BIRD_DISTANCE_SPEED = 6 ;
+    public static int BIRTH_HEIGHT = 60 ;
 
     /**
      * 视野环境创建的宽度和高度
      */
-    public static float CAMERA_WIDTH = 485 ; //485  545 485
+    public static float CAMERA_WIDTH = 768 ; //485  545 485
     public static float CAMERA_HEIGHT = 1280 ; //800 ;
 
 
-    public static String c_l_value = "13" ;
-    public static String c_z_value = "10" ;
-    public static String c_h_value = "7" ;
+    public static String c_l_value = "23" ; //
+    public static String c_z_value = "18" ; //
+    public static String c_h_value = "13" ;  //
+
 
 
     public static String s_l_value = "15" ;
-    public static String s_z_value = "25" ;
-    public static String s_h_value = "35" ;
+    public static String s_z_value = "30" ;
+    public static String s_h_value = "60" ;
 
-    public static String p_l_value = "3" ;
-    public static String p_z_value = "4" ;
-    public static String p_h_value = "5" ;
+    public static String p_l_value = "1" ;
+    public static String p_z_value = "2" ;
+    public static String p_h_value = "3" ;
 
+
+
+
+    public static float SUM_VALUE = 860f ;
+
+    public static float S_VALUE = 0f;
+    public static float C_VALUE_TOP = 0F ;
+
+    public static float S_VALUE_LEVEL = 0F ;
+    public static float C_VALUE_LEVEL = 0F ;
 
 
 
