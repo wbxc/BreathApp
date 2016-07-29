@@ -163,7 +163,6 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
         ButterKnife.bind(this);
         WindowManager manager  = this.getWindowManager() ;
         mWidth = manager.getDefaultDisplay().getWidth() ;
-        trainPlanLog = new TrainPlanLog() ;
         breathHisLog = new BreathHisLog() ;
         api = WXAPIFactory.createWXAPI(this, "wx92ff63ca90677197");
         mRecordDayData = (BreathTrainingResult) getIntent().getExtras().getSerializable("breathTrainingData");
@@ -196,6 +195,7 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
 
                         }
                         if (trainPlanLog==null){
+                            trainPlanLog = new TrainPlanLog() ;
                             trainPlanLog.setUserId(ShareUtils.getUserId(BreathReportActivity.this));
                             trainPlanLog.setName(trainPlan.getName());
                             trainPlanLog.setTrainType(trainPlan.getTrainType());

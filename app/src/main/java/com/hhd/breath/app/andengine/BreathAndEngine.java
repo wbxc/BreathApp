@@ -46,7 +46,7 @@ import java.util.TimerTask;
 public class BreathAndEngine extends SimpleBaseGameActivity {
 
 
-    private static final float SCROLL_SPEED = 3.8f;  //游戏速度
+    private static final float SCROLL_SPEED = 4f;  //游戏速度
     private Camera mCamera;
     private static final int STATE_READY = 1;
     private static final int STATE_PLAYING = 2;
@@ -85,6 +85,8 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     private String levelValue = "" ;
     private String levelResult = "" ;
     private int musicSwitch  ;
+    private int breathTime = 0 ;
+    private int temTime = 0 ;
 
 
     @Override
@@ -96,8 +98,11 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         musicSwitch = ShareUtils.getMusicSwitch(BreathAndEngine.this) ;
         mHandler = new MyHandler(this);
         trainPlan = (TrainPlan) getIntent().getExtras().getSerializable("train_plan");
+        breathTime = Integer.parseInt(trainPlan.getCurrentPersistent()) ;
         int level = Integer.parseInt(trainPlan.getCurrentControl())+(Integer.parseInt(trainPlan.getCurrentStrength())-1)*3+(Integer.parseInt(trainPlan.getCurrentPersistent())-1)*6 ;
         levelValue = String.valueOf(level) ;
+        temTime = breathTime ;
+
         if (level<=9){
             levelResult = "初级" ;
         }else if (level>9 && level<=18){
@@ -147,6 +152,7 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                     case STATE_PLAYING:
                         //场景平移
                         mCurrentWorldPosition -= SCROLL_SPEED;
+
                         receiveData();  // globalValue
                         play(isNoStop);
                         displayBirdPosition();
@@ -168,11 +174,10 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                     }
                 }else {
 
-                    if (mResourceManager.mMusic.isPlaying()){
+                    if (mResourceManager.mMusic.isPlaying()) {
                         mResourceManager.mMusic.stop();
                     }
                 }
-
             }
 
             private void play(boolean flag) {
@@ -192,19 +197,27 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                     isBreathShowIngFlag = false ;
 
                 }
+
+
+
                 mPipeSpawnCount++;
                 if (!flag) {
                     if (mPipeSpawnCount > PIPE_SPAWN_INTERVAL) {
                         mPipeSpawnCount = 0;
-                        spawnNewPipe();
+                       // spawnNewPipe();
+                        temTime-- ;
+                    }else if (flag){
+                        temTime = breathTime ;
                     }
                 }
+
+                if (startFlag) {
+                    startTimeAccount();
+                    trainTime = System.currentTimeMillis() / 1000;
+                    startFlag = false;
+                }
+
                 for (int i = 0; i < pipePairs.size(); i++) {
-                    if (startFlag) {
-                        startTimeAccount();
-                        trainTime = System.currentTimeMillis() / 1000;
-                        startFlag = false;
-                    }
                     PipePair pipe = pipePairs.get(i);
                     if (pipe.isOnScreen()) {
                         pipe.move(SCROLL_SPEED);
@@ -383,13 +396,21 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         return breathTrainingResult;
     }
 
+    private  int stop =0 ;
+    private  int play =0 ;
+
+
 
     //控制游戏的开始,暂停的操作
     private void controlGamePlay() {
         if (!breathEngines.get(mCurrentEngine).isStopFlag()) {
             if (breathEngines.get(mCurrentEngine).getStopInt() > 0) {
                 isNoStop = false;
-                int stop = breathEngines.get(mCurrentEngine).getStopInt() - 1;
+                stop = breathEngines.get(mCurrentEngine).getStopInt();
+                if (stop<=1){
+                    spawnNewPipe();
+                }
+                stop =  breathEngines.get(mCurrentEngine).getStopInt()- 1;
                 breathEngines.get(mCurrentEngine).setStopInt(stop);
                 totalTime--;
                 mSceneManager.displayCurrentTimes(totalTime);
@@ -404,12 +425,19 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         if (!breathEngines.get(mCurrentEngine).isPlayFlag()) {
             if (breathEngines.get(mCurrentEngine).getPlayInt() > 0) {
                 isNoStop = true;
-                int play = breathEngines.get(mCurrentEngine).getPlayInt() - 1;
+                play = breathEngines.get(mCurrentEngine).getPlayInt() ;
+
+                if (play>1){
+                    spawnNewPipe();
+                }
+
+                play = play - 1;
                 breathEngines.get(mCurrentEngine).setPlayInt(play);
 
                 if (totalTime!=1){
                     totalTime--;
                 }
+
                 mSceneManager.displayCurrentTimes(totalTime);
                 return;
             } else {
@@ -454,7 +482,7 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
                 }
             };
         }
-        mTimer.schedule(mTimerTask, 0, 1000);
+        mTimer.schedule(mTimerTask, 2000, 1000);
     }
 
 
@@ -560,6 +588,8 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     long tempTime = 0;
 
     private void showText(final String message) {
+
+
         if (!showFlag) {
             tempTime = System.currentTimeMillis();
             mHandler.post(new Runnable() {
@@ -573,11 +603,11 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
         } else if (showFlag) {
             long time = System.currentTimeMillis();
 
-            if ((time - tempTime) > 150) {
+            if ((time - tempTime) > 100) {
                 BreathToast.getInstance(BreathAndEngine.this).hideToast();
             }
 
-            if ((time - tempTime) > 1000) {
+            if ((time - tempTime) > 800) {
                 showFlag = false;
             }
         }

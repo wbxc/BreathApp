@@ -51,8 +51,6 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
 
-
-
     <permission
         android:name="com.umeng.message.example.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signatureOrSystem"/>
@@ -398,14 +396,19 @@
             android:name=".view.ui.TrainPlanAdd"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".view.ui.TrainAddName"
-                  android:screenOrientation="portrait">
+        <activity
+            android:name=".view.ui.TrainAddName"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".view.ui.CreateTrainInstruction"
-                  android:screenOrientation="portrait">
+        <activity
+            android:name=".view.ui.CreateTrainInstruction"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".view.ui.ArmClockActivity"
-                  android:screenOrientation="portrait">
+        <activity
+            android:name=".view.ui.ArmClockActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".main.ui.SplashActivity">
         </activity>
     </application>
 

@@ -64,7 +64,7 @@ public class PipePair {
     private Sprite mLowerPipe ;
     private Sprite mLowerPipeSection ;
 
-    private static final float PIPE_Y_OFFSET = CommonValues.CAMERA_WIDTH +200 ;
+    private static final float PIPE_Y_OFFSET = CommonValues.CAMERA_WIDTH  ;//+200 ;
 
     public PipePair(float centerHeight, VertexBufferObjectManager mVertexBufferObjectManager, Scene mScene) {
         this.mOpeningHeight = centerHeight;
@@ -99,11 +99,6 @@ public class PipePair {
 
         //644
 
-/*        mLowerPipeSection = new Sprite(PIPE_Y_OFFSET+3, centerHeight+(CommonValues.CONTROLLER_VALUE+CommonValues.PAIR_WIDTH_CENTER_HEIGHT),
-                CommonValues.PAIR_WIDTH,
-                (height-(centerHeight+CommonValues.CONTROLLER_VALUE+CommonValues.PAIR_WIDTH_CENTER_HEIGHT)),
-                mLowerPipeSelectionTexture,
-                mVertexBufferObjectManager) ;*/
 
         mLowerPipeSection = new Sprite(PIPE_Y_OFFSET+3,CommonValues.S_VALUE+CommonValues.PAIR_WIDTH_CENTER_HEIGHT,
                 CommonValues.PAIR_WIDTH,

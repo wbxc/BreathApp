@@ -128,7 +128,7 @@ public class TrainPlanAdd extends BaseActivity implements View.OnClickListener {
 
         for (int i=0 ; i<3 ; i++){
             SysDataModel sysDataModel = new SysDataModel() ;
-            sysDataModel.setValue((2+i)+"");
+            sysDataModel.setValue((1+i)+"");
             sysDataModel.setId((1+i)+"");
             sysDataModel.setName((2+i)+"秒")  ;
             layoutInspiredModels.add(sysDataModel) ;

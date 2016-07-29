@@ -55,7 +55,6 @@
     <string name="string_xiqi_info">对准呼吸器,缓缓吸气 \n</string>
     <string name="string_huqi_info">对准呼吸器,缓慢呼气</string>
     <string name="string_error_connection">呼吸器链接错误,请重新训练</string>
-
     <string name="string_look_introductions">等级说明</string>
 
 
@@ -69,6 +68,7 @@
     <string name="string_error_phone_empty">手机号不能为空</string>
     <string name="string_password_no_same">密码不一致</string>
     <string name="string_password_no_empty">密码不能为空</string>
+    <string name="string_permission_read_sdk">汇呼吸需要获取手机的存储读取权限，若禁止将影响汇呼吸使用</string>
 
 
     <string name="string_his_no_data">您还没有任何数据</string>
@@ -101,4 +101,8 @@
     <string name="vibration">震动</string>
     <string name="ring">铃声</string>
 
+    <string name="rationale_ask_again">\"汇呼吸\"如果没有存储读取权限，部分功能将受限。\n请打开应用设置界面对应用权限修改。</string>
+    <string name="setting">设置</string>
+    <string name="cancel">取消</string>
+    <string name="string_tips">提示</string>
 </resources>

@@ -13,6 +13,27 @@ public class ShareUtils {
     private static  String BREATH_TIME = "breath_time" ;
     private static  String  BASE_USER_INFO = "base_user_info" ;
 
+    private static String IS_FIRST_LAUNCH = "is_launch_first" ;
+
+
+
+
+
+
+    public static void setIsLaunchFirst(Context mContext ,boolean value){
+        SharedPreferences  spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        SharedPreferences.Editor mEditor = spf.edit() ;
+        mEditor.putBoolean(IS_FIRST_LAUNCH,value) ;
+        mEditor.commit() ;
+    }
+
+    public static  boolean getLaunchFirst(Context mContext){
+        SharedPreferences spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        return spf.getBoolean(IS_FIRST_LAUNCH,false) ;
+    }
+
+
+
 
     public static void setInspirationTime(Context mContext ,int value){
         SharedPreferences  spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
