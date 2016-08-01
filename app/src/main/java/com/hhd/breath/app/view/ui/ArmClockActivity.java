@@ -1,8 +1,8 @@
 package com.hhd.breath.app.view.ui;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +13,7 @@ import com.hhd.breath.app.R;
 import com.hhd.breath.app.arm.AlarmManagerUtil;
 import com.hhd.breath.app.arm.view.SelectRemindCyclePopup;
 import com.hhd.breath.app.arm.view.SelectRemindWayPopup;
+import com.hhd.breath.app.utils.ShareUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,9 +47,21 @@ public class ArmClockActivity extends BaseActivity implements View.OnClickListen
     TextView tvBellWay ;
     @Bind(R.id.tvRepeat)
     TextView tvRepeat ;
-
     private int ring = 0 ;
     private int cycle  ;
+
+    @Bind(R.id.layoutSwitch)
+    RelativeLayout layoutSwitch ;
+    @Bind(R.id.imgSwitchClock)
+    ImageView imgSwitchClock ;
+    private String cycleName ;
+    private int time0;
+    private int time1;
+
+
+
+
+
 
 
 
@@ -71,6 +84,25 @@ public class ArmClockActivity extends BaseActivity implements View.OnClickListen
                 tvSetTime.setText(time+" 提醒");
             }
         });
+
+        ring = ShareUtils.getRing(ArmClockActivity.this) ;
+        cycleName = ShareUtils.getCycleName(ArmClockActivity.this) ;
+        switch (ring) {
+            // 震动
+            case 0:
+                tvBellWay.setText("震动");
+                break;
+            // 铃声
+            case 1:
+                tvBellWay.setText("铃声");
+                break;
+            default:
+                break;
+        }
+
+        tvRepeat.setText(cycleName);
+        time0 = ShareUtils.getTime1(ArmClockActivity.this) ;
+        time1 = ShareUtils.getTime2(ArmClockActivity.this) ;
     }
 
     @Override
@@ -78,7 +110,7 @@ public class ArmClockActivity extends BaseActivity implements View.OnClickListen
         super.initView();
         layout_right.setVisibility(View.VISIBLE);
         tvRight.setText("保存");
-        topText.setText("设置闹钟");
+        topText.setText("修改训练提醒");
     }
 
     @Override
@@ -89,12 +121,17 @@ public class ArmClockActivity extends BaseActivity implements View.OnClickListen
         layoutSetTime.setOnClickListener(this);
         layoutBack.setOnClickListener(this);
         layout_right.setOnClickListener(this);
+        layoutSwitch.setOnClickListener(this);
+
     }
 
     @Override
     public void onClick(View v) {
 
         switch (v.getId()){
+            case R.id.layoutSwitch:
+
+                break;
             case R.id.layoutRepeat:
                 selectRemindCycle() ;
                 break;
@@ -122,23 +159,28 @@ public class ArmClockActivity extends BaseActivity implements View.OnClickListen
     private void setClock() {
         if (time != null && time.length() > 0) {
             String[] times = time.split(":");
+
+
+            time0 = Integer.parseInt(times[0]) ;
+            time1 = Integer.parseInt(times[1]) ;
+
+
             if (cycle == 0) {//是每天的闹钟
-                AlarmManagerUtil.setAlarm(this, 0, Integer.parseInt(times[0]), Integer.parseInt
-                        (times[1]), 0, 0, "闹钟响了", ring);
+                AlarmManagerUtil.setAlarm(this, 0,time0 , time1, 0, 0, "呼吸训练时间到了", ring);
             } if(cycle == -1){//是只响一次的闹钟
-                AlarmManagerUtil.setAlarm(this, 1, Integer.parseInt(times[0]), Integer.parseInt
-                        (times[1]), 0, 0, "闹钟响了", ring);
+                AlarmManagerUtil.setAlarm(this, 1, time0 , time1, 0, 0, "呼吸训练时间到了", ring);
             }else {//多选，周几的闹钟
                 String weeksStr = parseRepeat(cycle, 1);
                 String[] weeks = weeksStr.split(",");
                 for (int i = 0; i < weeks.length; i++) {
-                    AlarmManagerUtil.setAlarm(this, 2, Integer.parseInt(times[0]), Integer
-                            .parseInt(times[1]), i, Integer.parseInt(weeks[i]), "闹钟响了", ring);
+                    AlarmManagerUtil.setAlarm(this, 2, time0 , time1, i, Integer.parseInt(weeks[i]), "呼吸训练时间到了", ring);
                 }
             }
+            ShareUtils.setTime1(ArmClockActivity.this,time0);
+            ShareUtils.setTime2(ArmClockActivity.this,time1);
+
             Toast.makeText(this, "闹钟设置成功", Toast.LENGTH_LONG).show();
         }
-
     }
 
 
@@ -165,6 +207,7 @@ public class ArmClockActivity extends BaseActivity implements View.OnClickListen
                     default:
                         break;
                 }
+                ShareUtils.setRing(ArmClockActivity.this,ring);
             }
         });
     }
@@ -208,23 +251,29 @@ public class ArmClockActivity extends BaseActivity implements View.OnClickListen
                     // 确定
                     case 7:
                         int repeat = Integer.valueOf(ret);
-                        tvRepeat.setText(parseRepeat(repeat, 0));
+                        cycleName = parseRepeat(repeat,0) ;
+
+                        //tvRepeat.setText(parseRepeat(repeat, 0));
                         cycle = repeat;
                         fp.dismiss();
                         break;
                     case 8:
-                        tvRepeat.setText("每天");
+                        //tvRepeat.setText("每天");
+                        cycleName = "每天" ;
                         cycle = 0;
                         fp.dismiss();
                         break;
                     case 9:
-                        tvRepeat.setText("只响一次");
+                        cycleName = "只响一次" ;
+                        //tvRepeat.setText("只响一次");
                         cycle = -1;
                         fp.dismiss();
                         break;
                     default:
                         break;
                 }
+
+                tvRepeat.setText(cycleName);
             }
         });
     }

@@ -62,12 +62,12 @@ public class BreathTrainPlan extends BaseActivity {
             TrainPlan trainPlan = new TrainPlan() ;
             trainPlan.setTrainType("0");  // 循序渐进呼气类型
             trainPlan.setName("循序渐进训练");   // 训练的名称
-            trainPlan.setInspirerTime("3");   // 吸气时间 就是暂停时间
+            trainPlan.setInspirerTime("2");   // 吸气时间 就是暂停时间
 
 
             trainPlan.setGroupNumber("10");    // 呼吸训练的组数
             trainPlan.setTimes("1");           // 完成多少次可以晋级
-            trainPlan.setControlLevel("13");     // 控制强度
+            trainPlan.setControlLevel(CommonValues.c_l_value);     // 控制强度
             trainPlan.setControl("1");
             trainPlan.setStrength("1");
             trainPlan.setCurrentControl("1");
@@ -75,13 +75,12 @@ public class BreathTrainPlan extends BaseActivity {
             trainPlan.setCurrentPersistent("1");
 
 
-            trainPlan.setStrengthLevel("15");
+            trainPlan.setStrengthLevel(CommonValues.s_l_value);
             trainPlan.setPersistent("1");
-            trainPlan.setPersistentLevel("3");   // 吸气时间
+            trainPlan.setPersistentLevel("1");   // 吸气时间
             trainPlan.setUserId(ShareUtils.getUserId(BreathTrainPlan.this));
             trainPlan.setCumulativeTime("0");   // 训练累计时间
             trainPlan.setCreateTime("");
-
             TrainPlanService.getInstance(BreathTrainPlan.this).add(trainPlan) ;
         }
 
@@ -139,13 +138,12 @@ public class BreathTrainPlan extends BaseActivity {
                     ShareUtils.setBrathTime(BreathTrainPlan.this, Integer.parseInt(trainPlans.get(position).getPersistentLevel()));
 
 
-/*                    Intent intent = new Intent() ;
+/*                  Intent intent = new Intent() ;
                     Bundle bundle = new Bundle() ;
                     bundle.putSerializable("train_plan",trainPlans.get(position));
                     intent.putExtras(bundle) ;
                     intent.setClass(BreathTrainPlan.this, BreathAndEngine.class) ;
                     startActivity(intent);
-
                     Log.e("BreathTrainPlan",""+CommonValues.S_VALUE+">>>"+CommonValues.C_VALUE_TOP) ;*/
 
                     if (Global340Driver.getInstance(BreathTrainPlan.this).checkUsbStatus() == 1) {

@@ -11,6 +11,8 @@ import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.view.WindowManager;
 
+import com.hhd.breath.app.service.AlarmClockService;
+
 /**
  * Created by loongggdroid on 2016/3/21.
  */
@@ -33,7 +35,6 @@ public class LoongggAlarmReceiver extends BroadcastReceiver {
         clockIntent.putExtra("flag", flag);
         clockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(clockIntent);
+        //context.startService(intent) ;
     }
-
-
 }

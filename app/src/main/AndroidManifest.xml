@@ -2,7 +2,7 @@
 <manifest package="com.hhd.breath.app"
           xmlns:android="http://schemas.android.com/apk/res/android"
           android:revisionCode="2"
-          android:versionName="1.1.1">
+          android:versionName="1.0.2">
 
     <uses-feature
         android:name="android.hardware.usb.host"
@@ -75,6 +75,7 @@
             android:theme="@style/common_activity_style">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+                <action android:name="com.hhd.breath.app.launch"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
@@ -357,6 +358,17 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </receiver>
+        <receiver android:name=".arm.LoongggAlarmReceiver">
+            <intent-filter>
+                <action android:name="com.hytrige.alarm.clock"/>
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".arm.ClockAlarmActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        </activity>
 
         <service
             android:name=".service.UploadDataService"
@@ -408,8 +420,16 @@
             android:name=".view.ui.ArmClockActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".main.ui.SplashActivity">
+        <activity
+            android:name=".main.ui.SplashActivity"
+            android:screenOrientation="portrait">
         </activity>
+
+        <service
+            android:name=".service.AlarmClockService"
+            android:enabled="false"
+            android:exported="false">
+        </service>
     </application>
 
 </manifest>

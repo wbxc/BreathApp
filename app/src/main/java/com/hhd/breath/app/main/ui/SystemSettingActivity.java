@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,15 +41,19 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     private List<String> armClockStrings;
     private Dialog armClockDialog = null;
 
-    @Bind(R.id.tvMusicSwitch)
-    TextView tvMusicSwitch ;
+   /* @Bind(R.id.tvMusicSwitch)
+    TextView tvMusicSwitch ;*/
     @Bind(R.id.layoutMusicSwitch)
     RelativeLayout layoutMusicSwitch ;
     @Bind(R.id.layoutAlarmClock)
     RelativeLayout layoutAlarmClock ;
-    @Bind(R.id.tvAlarmClock)
-    TextView tvAlarmClock ;
+ /*   @Bind(R.id.tvAlarmClock)
+    TextView tvAlarmClock ;*/
+
     private String musicName = "";
+    @Bind(R.id.imgSwitchMusic)
+    ImageView imgSwitchMusic ;
+
 
 
 
@@ -91,8 +96,13 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
         layoutMusicSwitch.setOnClickListener(this);
         layoutAlarmClock.setOnClickListener(this);
         musicSwitch = ShareUtils.getMusicSwitch(SystemSettingActivity.this) ;
-        musicName = musicSwitch ==1?"打开":"关闭" ;
-        tvMusicSwitch.setText(musicName);
+        if (musicSwitch == 1){
+            imgSwitchMusic.setBackgroundResource(R.mipmap.icon_switch_on);
+        }else if (musicSwitch == 0){
+            imgSwitchMusic.setBackgroundResource(R.mipmap.icon_switch_off);
+        }
+       // musicName = musicSwitch ==1?"打开":"关闭" ;
+       // tvMusicSwitch.setText(musicName);
     }
 
     @Override
@@ -109,11 +119,20 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 SystemSettingActivity.this.finish();
                 break;
             case R.id.layoutMusicSwitch:
-                if (armClockDialog == null) {
+               /* if (armClockDialog == null) {
                     armClockDialog = showDialogPopuWindow(musicSwitch, armClockStrings,
                             armClockModels, armClockOnclickListener, armClockWheelOnclick);
                 }
-                armClockDialog.show();
+                armClockDialog.show();*/
+
+                musicSwitch = ShareUtils.getMusicSwitch(SystemSettingActivity.this) ;
+                if (musicSwitch == 1){
+                    ShareUtils.setMusicSwitch(SystemSettingActivity.this,0);
+                    imgSwitchMusic.setBackgroundResource(R.mipmap.icon_switch_off);
+                }else if (musicSwitch == 0){
+                    ShareUtils.setMusicSwitch(SystemSettingActivity.this,1);
+                    imgSwitchMusic.setBackgroundResource(R.mipmap.icon_switch_on);
+                }
                 break;
             case R.id.layout_serial:
                 if (!isNotEmpty(ShareUtils.getSerialNumber(SystemSettingActivity.this))) {
@@ -183,7 +202,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 
             musicSwitch = Integer.parseInt(armClockModels.get(selectedIndex).getValue());
             musicName = armClockModels.get(selectedIndex).getName()  ;
-            tvMusicSwitch.setText(musicName);
+           // tvMusicSwitch.setText(musicName);
         }
     };
 
@@ -194,7 +213,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
             if (armClockDialog.isShowing()) {
                 armClockDialog.dismiss();
             }
-            tvMusicSwitch.setText(musicName);
+           // tvMusicSwitch.setText(musicName);
             ShareUtils.setMusicSwitch(SystemSettingActivity.this, musicSwitch);
         }
     };

@@ -3,6 +3,8 @@ package com.hhd.breath.app.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Map;
+
 /**
  * Created by familylove on 2015/11/23.
  */
@@ -72,6 +74,81 @@ public class ShareUtils {
         SharedPreferences spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
         return spf.getInt(INTERVALTIME,3) ;
     }
+
+    private static String CYCLE = "cycle" ;
+
+    public static void setCycle(Context mContext ,int value){
+        SharedPreferences  spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        SharedPreferences.Editor mEditor = spf.edit() ;
+        mEditor.putInt(CYCLE,value) ;
+        mEditor.commit() ;
+    }
+    public static  int getCycle(Context mContext){
+        SharedPreferences spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        return spf.getInt(CYCLE,-1) ;
+    }
+
+    private static String CYCLE_NAME = "cycle_name" ;
+
+    public static void setCycleName(Context mContext ,String value){
+        SharedPreferences  spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        SharedPreferences.Editor mEditor = spf.edit() ;
+        mEditor.putString(CYCLE_NAME,value) ;
+        mEditor.commit() ;
+    }
+    public static  String getCycleName(Context mContext){
+        SharedPreferences spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        return spf.getString(CYCLE_NAME,"只响一次") ;
+    }
+
+
+    private static String RING = "ring" ;
+
+    public static void setRing(Context mContext ,int value){
+        SharedPreferences  spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        SharedPreferences.Editor mEditor = spf.edit() ;
+        mEditor.putInt(RING,value) ;
+        mEditor.commit() ;
+    }
+    public static  int getRing(Context mContext){
+        SharedPreferences spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        return spf.getInt(RING,0) ;
+    }
+
+    private static String TIME_MAP_1 = "time_map_1" ;
+    private static String TIME_MAP_2 = "time_map_2" ;
+
+
+
+    public static void setTime1(Context mContext ,int value){
+
+        SharedPreferences  spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        SharedPreferences.Editor mEditor = spf.edit() ;
+        mEditor.putInt(TIME_MAP_1,value) ;
+        mEditor.commit() ;
+
+    }
+
+    public static int getTime1(Context mContext){
+        SharedPreferences spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        return spf.getInt(TIME_MAP_1,0) ;
+    }
+
+    public static void setTime2(Context mContext ,int value){
+
+        SharedPreferences  spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        SharedPreferences.Editor mEditor = spf.edit() ;
+        mEditor.putInt(TIME_MAP_2,value) ;
+        mEditor.commit() ;
+
+    }
+
+    public static int getTime2(Context mContext){
+        SharedPreferences spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        return spf.getInt(TIME_MAP_2,0) ;
+    }
+
+
 
 
 

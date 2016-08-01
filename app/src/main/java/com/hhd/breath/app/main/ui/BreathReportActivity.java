@@ -147,15 +147,6 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
     @Bind(R.id.tvTimeLongValue)
     TextView tvTimeLongValue ;
 
-
-
-
-
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

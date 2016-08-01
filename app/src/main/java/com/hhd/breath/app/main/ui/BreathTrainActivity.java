@@ -1,22 +1,16 @@
 package com.hhd.breath.app.main.ui;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.hardware.usb.UsbManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -122,8 +116,6 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-
     }
 
     private void initData() {
@@ -150,7 +142,7 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         trainTimeLong = (TextView) findViewById(R.id.time_long);
         trainGroupNumber = (TextView) findViewById(R.id.zushuo);
         mTextTrainName = (TextView) findViewById(R.id.train_name);
-        mBreathExplain = (TextView) findViewById(R.id.text_breathExplain);
+        mBreathExplain = (TextView) findViewById(R.id.tvBreathExplain);
         imgConnectionTrainQi = (ImageView) findViewById(R.id.img_connect_train_qi);
     }
 
@@ -167,6 +159,15 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
         imgConnectionTrainQi.setOnClickListener(this);
         mTextTrainName.setText(trainPlan.getName());
         int level = Integer.parseInt(trainPlan.getCurrentControl())+(Integer.parseInt(trainPlan.getCurrentStrength())-1)*3+(Integer.parseInt(trainPlan.getCurrentPersistent())-1)*6 ;
+
+        tvLevelValue.setText(String.valueOf(level));
+        if (level<=9){
+            tvLevelFlag.setText("初级");
+        }else if (level<=18){
+            tvLevelFlag.setText("中级");
+        }else {
+            tvLevelFlag.setText("高级");
+        }
         tvLevelValue.setText(String.valueOf(level));
     }
 

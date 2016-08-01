@@ -1,31 +1,37 @@
-package com.hhd.breath.app.arm;
+package com.hhd.breath.app.service;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Vibrator;
 import android.view.View;
 
-import com.hhd.breath.app.BaseActivity;
 import com.hhd.breath.app.R;
-import com.hhd.breath.app.main.ui.LoginBreathActivity;
-import com.hhd.breath.app.main.ui.LogoActivity;
-import com.hhd.breath.app.main.ui.MainTabHomeActivity;
+import com.hhd.breath.app.arm.SimpleDialog;
 
-
-public class ClockAlarmActivity extends Activity {
+public class AlarmClockService extends Service {
     private MediaPlayer mediaPlayer;
     private Vibrator vibrator;
 
+    public AlarmClockService() {
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clock_alarm);
-        String message = this.getIntent().getStringExtra("msg");
-        int flag = this.getIntent().getIntExtra("flag", 0);
+    public IBinder onBind(Intent intent) {
+        // TODO: Return the communication channel to the service.
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    @Override
+    public void onStart(Intent intent, int startId) {
+        super.onStart(intent, startId);
+
+
+        String message = intent.getStringExtra("msg");
+        int flag = intent.getIntExtra("flag", 0);
         showDialogInBroadcastReceiver(message, flag);
+
     }
 
     private void showDialogInBroadcastReceiver(String message, final int flag) {
@@ -56,18 +62,14 @@ public class ClockAlarmActivity extends Activity {
                     if (flag == 0 || flag == 2) {
                         vibrator.cancel();
                     }
-
-                    Intent intent = new Intent() ;
-                    intent.setClass(ClockAlarmActivity.this, LogoActivity.class) ;
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK) ;
-                    startActivity(intent);
                     dialog.dismiss();
-                    ClockAlarmActivity.this.finish();
+                    Intent intent = new Intent() ;
+                    intent.setAction("com.hhd.breath.app.launch") ;
+                    startActivity(intent);
                 }
             }
         });
 
 
     }
-
 }

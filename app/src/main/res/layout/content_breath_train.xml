@@ -211,7 +211,7 @@
                 android:textSize="14sp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:id="@+id/text_breathExplain"
+                android:id="@+id/tvBreathExplain"
                 android:textColor="@color/common_train_plan_text_color"/>
         </LinearLayout>
     </ScrollView>

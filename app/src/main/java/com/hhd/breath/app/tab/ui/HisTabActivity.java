@@ -433,7 +433,7 @@ public class HisTabActivity extends BaseActivity {
 
         int posx = windowManager.getDefaultDisplay().getWidth() / 2 - popupWindow.getWidth() / 2;
         backgroundAlpha(0.7f);
-        popupWindow.showAsDropDown(layoutTop, posx, -40);
+        popupWindow.showAsDropDown(layoutTop, posx, 20);
 
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override

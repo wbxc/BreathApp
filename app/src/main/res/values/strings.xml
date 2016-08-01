@@ -100,9 +100,11 @@
     <string name="cycle_sure">确定</string>
     <string name="vibration">震动</string>
     <string name="ring">铃声</string>
+    <string name="string_time_start_train">我知道了</string>
 
     <string name="rationale_ask_again">\"汇呼吸\"如果没有存储读取权限，部分功能将受限。\n请打开应用设置界面对应用权限修改。</string>
     <string name="setting">设置</string>
     <string name="cancel">取消</string>
     <string name="string_tips">提示</string>
+    <string name="string_time_start_title">测量提醒</string>
 </resources>

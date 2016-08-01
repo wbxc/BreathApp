@@ -14,10 +14,44 @@
 
     <include layout="@layout/common_login_top"  android:id="@+id/top"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/layoutSwitch"
+        android:layout_below="@+id/top"
+        android:layout_marginTop="@dimen/common_dian10"
+        android:visibility="gone"
+        android:layout_height="@dimen/common_dian50">
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="开关"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/common_dian20"
+            android:textSize="@dimen/common_text_14sp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/common_color_9A9A9A"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:id="@+id/imgSwitchClock"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/common_dian30"
+            android:background="@mipmap/icon_switch_on"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_below="@+id/layoutSwitch"
+        android:layout_marginLeft="@dimen/common_dian15"
+        android:layout_marginRight="@dimen/common_dian15"
+        android:background="@color/common_bottom_text_color"
+        android:layout_height="0.5dip" />
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_below="@+id/top"
+        android:layout_below="@+id/layoutSwitch"
         android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -33,7 +67,7 @@
                 android:layout_marginLeft="@dimen/common_dian20"
                 android:textSize="@dimen/common_text_14sp"
                 android:id="@+id/tv1"
-                android:textColor="@color/black"/>
+                android:textColor="@color/common_color_9A9A9A"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,7 +106,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/common_dian20"
                 android:textSize="@dimen/common_text_14sp"
-                android:textColor="@color/black"
+                android:textColor="@color/common_color_9A9A9A"
 
                 android:text="铃声"/>
             <TextView
@@ -114,7 +148,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/common_dian20"
                 android:textSize="@dimen/common_text_14sp"
-                android:textColor="@color/black"
+                android:textColor="@color/common_color_9A9A9A"
                 android:text="时间"/>
             <TextView
                 android:layout_width="wrap_content"
