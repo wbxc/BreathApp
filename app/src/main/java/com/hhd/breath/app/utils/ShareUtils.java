@@ -117,6 +117,22 @@ public class ShareUtils {
 
     private static String TIME_MAP_1 = "time_map_1" ;
     private static String TIME_MAP_2 = "time_map_2" ;
+    private static String TIME_MAP_NAME = "time_map_name" ;
+
+
+    public static void setTimeName(Context mContext ,String value){
+
+        SharedPreferences  spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        SharedPreferences.Editor mEditor = spf.edit() ;
+        mEditor.putString(TIME_MAP_NAME,value) ;
+        mEditor.commit() ;
+
+    }
+
+    public static String getTimeName(Context mContext){
+        SharedPreferences spf = mContext.getSharedPreferences(BASE_NAME,Context.MODE_PRIVATE) ;
+        return spf.getString(TIME_MAP_NAME,"") ;
+    }
 
 
 

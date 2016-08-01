@@ -81,6 +81,7 @@ public class ArmClockActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onTimeSelect(Date date) {
                 time = getTime(date) ;
+                ShareUtils.setTimeName(ArmClockActivity.this,time+" 提醒");
                 tvSetTime.setText(time+" 提醒");
             }
         });
@@ -103,6 +104,7 @@ public class ArmClockActivity extends BaseActivity implements View.OnClickListen
         tvRepeat.setText(cycleName);
         time0 = ShareUtils.getTime1(ArmClockActivity.this) ;
         time1 = ShareUtils.getTime2(ArmClockActivity.this) ;
+        tvSetTime.setText(ShareUtils.getTimeName(ArmClockActivity.this));
     }
 
     @Override
