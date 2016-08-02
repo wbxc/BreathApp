@@ -53,17 +53,21 @@ public class MeDetailsActivity extends BaseActivity implements View.OnClickListe
         setContentView(R.layout.activity_me_tab);
         ButterKnife.bind(this);
         builder = new DisplayImageOptions.Builder() ;
-        builder.showImageForEmptyUri(R.mipmap.main_moren).showImageOnFail(R.mipmap.main_moren) ;
+        builder.showImageForEmptyUri(R.mipmap.main_moren)
+                .showImageOnFail(R.mipmap.main_moren)
+                .cacheInMemory(true)                               //启用内存缓存
+                .cacheOnDisk(true)                                 //启用外存缓存
+                .considerExifParams(true)  ;                        //启用EXIF和JPEG图像格式;   ;
         initView();
         initEvent();
         setUpUmengFeedback();
+        ImageLoader.getInstance().displayImage(ShareUtils.getUserImage(MeDetailsActivity.this),imgUserAvatar,builder.build());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mTopTextView.setText("我");
-        ImageLoader.getInstance().displayImage(ShareUtils.getUserImage(MeDetailsActivity.this),imgUserAvatar,builder.build());
     }
 
     @Override

@@ -74,7 +74,10 @@ public class UserDetailsActivity extends BaseActivity {
         initEvent();
         builder = new DisplayImageOptions.Builder() ;
         builder.showImageOnFail(R.mipmap.main_moren) ;
-        builder.showImageForEmptyUri(R.mipmap.main_moren) ;
+        builder.showImageForEmptyUri(R.mipmap.main_moren)
+                .cacheInMemory(true)                               //启用内存缓存
+                .cacheOnDisk(true)                                 //启用外存缓存
+                .considerExifParams(true)  ;                        //启用EXIF和JPEG图像格式;   ;;
 
         if (isNetworkConnected(UserDetailsActivity.this)) {
             showProgressDialog("获取个人信息");
@@ -82,11 +85,11 @@ public class UserDetailsActivity extends BaseActivity {
         } else {
             Toast.makeText(UserDetailsActivity.this, "网络连接异常", Toast.LENGTH_SHORT).show();
         }
-        File mFile = new File(Environment.getExternalStorageDirectory().toString() + "/hyTriage/touxiang.jpg");
+      /*  File mFile = new File(Environment.getExternalStorageDirectory().toString() + "/hyTriage/touxiang.jpg");
         if (mFile.exists()) {
             Bitmap bm = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().toString() + "/hyTriage/touxiang.jpg");
             imgUserAvatar.setImageBitmap(bm);
-        }
+        }*/
     }
 
     private void userDetail() {

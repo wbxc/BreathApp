@@ -123,7 +123,11 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
         builder = new DisplayImageOptions.Builder() ;
-        builder.showImageForEmptyUri(R.mipmap.main_moren).showImageOnFail(R.mipmap.main_moren) ;
+        builder.showImageForEmptyUri(R.mipmap.main_moren)
+                .showImageOnFail(R.mipmap.main_moren)
+                .cacheInMemory(true)                               //启用内存缓存
+                .cacheOnDisk(true)                                 //启用外存缓存
+                .considerExifParams(true)  ;                        //启用EXIF和JPEG图像格式;   ;;;
         initData();
         initView();
         initEvent();

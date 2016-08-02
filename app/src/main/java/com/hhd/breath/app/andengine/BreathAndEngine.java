@@ -10,6 +10,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -92,6 +93,7 @@ public class BreathAndEngine extends SimpleBaseGameActivity {
     @Override
     protected void onCreate(Bundle pSavedInstanceState) {
         super.onCreate(pSavedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         //吸气时间
         mBreathTime = ShareUtils.getBrathTime(BreathAndEngine.this);
         mPauseTime = ShareUtils.getIntervalTime(BreathAndEngine.this);
