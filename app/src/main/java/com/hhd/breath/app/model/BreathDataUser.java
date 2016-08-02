@@ -95,4 +95,20 @@ public class BreathDataUser {
     public void setUser_disease(String user_disease) {
         this.user_disease = user_disease;
     }
+
+    @Override
+    public String toString() {
+        return "BreathDataUser{" +
+                "user_id='" + user_id + '\'' +
+                ", user_name='" + user_name + '\'' +
+                ", user_password='" + user_password + '\'' +
+                ", user_fullname='" + user_fullname + '\'' +
+                ", user_image='" + user_image + '\'' +
+                ", user_sex='" + user_sex + '\'' +
+                ", user_state='" + user_state + '\'' +
+                ", user_ctime='" + user_ctime + '\'' +
+                ", user_birthday='" + user_birthday + '\'' +
+                ", user_disease='" + user_disease + '\'' +
+                '}';
+    }
 }

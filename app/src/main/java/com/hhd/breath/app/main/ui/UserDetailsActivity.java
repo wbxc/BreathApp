@@ -90,6 +90,7 @@ public class UserDetailsActivity extends BaseActivity {
             Bitmap bm = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().toString() + "/hyTriage/touxiang.jpg");
             imgUserAvatar.setImageBitmap(bm);
         }*/
+        ImageLoader.getInstance().displayImage(ShareUtils.getUserImage(UserDetailsActivity.this),imgUserAvatar,builder.build());
     }
 
     private void userDetail() {

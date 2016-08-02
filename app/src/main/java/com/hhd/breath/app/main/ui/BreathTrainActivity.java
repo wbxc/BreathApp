@@ -77,17 +77,6 @@ public class BreathTrainActivity extends BaseActivity implements View.OnClickLis
     TextView tvLevelValue ;
     @Bind(R.id.layoutLevelContent)
     RelativeLayout layoutLevelContent ;
-
-
-
-
-
-
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

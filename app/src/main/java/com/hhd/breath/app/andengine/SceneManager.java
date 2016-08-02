@@ -85,7 +85,7 @@ public class SceneManager {
         mInstructionsSprite.setZIndex(3);
         mScene.attachChild(mInstructionsSprite);
         centerSprite(mInstructionsSprite) ;
-        mInstructionsSprite.setY(mInstructionsSprite.getY()+20);
+        //mInstructionsSprite.setY(mInstructionsSprite.getY()+20);
 
 
 

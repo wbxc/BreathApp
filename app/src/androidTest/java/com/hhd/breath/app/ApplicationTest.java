@@ -66,6 +66,19 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
    }
 
 
+    public void  testLevel() throws Exception{
+
+        int level = 20 ;
+        level = level -1 ;
+        int s = level/9+1 ;
+        int m_m = level%9 ;
+        int m = m_m/6+1 ;
+        int star = m_m%6+1 ;
+
+        Log.e("testLevel",s+">>>"+m+">>>"+star) ;
+    }
+
+
 
 
 }

@@ -46,15 +46,6 @@ public class CommonValues {
     public static final String UPLOAD_RECORD_DATA_SUCCESS = "com.hhd.upload.data.success" ;
     // 上传数据失败
     public static final String UPLOAD_RECORD_DATA_FAIL = "com.hhd.upload.fail" ;
-
-
-
-
-
-
-
-
-
     public static int VALUE_MAX_PROGRESS = 20 ;
     public static int VALUE_STANDARD = 10 ;
     public static  String sumTimeLong ;
@@ -121,39 +112,29 @@ public class CommonValues {
     public static float CENTER_HEIGHT = 0f ;
     public static float PAIR_WIDTH_CENTER_HEIGHT = 41f ;
     public static int BIRD_DISTANCE_SPEED = 6 ;
-    public static int BIRTH_HEIGHT = 60 ;
+    public static int BIRTH_HEIGHT = 80 ;
 
     /**
      * 视野环境创建的宽度和高度
      */
     public static float CAMERA_WIDTH = 768 ; //485  545 485
     public static float CAMERA_HEIGHT = 1280 ; //800 ;
-
-
     public static String c_l_value = "23" ; //
     public static String c_z_value = "18" ; //
     public static String c_h_value = "13" ;  //
-
-
-
     public static String s_l_value = "15" ;
     public static String s_z_value = "30" ;
     public static String s_h_value = "45" ;   // 60
-
     public static String p_l_value = "1" ;
     public static String p_z_value = "2" ;
     public static String p_h_value = "3" ;
-
-
-
-
     public static float SUM_VALUE = 860f ;
-
     public static float S_VALUE = 0f;
     public static float C_VALUE_TOP = 0F ;
 
     public static float S_VALUE_LEVEL = 0F ;
     public static float C_VALUE_LEVEL = 0F ;
+    public static boolean TRAIN_IS_PLAYING = false ;
 
 
 

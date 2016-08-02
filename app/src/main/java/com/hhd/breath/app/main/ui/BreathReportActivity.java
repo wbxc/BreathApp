@@ -100,12 +100,6 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
     private TextView tvTrainTime;
     @Bind(R.id.tvBreathGroups)
     TextView tvBreathGroups ;
-   /* @Bind(R.id.levelControlRa)
-    RatingBar levelControlRa ;
-    @Bind(R.id.levelStrengthRa)
-    RatingBar levelStrengthRa ;
-    @Bind(R.id.levelPersistentRa)
-    RatingBar levelPersistentRa ;*/
     @Bind(R.id.tvDifficultyShow)
     TextView tvDifficultyShow ; // 难度系数显示
     @Bind(R.id.levelControlInitRa)
@@ -146,6 +140,7 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
     TextView tvLevelValue ;
     @Bind(R.id.tvTimeLongValue)
     TextView tvTimeLongValue ;
+    private boolean istigao = false ;   // 判断是否有所提高
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,7 +188,6 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                             trainPlanLog.setTrainStartTime(String.valueOf(System.currentTimeMillis()));
                         }
                         TrainPlanService.getInstance(BreathReportActivity.this).addTrainLog(trainPlanLog);  //本地记录 记录一次
-                        Log.e("BreathReportActivity",trainPlanLog.toString()) ;
                         TrainPlanService.getInstance(BreathReportActivity.this).countSumTime(timeLast,trainPlan); // 训练计划 时间累计  //时间累计
                         Message msg = Message.obtain() ;
                         msg.what = 40 ;
@@ -245,9 +239,7 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                     ManagerRequest.getInstance().getRequestNetApi().getBreathDetailReport(record_id).enqueue(new retrofit2.Callback<BreathDetailSuccess>() {
                         @Override
                         public void onResponse(Call<BreathDetailSuccess> call, Response<BreathDetailSuccess> response) {
-
                             if (response.body().getCode().equals("200")){
-
                                 if (TrainHisService.getInstance(BreathReportActivity.this).addBreathDetialReport(response.body().getData())){
                                     new Thread(runnable).start();
                                 }
@@ -255,7 +247,6 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                         }
                         @Override
                         public void onFailure(Call<BreathDetailSuccess> call, Throwable t) {
-
 
                         }
                     });
@@ -313,48 +304,55 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                         upgradeValue +=Integer.parseInt(breathDetailReports.get(k).getDifficulty()) ;
                     }
                 }
-
                 if (upgradeValue == (times*100)){
+                    int level = Integer.parseInt(trainPlan.getCurrentControl())
+                                +(Integer.parseInt(trainPlan.getCurrentStrength())-1)*3
+                                +(Integer.parseInt(trainPlan.getCurrentPersistent())-1)*6;
                     istigao = true ;
-                    int c = Integer.parseInt(trainPlan.getCurrentControl()) ;
-                    switch (c){
+
+
+                    int p_level =level/9+1 ;
+                    int s_level = (level%9)/6 +1 ;
+                    int c_level = (level%9)%6 +1;
+
+                    trainPlan.setCurrentControl(String.valueOf(c_level));
+                    trainPlan.setCurrentStrength(String.valueOf(s_level));
+                    trainPlan.setCurrentPersistent(String.valueOf(p_level));
+
+                    switch (c_level){
                         case 1:
-                            trainPlan.setCurrentControl(String.valueOf(2));
-                            trainPlan.setControlLevel(String.valueOf(CommonValues.c_z_value));
+                            trainPlan.setControlLevel(String.valueOf(CommonValues.c_l_value));
                             break;
                         case 2:
-                            trainPlan.setCurrentControl(String.valueOf(3));
-                            trainPlan.setControlLevel(String.valueOf(CommonValues.c_h_value));
+                            trainPlan.setControlLevel(String.valueOf(CommonValues.c_z_value));
                             break;
                         case 3:
-                            int s = Integer.parseInt(trainPlan.getCurrentStrength()) ;
-                            switch (s){
-                                case 1:
-                                    trainPlan.setCurrentStrength(String.valueOf(2));
-                                    trainPlan.setStrengthLevel(CommonValues.s_z_value);
-                                    break;
-                                case 2:
-                                    trainPlan.setCurrentStrength(String.valueOf(3));
-                                    trainPlan.setStrengthLevel(CommonValues.s_h_value);
-                                    break;
-                                case 3:
-                                    int p = Integer.parseInt(trainPlan.getCurrentPersistent());
-                                    switch (p){
-                                        case 1:
-                                            trainPlan.setCurrentPersistent(String.valueOf(2));
-                                            trainPlan.setPersistentLevel(CommonValues.p_z_value);
-                                            break;
-                                        case 2:
-                                            trainPlan.setCurrentPersistent(String.valueOf(3));
-                                            trainPlan.setPersistentLevel(CommonValues.p_z_value);
-                                            break;
-                                        case 3:
-                                            break;
-                                    }
-                                    break;
-                            }
+                            trainPlan.setControlLevel(String.valueOf(CommonValues.c_h_value));
                             break;
                     }
+                    switch (s_level){
+                        case 1:
+                            trainPlan.setStrengthLevel(CommonValues.s_l_value);
+                            break;
+                        case 2:
+                            trainPlan.setStrengthLevel(CommonValues.s_z_value);
+                            break;
+                        case 3:
+                            trainPlan.setStrengthLevel(CommonValues.s_h_value);
+                            break;
+                    }
+                    switch (p_level){
+                        case 1:
+                            trainPlan.setPersistentLevel(CommonValues.p_l_value);
+                            break;
+                        case 2:
+                            trainPlan.setPersistentLevel(CommonValues.p_z_value);
+                            break;
+                        case 3:
+                            trainPlan.setPersistentLevel(CommonValues.p_h_value);
+                            break;
+                    }
+
                     TrainPlanService.getInstance(BreathReportActivity.this).updateTrainPlan(trainPlan) ;
                     // 时间的累加
                 }
@@ -368,8 +366,6 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                 breathHisLog.setTrainTimes(String.valueOf(PlanLog.getTrainTimes()));
                 breathHisLog.setTrainSuccessTimes(trainPlan.getTimes());
                 breathHisLog.setTrainAverTimes(String.valueOf(PlanLog.getTrainTimes()/PlanLog.getDays()));
-
-
             }
             //结果判断
             if (istigao){
@@ -387,9 +383,6 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                     str_train_times = breathHisLog.getTrainTimes() ;
                     str_train_aver_times = breathHisLog.getTrainAverTimes() ;
                     tvHisContent.setText(Html.fromHtml(reportHisBack(str_startTime,str_train_days,str_train_times,str_train_aver_times,str_train_result)));
-                    /*levelControlRa.setRating(Float.valueOf(breathHisLog.getCurrentControlLevel()));
-                    levelStrengthRa.setRating(Float.valueOf(breathHisLog.getCurrentStrengthLevel()));
-                    levelPersistentRa.setRating(Float.valueOf(breathHisLog.getCurrentPersistentLevel()));*/
 
                     int level = Integer.parseInt(breathHisLog.getCurrentControlLevel())+(Integer.parseInt(breathHisLog.getCurrentStrengthLevel())-1)*3+(Integer.parseInt(breathHisLog.getCurrentPersistentLevel())-1)*6 ;
                     tvLevelValue.setText(String.valueOf(level));
@@ -400,8 +393,6 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
                     }else {
                         tvLevelFlag.setText("高级");
                     }
-
-
                     levelControlInitRa.setRating(Float.valueOf(breathHisLog.getControlLevel()));
                     levelStrengthInitRa.setRating(Float.valueOf(breathHisLog.getStrengthLevel()));
                     levelPrensterInitRa.setRating(Float.valueOf(breathHisLog.getPersistentLevel()));
@@ -428,7 +419,7 @@ public class BreathReportActivity extends BaseActivity implements View.OnClickLi
     } ;
 
 
-    boolean istigao = false ;
+
     protected String timeStampToData(String timeStamp){
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd  HH:mm:ss") ;

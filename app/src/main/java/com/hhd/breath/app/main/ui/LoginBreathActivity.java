@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -134,6 +135,7 @@ public class LoginBreathActivity extends BaseActivity {
                                                         ShareUtils.setUserBirthday(LoginBreathActivity.this, breathDataUser.getUser_birthday());
                                                         ShareUtils.setUserPassword(LoginBreathActivity.this, breathDataUser.getUser_password());
                                                         ShareUtils.setUserSex(LoginBreathActivity.this, breathDataUser.getUser_sex().equals("0") ? "男" : "女");
+                                                        ShareUtils.setUserImage(LoginBreathActivity.this,breathDataUser.getUser_image());
                                                         MainTabHomeActivity.actionStart(LoginBreathActivity.this);
                                                         LoginBreathActivity.this.finish();
                                                         break;
@@ -146,6 +148,7 @@ public class LoginBreathActivity extends BaseActivity {
                                             @Override
                                             public void onFailure(Call<BreathSuccessUser> call, Throwable t) {
                                                 hideProgress();
+                                                Toast.makeText(LoginBreathActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                         break;

@@ -1,5 +1,6 @@
 package com.hhd.breath.app.service;
 
+import android.app.Dialog;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,11 +8,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
+import android.os.Binder;
 import android.os.IBinder;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hhd.breath.app.CommonValues;
+import com.hhd.breath.app.R;
+import com.hhd.breath.app.andengine.BreathAndEngine;
 import com.hhd.breath.app.main.ui.LogoActivity;
 import com.hhd.breath.app.main.ui.MainTabHomeActivity;
 import com.hhd.breath.app.utils.ShareUtils;
@@ -34,10 +41,16 @@ public class GlobalUsbService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+
+        return new GlobBinder() ;
     }
 
+    public class  GlobBinder extends Binder{
+
+        public GlobalUsbService getGlobalUsbService(){
+            return GlobalUsbService.this ;
+        }
+    }
     @Override
     public void onCreate() {
         super.onCreate();
@@ -88,11 +101,15 @@ public class GlobalUsbService extends Service {
             } else if (intent.getAction().equals(CommonValues.USB_DEVICE_DETACHED)) {
                 ShareUtils.setSerialNumber(context, "");
                 isOpenBreath = false ;
-                Toast.makeText(context,"设备已拔出",Toast.LENGTH_SHORT).show();
                 Global340Driver.getInstance(context).close();
+                if (CommonValues.TRAIN_IS_PLAYING){
+                   // showDialogEConnection() ;
+                }
             }
         }
     }
+
+
 
     /**
      * 检查usb状态
